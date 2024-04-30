@@ -1,6 +1,4 @@
 import 'dart:developer';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hinvex/features/user/data/i_user_facade.dart';
@@ -11,7 +9,7 @@ class UserProvider with ChangeNotifier {
   final IUserFacade iUserFacade;
   UserProvider({required this.iUserFacade}) {
     // Fetch user data when the provider is initialized
-    fetchUser();
+    // fetchUser();
   }
 
   bool fetchUserLoding = false;
@@ -21,46 +19,70 @@ class UserProvider with ChangeNotifier {
 
 // FETCH USER DETAILS
   List<UserModel> fetchUserList = [];
-  bool fetchNextUserLoading = false;
-  bool fetchNextUserCompleted = false;
-  DocumentSnapshot? lastDocument;
-  bool isLoading = false; // Flag to indicate whether data is being loaded
+
   Future<void> fetchUser() async {
-    isLoading = true;
-    notifyListeners();
-    fetchNextUserLoading = true;
-    final result = iUserFacade.fetchUser();
-    result.listen((event) {
-      final users = event.docs.map((e) => UserModel.fromSnap(e)).toList();
-      fetchUserList.addAll(users);
-      lastDocument = event.docs.isNotEmpty ? event.docs.last : null;
-      fetchNextUserLoading = false;
-      // Populate _filteredUserList with the fetched data
-      _filteredUserList.addAll(fetchUserList);
-      isLoading = false;
-      notifyListeners();
-    });
-  }
+    log('called ');
 
-  Future<void> fetchNextUserBatch() async {
-    if (fetchNextUserLoading || fetchNextUserCompleted) return;
+    fetchUserLoding = true;
 
     notifyListeners();
-    fetchNextUserLoading = true;
-    final result = iUserFacade.fetchNextUser(lastDocument);
-    result.listen((event) {
-      final users = event.docs.map((e) => UserModel.fromSnap(e)).toList();
-      fetchUserList.addAll(users);
-      lastDocument = event.docs.isNotEmpty ? event.docs.last : null;
-      fetchNextUserLoading = false;
-      if (users.isEmpty) fetchNextUserCompleted = true;
+    final result = await iUserFacade.fetchUser();
 
-      // Update _filteredUserList with the fetched data
-      _filteredUserList.addAll(users);
-
-      notifyListeners();
-    });
+    result.fold(
+      (l) {
+        log(l.errorMsg);
+        fetchUserLoding = false;
+        notifyListeners();
+      },
+      (r) {
+        log(r.length.toString());
+        fetchUserLoding = false;
+        log(r.first.toString());
+        fetchUserList.addAll(r);
+        notifyListeners();
+      },
+    );
   }
+
+  void clearDoc() {
+    iUserFacade.clearDoc();
+  }
+  // Future<void> fetchUser() async {
+  //   isLoading = true;
+  //   notifyListeners();
+  //   fetchNextUserLoading = true;
+  //   final result = iUserFacade.fetchUser();
+  //   result.listen((event) {
+  //     final users = event.docs.map((e) => UserModel.fromSnap(e)).toList();
+  //     fetchUserList.addAll(users);
+  //     lastDocument = event.docs.isNotEmpty ? event.docs.last : null;
+  //     fetchNextUserLoading = false;
+  //     // Populate _filteredUserList with the fetched data
+  //     _filteredUserList.addAll(fetchUserList);
+  //     isLoading = false;
+  //     notifyListeners();
+  //   });
+  // }
+
+  // Future<void> fetchNextUserBatch() async {
+  //   if (fetchNextUserLoading || fetchNextUserCompleted) return;
+
+  //   notifyListeners();
+  //   fetchNextUserLoading = true;
+  //   final result = iUserFacade.fetchNextUser(lastDocument);
+  //   result.listen((event) {
+  //     final users = event.docs.map((e) => UserModel.fromSnap(e)).toList();
+  //     fetchUserList.addAll(users);
+  //     lastDocument = event.docs.isNotEmpty ? event.docs.last : null;
+  //     fetchNextUserLoading = false;
+  //     if (users.isEmpty) fetchNextUserCompleted = true;
+
+  //     // Update _filteredUserList with the fetched data
+  //     _filteredUserList.addAll(users);
+
+  //     notifyListeners();
+  //   });
+  // }
 
   // SET SELECTED USER DETAILS
   userDetails({required UserModel userModel}) {
@@ -72,30 +94,42 @@ class UserProvider with ChangeNotifier {
   List<UserProductDetailsModel> fetchPostsList = [];
 
   Future fetchPosts({required String userId}) async {
+    log("fetchPosts called");
     fetchPostLoding = true;
-    final result = iUserFacade.fetchPosts(userId);
-    result.listen((event) {
-      fetchPostsList = [
-        ...event.docs.map((e) => UserProductDetailsModel.fromSnap(e))
-      ];
-      notifyListeners();
-    });
+    final result = await iUserFacade.fetchPosts(userId);
+    fetchPostsList = [
+      ...result.docs.map((e) => UserProductDetailsModel.fromSnap(e))
+    ];
     fetchPostLoding = true;
+    notifyListeners();
+    // result.listen((event) {
+    //   fetchPostsList = [
+    //     ...event.docs.map((e) => UserProductDetailsModel.fromSnap(e))
+    //   ];
+    // fetchPostLoding = true;
+    //   notifyListeners();
+    // });
   }
 
   // FETCH USER REPORTS DETAILS
   List<UserProductDetailsModel> fetchReportList = [];
 
   Future fetchRepors({required String userId}) async {
+    log("fetchRepors called");
     fetchReportLoading = true;
-    final result = iUserFacade.fetchReports(userId);
-    result.listen((event) {
-      fetchReportList = [
-        ...event.docs.map((e) => UserProductDetailsModel.fromSnap(e))
-      ];
-      notifyListeners();
-    });
+    final result = await iUserFacade.fetchReports(userId);
+    fetchReportList = [
+      ...result.docs.map((e) => UserProductDetailsModel.fromSnap(e))
+    ];
     fetchReportLoading = false;
+    notifyListeners();
+    // result.listen((event) {
+    //   fetchReportList = [
+    //     ...event.docs.map((e) => UserProductDetailsModel.fromSnap(e))
+    //   ];
+    //   fetchReportLoading = false;
+    //   notifyListeners();
+    // });
   }
 
   // DELETE POSTS
@@ -131,13 +165,13 @@ class UserProvider with ChangeNotifier {
 
   // FILTER USER FOR SEARCH
 
-  List<UserModel> _filteredUserList = [];
+  // List<UserModel> filteredUserList = [];
 
   void onSearchChanged(String query) {
     if (query.isEmpty) {
-      _filteredUserList = List.from(fetchUserList);
+      fetchUserList = List.from(fetchUserList);
     } else {
-      _filteredUserList = fetchUserList
+      fetchUserList = fetchUserList
           .where((user) =>
               user.userName.toLowerCase().contains(query.toLowerCase()))
           .toList();
@@ -146,8 +180,8 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // GET FILTERED USER LIST
-  List<UserModel> get filteredUserList => _filteredUserList;
+  // // GET FILTERED USER LIST
+  // List<UserModel> get filteredUserList => _filteredUserList;
 
   // BLOCK OR UNBLOCK SELECTED USER
   void toggleUserBlockStatus() {

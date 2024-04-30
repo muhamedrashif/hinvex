@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:hinvex/features/user/data/i_user_facade.dart';
@@ -11,36 +13,78 @@ import 'package:injectable/injectable.dart';
 class IUserImpl implements IUserFacade {
   IUserImpl(this._firestore);
   final FirebaseFirestore _firestore;
+
+  QueryDocumentSnapshot<Map<String, dynamic>>? lastDoc;
+
 // // FETCH USER DETAILS
 
   @override
-  Stream<QuerySnapshot<Map<String, dynamic>>> fetchUser() {
-    final result = _firestore.collection('users').limit(5).snapshots();
-    return result;
+  FutureResult<List<UserModel>> fetchUser() async {
+    try {
+      if (lastDoc == null) {
+        log('lastdoc null');
+      } else {
+        log('lastdoc');
+      }
+      final result = lastDoc == null
+          ? await _firestore.collection('users').limit(4).get()
+          : await _firestore
+              .collection('users')
+              .startAfterDocument(lastDoc!)
+              .limit(10)
+              .get();
+
+      if (result.docs.isNotEmpty) {
+        lastDoc = result.docs.last;
+        return right(
+          [
+            ...result.docs.map(
+              (e) => UserModel.fromSnap(e),
+            ),
+          ],
+        );
+      }
+
+      return left(
+          const MainFailure.noDataFountFailure(errorMsg: 'No Data Fount'));
+    } on FirebaseException catch (e) {
+      return left(MainFailure.noDataFountFailure(errorMsg: e.code));
+    }
   }
 
   @override
-  Stream<QuerySnapshot<Map<String, dynamic>>> fetchNextUser(
-      DocumentSnapshot? lastDocument) {
-    if (lastDocument == null) {
-      return const Stream.empty();
-    }
-    final result = _firestore
-        .collection('users')
-        .startAfterDocument(lastDocument)
-        .limit(5)
-        .snapshots();
-    return result;
+  void clearDoc() {
+    lastDoc = null;
   }
+
+  // @override
+  // Stream<QuerySnapshot<Map<String, dynamic>>> fetchUser() {
+  //   final result = _firestore.collection('users').limit(5).snapshots();
+  //   return result;
+  // }
+
+  // @override
+  // Stream<QuerySnapshot<Map<String, dynamic>>> fetchNextUser(
+  //     DocumentSnapshot? lastDocument) {
+  //   if (lastDocument == null) {
+  //     return const Stream.empty();
+  //   }
+  //   final result = _firestore
+  //       .collection('users')
+  //       .startAfterDocument(lastDocument)
+  //       .limit(5)
+  //       .snapshots();
+  //   return result;
+  // }
 
 // FETCH USER POSTS DETAILS
   @override
-  Stream<QuerySnapshot<Map<String, dynamic>>> fetchPosts(String userId) {
+  Future<QuerySnapshot<Map<String, dynamic>>> fetchPosts(String userId) {
     final result = _firestore
         .collection('posts')
         .orderBy('createDate', descending: true)
         .where('userId', isEqualTo: userId)
-        .snapshots();
+        .get();
 
     return result;
   }
@@ -48,7 +92,7 @@ class IUserImpl implements IUserFacade {
 // FETCH REPORTS
 
   @override
-  Stream<QuerySnapshot<Map<String, dynamic>>> fetchReports(String userId) {
+  Future<QuerySnapshot<Map<String, dynamic>>> fetchReports(String userId) {
     final result = _firestore
         .collection('posts')
         .orderBy('createDate', descending: true)
@@ -62,7 +106,7 @@ class IUserImpl implements IUserFacade {
             isGreaterThanOrEqualTo: 1,
           ),
         ))
-        .snapshots();
+        .get();
     return result;
   }
 

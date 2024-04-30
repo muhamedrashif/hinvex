@@ -29,7 +29,7 @@ abstract class IUploadedByAdminFacade {
   //   throw UnimplementedError('fetchNextUploadedProperties() not impl');
   // }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> fetchUser(String userId) {
+  Future<QuerySnapshot<Map<String, dynamic>>> fetchUser(String userId) {
     throw UnimplementedError('fetchUser() not impl');
   }
 

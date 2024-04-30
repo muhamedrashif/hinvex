@@ -107,11 +107,9 @@ class IUploadedByAdminImpl implements IUploadedByAdminFacade {
   // }
 
   @override
-  Stream<QuerySnapshot<Map<String, dynamic>>> fetchUser(String userId) {
-    final reuslt = _firestore
-        .collection('users')
-        .where('userId', isEqualTo: userId)
-        .snapshots();
+  Future<QuerySnapshot<Map<String, dynamic>>> fetchUser(String userId) {
+    final reuslt =
+        _firestore.collection('users').where('userId', isEqualTo: userId).get();
     return reuslt;
   }
 

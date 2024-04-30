@@ -4,20 +4,20 @@ import 'package:hinvex/features/user/data/model/user_model.dart';
 import 'package:hinvex/general/typedefs/typedefs.dart';
 
 abstract class IUserFacade {
-  Stream<QuerySnapshot<Map<String, dynamic>>> fetchUser() {
+  FutureResult<List<UserModel>> fetchUser() {
     throw UnimplementedError('fetchUser() not impl');
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> fetchNextUser(
-      DocumentSnapshot? lastDocument) {
-    throw UnimplementedError('fetchNextUser() not impl');
-  }
+  // Future<QuerySnapshot<Map<String, dynamic>>> fetchNextUser(
+  //     DocumentSnapshot? lastDocument) {
+  //   throw UnimplementedError('fetchNextUser() not impl');
+  // }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> fetchPosts(String userId) {
+  Future<QuerySnapshot<Map<String, dynamic>>> fetchPosts(String userId) {
     throw UnimplementedError('fetchPosts() not impl');
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> fetchReports(String userId) {
+  Future<QuerySnapshot<Map<String, dynamic>>> fetchReports(String userId) {
     throw UnimplementedError('fetchReports() not impl');
   }
 
@@ -32,4 +32,6 @@ abstract class IUserFacade {
   FutureResult<void> updateUser(UserModel userModel) {
     throw UnimplementedError('updateUser() not impl');
   }
+
+  void clearDoc() {}
 }
