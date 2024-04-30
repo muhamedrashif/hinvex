@@ -8,6 +8,8 @@ import 'package:hinvex/general/utils/enums/enums.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
+import 'reports_reasons_popup_widget.dart';
+
 class ReportsUserDetailWidget extends StatefulWidget {
   const ReportsUserDetailWidget({super.key});
 
@@ -211,7 +213,7 @@ class _ReportsUserDetailWidgetState extends State<ReportsUserDetailWidget> {
                                             width: 150,
                                             child: Padding(
                                                 padding: EdgeInsets.all(8.0),
-                                                child: Text("Asking price",
+                                                child: Text("Reasons",
                                                     style: TextStyle(
                                                         fontSize: 10,
                                                         fontWeight:
@@ -314,21 +316,35 @@ class _ReportsUserDetailWidgetState extends State<ReportsUserDetailWidget> {
 
                                                   SizedBox(
                                                       width: 150,
-                                                      child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: Text(
-                                                              state
-                                                                  .fetchUserReportstList[
-                                                                      index]
-                                                                  .propertyPrice
-                                                                  .toString(),
-                                                              style: const TextStyle(
-                                                                  fontSize: 10,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold)))),
+                                                      child: InkWell(
+                                                        onTap: () {
+                                                          showDialog(
+                                                            context: context,
+                                                            builder:
+                                                                (BuildContext
+                                                                    context) {
+                                                              return ReportReasonsPopupScreen(
+                                                                reasonList: state
+                                                                    .filteredReportsList[
+                                                                        index]
+                                                                    .reportReasons,
+                                                              );
+                                                            },
+                                                          );
+                                                        },
+                                                        child: const Padding(
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    8.0),
+                                                            child: Text(
+                                                                "View More",
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        10,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold))),
+                                                      )),
 
                                                   SizedBox(
                                                       width: 290,

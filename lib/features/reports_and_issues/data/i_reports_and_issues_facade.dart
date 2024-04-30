@@ -16,7 +16,7 @@ abstract class IReportsAndIssuesFacade {
     throw UnimplementedError('fetchNextReports() not impl');
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> fetchUser(String userId) {
+  Future<QuerySnapshot<Map<String, dynamic>>> fetchUser(String userId) {
     throw UnimplementedError('fetchUser() not impl');
   }
 
@@ -28,7 +28,7 @@ abstract class IReportsAndIssuesFacade {
     throw UnimplementedError('updateUser() not impl');
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> fetchUserReports(String userId) {
+  Future<QuerySnapshot<Map<String, dynamic>>> fetchUserReports(String userId) {
     throw UnimplementedError('fetchUserReports() not impl');
   }
 }

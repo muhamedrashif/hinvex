@@ -41,6 +41,7 @@ class UserProductDetailsModel {
   final int? bhk;
   final List? keywords;
   final String? bannerId;
+  List? reportReasons;
   UserProductDetailsModel({
     this.id,
     this.userId,
@@ -78,6 +79,7 @@ class UserProductDetailsModel {
     this.bhk,
     this.keywords,
     this.bannerId,
+    this.reportReasons,
   });
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -116,6 +118,7 @@ class UserProductDetailsModel {
         "bhk": bhk,
         "keywords": keywords,
         "bannerId": bannerId,
+        "reportReasons": reportReasons,
       };
 
   static UserProductDetailsModel fromSnap(
@@ -160,6 +163,7 @@ class UserProductDetailsModel {
       bhk: snapshot['bhk'],
       keywords: snapshot['keywords'],
       bannerId: snapshot['bannerId'],
+      reportReasons: snapshot['reportReasons'],
     );
   }
 
@@ -484,6 +488,7 @@ class UserProductDetailsModel {
     int? bhk,
     List? keywords,
     String? bannerId,
+    List? reportReasons,
   }) {
     return UserProductDetailsModel(
       id: id ?? this.id,
@@ -522,6 +527,7 @@ class UserProductDetailsModel {
       bhk: bhk ?? this.bhk,
       keywords: keywords ?? this.keywords,
       bannerId: bannerId ?? this.bannerId,
+      reportReasons: reportReasons ?? this.reportReasons,
     );
   }
 }

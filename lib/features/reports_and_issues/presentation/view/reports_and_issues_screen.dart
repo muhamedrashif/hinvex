@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hinvex/features/home/presantation/provider/routing_provider.dart';
 import 'package:hinvex/features/reports_and_issues/presentation/provider/report_and_issue_provider.dart';
 import 'package:hinvex/features/reports_and_issues/presentation/view/widget/date_widget.dart';
+import 'package:hinvex/features/reports_and_issues/presentation/view/widget/reports_reasons_popup_widget.dart';
 import 'package:hinvex/general/utils/app_theme/colors.dart';
 import 'package:hinvex/general/utils/enums/enums.dart';
 import 'package:provider/provider.dart';
@@ -390,18 +391,34 @@ class _ReportsAndIssuesScreenState extends State<ReportsAndIssuesScreen> {
                                                       SizedBox(
                                                         width:
                                                             150, // Adjusted width for better alignment
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: Text(
-                                                            "Scam Or Froud",
-                                                            style:
-                                                                const TextStyle(
-                                                              fontSize: 10,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
+                                                        child: InkWell(
+                                                          onTap: () {
+                                                            showDialog(
+                                                              context: context,
+                                                              builder:
+                                                                  (BuildContext
+                                                                      context) {
+                                                                return ReportReasonsPopupScreen(
+                                                                  reasonList: state
+                                                                      .filteredReportsList[
+                                                                          index]
+                                                                      .reportReasons,
+                                                                );
+                                                              },
+                                                            );
+                                                          },
+                                                          child: const Padding(
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    8.0),
+                                                            child: Text(
+                                                              "View More",
+                                                              style: TextStyle(
+                                                                fontSize: 10,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
                                                             ),
                                                           ),
                                                         ),
@@ -415,7 +432,7 @@ class _ReportsAndIssuesScreenState extends State<ReportsAndIssuesScreen> {
                                                                   .all(8.0),
                                                           child: RichText(
                                                             text: TextSpan(
-                                                              text: "View",
+                                                              text: "View More",
                                                               style:
                                                                   const TextStyle(
                                                                 fontSize: 10,

@@ -152,13 +152,18 @@ class ReportsAndIssuesProvider with ChangeNotifier {
   Future fetchUser({required String userId}) async {
     fetchUsertLoading = true;
     notifyListeners();
-    final result = iReportsAndIssuesFacade.fetchUser(userId);
-    result.listen((event) {
-      fetchUsertList = [...event.docs.map((e) => UserModel.fromSnap(e))];
-      fetchUsertLoading = false;
+    final result = await iReportsAndIssuesFacade.fetchUser(userId);
+    fetchUsertList = [...result.docs.map((e) => UserModel.fromSnap(e))];
+    fetchUsertLoading = false;
 
-      notifyListeners();
-    });
+    notifyListeners();
+
+    // result.listen((event) {
+    //   fetchUsertList = [...event.docs.map((e) => UserModel.fromSnap(e))];
+    //   fetchUsertLoading = false;
+
+    //   notifyListeners();
+    // });
   }
 
   // DELETE REPORTS
@@ -178,15 +183,20 @@ class ReportsAndIssuesProvider with ChangeNotifier {
   Future fetchUserReports({required String userId}) async {
     fetchUserReportstLoading = true;
     notifyListeners();
-    final result = iReportsAndIssuesFacade.fetchUserReports(userId);
-    result.listen((event) {
-      fetchUserReportstList = [
-        ...event.docs.map((e) => UserProductDetailsModel.fromSnap(e))
-      ];
-      fetchUserReportstLoading = false;
+    final result = await iReportsAndIssuesFacade.fetchUserReports(userId);
+    fetchUserReportstList =
+        result.docs.map((e) => UserProductDetailsModel.fromSnap(e)).toList();
+    fetchUserReportstLoading = false;
 
-      notifyListeners();
-    });
+    notifyListeners();
+    // result.listen((event) {
+    //   fetchUserReportstList = [
+    //     ...event.docs.map((e) => UserProductDetailsModel.fromSnap(e))
+    //   ];
+    //   fetchUserReportstLoading = false;
+
+    //   notifyListeners();
+    // });
   }
 
   // BLOCK OR UNBLOCK SELECTED USER

@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 import 'package:hinvex/features/reports_and_issues/data/i_reports_and_issues_facade.dart';
 import 'package:hinvex/features/user/data/model/user_model.dart';
 import 'package:hinvex/general/failures/exeception/execeptions.dart';
@@ -32,12 +33,9 @@ class IReportsAndIssuesImpl implements IReportsAndIssuesFacade {
       final result = await _firestore
           .collection('posts')
           .orderBy('createDate', descending: true)
+          .orderBy('noOfReports')
           .where(
             Filter.and(
-              Filter(
-                'noOfReports',
-                isGreaterThanOrEqualTo: 1,
-              ),
               Filter('userId', isNotEqualTo: 'owner'),
               Filter(
                 'createDate',
@@ -46,6 +44,10 @@ class IReportsAndIssuesImpl implements IReportsAndIssuesFacade {
               Filter(
                 'createDate',
                 isLessThanOrEqualTo: Timestamp.fromDate(endDate),
+              ),
+              Filter(
+                'noOfReports',
+                isGreaterThanOrEqualTo: 1,
               ),
             ),
           )
@@ -78,12 +80,9 @@ class IReportsAndIssuesImpl implements IReportsAndIssuesFacade {
       final result = await _firestore
           .collection('posts')
           .orderBy('createDate', descending: true)
+          .orderBy('noOfReports')
           .where(
             Filter.and(
-              Filter(
-                'noOfReports',
-                isGreaterThanOrEqualTo: 1,
-              ),
               Filter('userId', isNotEqualTo: 'owner'),
               Filter(
                 'createDate',
@@ -93,6 +92,10 @@ class IReportsAndIssuesImpl implements IReportsAndIssuesFacade {
                 'createDate',
                 isLessThanOrEqualTo: Timestamp.fromDate(endDate),
               ),
+              Filter(
+                'noOfReports',
+                isGreaterThanOrEqualTo: 1,
+              ),
             ),
           )
           .startAfterDocument(lastDocument)
@@ -101,20 +104,19 @@ class IReportsAndIssuesImpl implements IReportsAndIssuesFacade {
 
       return result;
     } catch (e, stackTrace) {
+      debugPrint(e.toString());
       log("Error fetching next reports: $e", stackTrace: stackTrace);
       // Handle the error as needed, e.g., throw a custom exception
-      throw CustomExeception('Error fetching next reports: $e');
+      // throw CustomExeception('Error fetching next reports: $e');
     }
   }
 
   // FETCH USER
 
   @override
-  Stream<QuerySnapshot<Map<String, dynamic>>> fetchUser(String userId) {
-    final result = _firestore
-        .collection('users')
-        .where('userId', isEqualTo: userId)
-        .snapshots();
+  Future<QuerySnapshot<Map<String, dynamic>>> fetchUser(String userId) {
+    final result =
+        _firestore.collection('users').where('userId', isEqualTo: userId).get();
     return result;
   }
 
@@ -144,7 +146,7 @@ class IReportsAndIssuesImpl implements IReportsAndIssuesFacade {
   }
 
   @override
-  Stream<QuerySnapshot<Map<String, dynamic>>> fetchUserReports(String userId) {
+  Future<QuerySnapshot<Map<String, dynamic>>> fetchUserReports(String userId) {
     final result = _firestore
         .collection('posts')
         .orderBy('createDate', descending: true)
@@ -154,7 +156,7 @@ class IReportsAndIssuesImpl implements IReportsAndIssuesFacade {
               isGreaterThanOrEqualTo: 1,
             ),
             Filter('userId', isEqualTo: userId)))
-        .snapshots();
+        .get();
     return result;
   }
 }
