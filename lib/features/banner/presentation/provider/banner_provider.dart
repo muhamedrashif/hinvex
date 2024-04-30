@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hinvex/features/banner/data/i_banner_facade.dart';
@@ -29,9 +30,9 @@ class BannerProvider with ChangeNotifier {
   // List<UserProductDetailsModel> _fetchProductsList = [];
 
   // List<UserProductDetailsModel> get fetchProductsList => _fetchProductsList;
-  List<UserProductDetailsModel> _suggestions = [];
+  List<UserProductDetailsModel> suggestions = [];
 
-  List<UserProductDetailsModel> get suggestions => _suggestions;
+  // List<UserProductDetailsModel> get suggestions => suggestions;
   // GET IMAGE
 
   Future<void> getImage() async {
@@ -208,7 +209,7 @@ class BannerProvider with ChangeNotifier {
         log(r.length.toString());
         log(r.first.toString());
 
-        _suggestions.addAll(r);
+        suggestions.addAll(r);
         isLoading = false;
         notifyListeners();
       },
@@ -216,7 +217,7 @@ class BannerProvider with ChangeNotifier {
   }
 
   void clearSuggestions() {
-    _suggestions.clear();
+    suggestions.clear();
 
     notifyListeners();
   }
@@ -225,13 +226,29 @@ class BannerProvider with ChangeNotifier {
     iBannerFacade.clearDoc();
   }
 
-  Future<void> updateBannerId(
-      {required String id, required String bannerId}) async {
-    final result = await iBannerFacade.updateBannerId(id, bannerId);
+  Future<void> updateBannerId({
+    required UserProductDetailsModel product,
+    required String bannerId,
+    required VoidCallback onSuccess,
+    required VoidCallback onFailure,
+  }) async {
+    suggestions[
+            suggestions.indexWhere((element) => element.bannerId == bannerId)] =
+        product.copyWith(bannerId: null);
+
+    notifyListeners();
+
+    final result = await iBannerFacade.updateBannerId(product.id!, bannerId);
     result.fold((error) {
       debugPrint(error.errorMsg);
+      onFailure();
     }, (success) {
+      suggestions[
+              suggestions.indexWhere((element) => element.id == product.id)] =
+          product.copyWith(bannerId: bannerId);
+
       notifyListeners();
+      onSuccess();
     });
   }
 }

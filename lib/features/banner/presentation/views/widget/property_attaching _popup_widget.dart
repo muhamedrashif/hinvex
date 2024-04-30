@@ -2,19 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hinvex/features/banner/presentation/provider/banner_provider.dart';
 import 'package:provider/provider.dart';
 
-// void showAttachPropertyIntoBannerPopUpWidget(BuildContext context) {
-//   final TextEditingController_searchController = TextEditingController();
-//   Provider.of<BannerProvider>(context, listen: false).fetchProducts();
-
-//   showDialog(
-//     barrierDismissible: false,
-//     context: context,
-//     builder: (BuildContext context) {
-//       return
-//     },
-//   );
-// }
-
 class PropertyAttachingPopupScreen extends StatefulWidget {
   final String id;
   const PropertyAttachingPopupScreen({super.key, required this.id});
@@ -26,37 +13,13 @@ class PropertyAttachingPopupScreen extends StatefulWidget {
 
 class _PropertyAttachingPopupScreenState
     extends State<PropertyAttachingPopupScreen> {
-  // final ScrollController _scrollController = ScrollController();
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   WidgetsBinding.instance.addPostFrameCallback((_) {
-  //     Provider.of<BannerProvider>(context, listen: false).fetchProducts();
-
-  //     _scrollController.addListener(_scrollListener);
-  //   });
-  // }
-
-  // @override
-  // void dispose() {
-  //   _scrollController.dispose();
-  //   super.dispose();
-  // }
-
-  // void _scrollListener() {
-  //   if (_scrollController.position.pixels ==
-  //       _scrollController.position.maxScrollExtent) {
-  //     Provider.of<BannerProvider>(context, listen: false).fetchProducts();
-  //   }
-  // }
   final TextEditingController _searchController = TextEditingController();
-  int? _selectedRadio;
+  int? _selectedCheckboxIndex;
 
   @override
   void initState() {
     super.initState();
-    _selectedRadio = null;
+    _selectedCheckboxIndex = null;
   }
 
   @override
@@ -108,16 +71,18 @@ class _PropertyAttachingPopupScreenState
                         ),
                       ),
                       InkWell(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: const SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: Icon(
-                              Icons.close_sharp,
-                            ),
-                          ))
+                        onTap: () {
+                          state.clearSuggestions();
+                          Navigator.pop(context);
+                        },
+                        child: const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: Icon(
+                            Icons.close_sharp,
+                          ),
+                        ),
+                      )
                     ],
                   ),
                 ),
@@ -186,27 +151,17 @@ class _PropertyAttachingPopupScreenState
                                     right: 0,
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Radio(
-                                        value: index,
-                                        groupValue: _selectedRadio,
-                                        onChanged: (int? value) {
-                                          setState(() {
-                                            _selectedRadio = value;
-
-                                            if (value != null) {
-                                              state.updateBannerId(
-                                                  id: state
-                                                      .suggestions[index].id
-                                                      .toString(),
-                                                  bannerId: widget.id);
-                                            } else {
-                                              state.updateBannerId(
-                                                  id: state
-                                                      .suggestions[index].id
-                                                      .toString(),
-                                                  bannerId: '');
-                                            }
-                                          });
+                                      child: Checkbox(
+                                        value:
+                                            state.suggestions[index].bannerId ==
+                                                widget.id,
+                                        onChanged: (bool? value) {
+                                          state.updateBannerId(
+                                            product: state.suggestions[index],
+                                            bannerId: widget.id,
+                                            onSuccess: () {},
+                                            onFailure: () {},
+                                          );
                                         },
                                       ),
                                     ),

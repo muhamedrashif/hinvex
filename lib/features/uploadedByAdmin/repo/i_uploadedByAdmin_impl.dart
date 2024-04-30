@@ -10,6 +10,7 @@ import 'package:hinvex/features/uploadedByAdmin/data/model/search_location_model
 import 'package:hinvex/features/user/data/model/user_product_details_model.dart';
 import 'package:hinvex/general/failures/exeception/execeptions.dart';
 import 'package:hinvex/general/failures/failures.dart';
+import 'package:hinvex/general/services/function_service.dart';
 import 'package:hinvex/general/services/image_picker_service.dart';
 import 'package:hinvex/general/services/key_word_generate.dart';
 import 'package:hinvex/general/services/upload_location_service.dart';
@@ -263,20 +264,39 @@ class IUploadedByAdminImpl implements IUploadedByAdminFacade {
     );
   }
 
+  // @override
+  // FutureResult<List<PlaceResult>> pickLocationFromSearch(
+  //   String searchText,
+  // ) async {
+  //   try {
+  //     final res = await LocationService.searchPlaces(searchText.toLowerCase());
+  //     log("SEARCH:::::::::::${res.toString()}");
+  //     if (res != null) {
+  //       return right(res);
+  //     } else {
+  //       return left(
+  //         const MainFailure.serverFailure(errorMsg: 'No result found'),
+  //       );
+  //     }
+  //   } catch (err) {
+  //     return left(MainFailure.serverFailure(errorMsg: err.toString()));
+  //   }
+  // }
+
   @override
   FutureResult<List<PlaceResult>> pickLocationFromSearch(
     String searchText,
   ) async {
     try {
-      final res = await LocationService.searchPlaces(searchText.toLowerCase());
-      log("SEARCH:::::::::::${res.toString()}");
-      if (res != null) {
-        return right(res);
-      } else {
-        return left(
-          const MainFailure.serverFailure(errorMsg: 'No result found'),
-        );
-      }
+      const String apikey = 'AIzaSyAtdiojUpua_HUorIa1wiTQXVRTanYkF6E';
+
+      final url =
+          'https://maps.googleapis.com/maps/api/place/textsearch/json?query=$searchText&key=$apikey';
+
+      final res = await httpRequestViaServer(url);
+      print("SEARCH:::::::::::${res.toString()}");
+      return right(
+          [...(res['results'] as List).map((e) => PlaceResult.fromJson(e))]);
     } catch (err) {
       return left(MainFailure.serverFailure(errorMsg: err.toString()));
     }

@@ -214,16 +214,35 @@ class IBannerImpl implements IBannerFacade {
     }
   }
 
+  @override
   void clearDoc() {
     lastDoc = null;
   }
 
   @override
   FutureResult<void> updateBannerId(String id, String bannerId) async {
+    final batch = _firestore.batch();
+
     try {
-      await _firestore.collection('posts').doc(id).update({
-        'bannerId': bannerId,
-      });
+      final result = await _firestore
+          .collection('posts')
+          .where('bannerId', isEqualTo: bannerId)
+          .get();
+
+      if (result.docs.isNotEmpty) {
+        for (var doc in result.docs) {
+          batch.update(_firestore.collection('posts').doc(doc.id), {
+            'bannerId': null,
+          });
+        }
+
+        batch.update(_firestore.collection('posts').doc(id), {
+          'bannerId': bannerId,
+        });
+      }
+
+      await batch.commit();
+
       return right(null);
     } on CustomExeception catch (e) {
       return left(MainFailure.serverFailure(errorMsg: e.errorMsg));
