@@ -146,15 +146,15 @@ class _PropertyAttachingPopupScreenState
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Checkbox(
-                                        value:
-                                            state.suggestions[index].bannerId ==
-                                                widget.id,
+                                        value: state.suggestions[index]
+                                                .webBannerId ==
+                                            widget.id,
                                         onChanged: (bool? value) {
                                           if (value != null) {
                                             showProgress(context);
-                                            state.updateBannerId(
+                                            state.updateWebBannerId(
                                               product: state.suggestions[index],
-                                              bannerId: widget.id,
+                                              webBannerId: widget.id,
                                               onSuccess: () {
                                                 Navigator.pop(context);
                                               },

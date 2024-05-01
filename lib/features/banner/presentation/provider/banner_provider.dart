@@ -227,9 +227,9 @@ class BannerProvider with ChangeNotifier {
     iBannerFacade.clearDoc();
   }
 
-  // Future<void> updateBannerId({
+  // Future<void> updatewebBannerId({
   //   required UserProductDetailsModel product,
-  //   required String bannerId,
+  //   required String webBannerId,
   //   required VoidCallback onSuccess,
   //   required VoidCallback onFailure,
   // }) async {
@@ -237,22 +237,22 @@ class BannerProvider with ChangeNotifier {
   //       suggestions.indexWhere((element) => element.id == product.id);
 
   //   if (index != -1) {
-  //     // Deselect all items with the same bannerId
-  //     if (bannerId.isEmpty) {
+  //     // Deselect all items with the same webBannerId
+  //     if (webBannerId.isEmpty) {
   //       for (int i = 0; i < suggestions.length; i++) {
-  //         if (suggestions[i].bannerId == bannerId) {
-  //           final updatedProduct = suggestions[i].copyWith(bannerId: '');
+  //         if (suggestions[i].webBannerId == webBannerId) {
+  //           final updatedProduct = suggestions[i].copyWith(webBannerId: '');
   //           suggestions[i] = updatedProduct;
   //         }
   //       }
   //     }
 
   //     // Update the banner ID for the current item
-  //     final updatedProduct = product.copyWith(bannerId: bannerId);
+  //     final updatedProduct = product.copyWith(webBannerId: webBannerId);
   //     suggestions[index] = updatedProduct;
 
   //     // Call the API or perform other necessary operations
-  //     final result = await iBannerFacade.updateBannerId(product.id!, bannerId);
+  //     final result = await iBannerFacade.updatewebBannerId(product.id!, webBannerId);
   //     result.fold(
   //       (error) {
   //         debugPrint(error.errorMsg);
@@ -267,18 +267,18 @@ class BannerProvider with ChangeNotifier {
   //   }
   // }
 
-  Future<void> updateBannerId({
+  Future<void> updatewebBannerId({
     required UserProductDetailsModel product,
-    required String bannerId,
+    required String webBannerId,
     required VoidCallback onSuccess,
     required VoidCallback onFailure,
   }) async {
     final prIndex =
-        suggestions.indexWhere((element) => element.bannerId == bannerId);
+        suggestions.indexWhere((element) => element.webBannerId == webBannerId);
 
-    if (product.bannerId == bannerId) {
-      log('product.bannerId == bannerId');
-      final result = await _updateBannerId(null, bannerId);
+    if (product.webBannerId == webBannerId) {
+      log('product.webBannerId == webBannerId');
+      final result = await _updatewebBannerId(null, webBannerId);
 
       result.fold(
         (l) {
@@ -287,29 +287,29 @@ class BannerProvider with ChangeNotifier {
         (r) {
           suggestions[suggestions
                   .indexWhere((element) => product.id == element.id)] =
-              product.copyWith(bannerId: null);
+              product.copyWith(webBannerId: null);
           notifyListeners();
           onSuccess();
 
-          log('bannerid ${suggestions[0].bannerId}');
+          log('webBannerId ${suggestions[0].webBannerId}');
         },
       );
     } else {
-      log('product.bannerId != bannerId');
+      log('product.webBannerId != webBannerId');
       if (prIndex != -1) {
         log('prIndex != -1');
-        suggestions[prIndex] = suggestions[prIndex].copyWith(bannerId: null);
+        suggestions[prIndex] = suggestions[prIndex].copyWith(webBannerId: null);
         notifyListeners();
       }
 
-      final result = await _updateBannerId(product.id, bannerId);
+      final result = await _updatewebBannerId(product.id, webBannerId);
 
       result.fold(
         (l) => onFailure(),
         (r) {
           suggestions[suggestions
                   .indexWhere((element) => product.id == element.id)] =
-              product.copyWith(bannerId: bannerId);
+              product.copyWith(webBannerId: webBannerId);
           notifyListeners();
           onSuccess();
         },
@@ -317,10 +317,10 @@ class BannerProvider with ChangeNotifier {
     }
   }
 
-  FutureResult<void> _updateBannerId(
+  FutureResult<void> _updatewebBannerId(
     String? productId,
-    String bannerId,
+    String webBannerId,
   ) {
-    return iBannerFacade.updateBannerId(productId, bannerId);
+    return iBannerFacade.updateWebBannerId(productId, webBannerId);
   }
 }

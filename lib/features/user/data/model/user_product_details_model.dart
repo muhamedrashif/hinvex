@@ -40,7 +40,7 @@ class UserProductDetailsModel {
   final int? pricePerstft;
   final int? bhk;
   final List? keywords;
-  final String? bannerId;
+  final String? webBannerId;
   List? reportReasons;
   UserProductDetailsModel({
     this.id,
@@ -78,7 +78,7 @@ class UserProductDetailsModel {
     this.pricePerstft,
     this.bhk,
     this.keywords,
-    this.bannerId,
+    this.webBannerId,
     this.reportReasons,
   });
   Map<String, dynamic> toJson() => {
@@ -117,7 +117,7 @@ class UserProductDetailsModel {
         "pricePerstft": pricePerstft,
         "bhk": bhk,
         "keywords": keywords,
-        "bannerId": bannerId,
+        "webBannerId": webBannerId,
         "reportReasons": reportReasons,
       };
 
@@ -162,7 +162,7 @@ class UserProductDetailsModel {
       pricePerstft: snapshot['pricePerstft'] ?? 0,
       bhk: snapshot['bhk'],
       keywords: snapshot['keywords'],
-      bannerId: snapshot['bannerId'],
+      webBannerId: snapshot['webBannerId'],
       reportReasons: snapshot['reportReasons'],
     );
   }
@@ -487,7 +487,7 @@ class UserProductDetailsModel {
     int? pricePerstft,
     int? bhk,
     List? keywords,
-    String? bannerId,
+    String? webBannerId,
     List? reportReasons,
   }) {
     return UserProductDetailsModel(
@@ -526,7 +526,7 @@ class UserProductDetailsModel {
       pricePerstft: pricePerstft ?? this.pricePerstft,
       bhk: bhk ?? this.bhk,
       keywords: keywords ?? this.keywords,
-      bannerId: bannerId,
+      webBannerId: webBannerId,
       reportReasons: reportReasons ?? this.reportReasons,
     );
   }

@@ -349,7 +349,20 @@ class _BannerScreenState extends State<BannerScreen> {
                                                   padding:
                                                       const EdgeInsets.only(
                                                           bottom: 10),
-                                                  onTap: () {},
+                                                  onTap: () {
+                                                    showDialog(
+                                                      context: context,
+                                                      barrierDismissible: false,
+                                                      builder: (BuildContext
+                                                          context) {
+                                                        return PropertyAttachingPopupScreen(
+                                                            id: state
+                                                                .mobileBannerList[
+                                                                    index]
+                                                                .postId);
+                                                      },
+                                                    );
+                                                  },
                                                   child: const Row(
                                                     children: [
                                                       Padding(
