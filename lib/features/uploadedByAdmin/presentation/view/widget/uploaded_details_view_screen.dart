@@ -109,7 +109,7 @@ class _UploadedDetailWidgetState extends State<UploadedDetailWidget> {
                                         width: 70,
                                         child: Transform.scale(
                                           scale: 1.5,
-                                          child: Image.network(
+                                          child: Image.asset(
                                             ImageConstant.hinvexWhite,
                                           ),
                                         ),

@@ -1825,7 +1825,7 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                                 vertical: 20),
                                             child: Column(
                                               children: [
-                                                Image.network(
+                                                Image.asset(
                                                   ImageConstant.imageIcon,
                                                   fit: BoxFit.cover,
                                                 ),
