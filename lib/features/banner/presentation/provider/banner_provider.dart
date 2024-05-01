@@ -252,7 +252,8 @@ class BannerProvider with ChangeNotifier {
   //     suggestions[index] = updatedProduct;
 
   //     // Call the API or perform other necessary operations
-  //     final result = await iBannerFacade.updatewebBannerId(product.id!, webBannerId);
+  //     final result = await iBannerFacade.updateWebBannerId(
+  //         id: product.id!, webBannerId: webBannerId);
   //     result.fold(
   //       (error) {
   //         debugPrint(error.errorMsg);
@@ -267,7 +268,7 @@ class BannerProvider with ChangeNotifier {
   //   }
   // }
 
-  Future<void> updatewebBannerId({
+  Future<void> updateWebBannerId({
     required UserProductDetailsModel product,
     required String webBannerId,
     required VoidCallback onSuccess,
@@ -278,7 +279,8 @@ class BannerProvider with ChangeNotifier {
 
     if (product.webBannerId == webBannerId) {
       log('product.webBannerId == webBannerId');
-      final result = await _updatewebBannerId(null, webBannerId);
+      final result =
+          await _updateWebBannerId(productId: null, webBannerId: webBannerId);
 
       result.fold(
         (l) {
@@ -302,7 +304,8 @@ class BannerProvider with ChangeNotifier {
         notifyListeners();
       }
 
-      final result = await _updatewebBannerId(product.id, webBannerId);
+      final result = await _updateWebBannerId(
+          productId: product.id, webBannerId: webBannerId);
 
       result.fold(
         (l) => onFailure(),
@@ -317,10 +320,158 @@ class BannerProvider with ChangeNotifier {
     }
   }
 
-  FutureResult<void> _updatewebBannerId(
+  Future<void> updateMobileBannerId({
+    required UserProductDetailsModel product,
+    required String mobileBannerId,
+    required VoidCallback onSuccess,
+    required VoidCallback onFailure,
+  }) async {
+    final prIndex = suggestions
+        .indexWhere((element) => element.mobileBannerId == mobileBannerId);
+
+    if (product.mobileBannerId == mobileBannerId) {
+      log('product.mobileBannerId == mobileBannerId');
+      final result = await _updateMobileBannerId(
+          productId: null, mobileBannerId: mobileBannerId);
+
+      result.fold(
+        (l) {
+          onFailure();
+        },
+        (r) {
+          suggestions[suggestions
+                  .indexWhere((element) => product.id == element.id)] =
+              product.copyWith(mobileBannerId: null);
+          notifyListeners();
+          onSuccess();
+
+          log('mobileBannerId ${suggestions[0].mobileBannerId}');
+        },
+      );
+    } else {
+      log('product.mobileBannerId != mobileBannerId');
+      if (prIndex != -1) {
+        log('prIndex != -1');
+        suggestions[prIndex] =
+            suggestions[prIndex].copyWith(mobileBannerId: null);
+        notifyListeners();
+      }
+
+      final result = await _updateMobileBannerId(
+          productId: product.id, mobileBannerId: mobileBannerId);
+
+      result.fold(
+        (l) => onFailure(),
+        (r) {
+          suggestions[suggestions
+                  .indexWhere((element) => product.id == element.id)] =
+              product.copyWith(mobileBannerId: mobileBannerId);
+          notifyListeners();
+          onSuccess();
+        },
+      );
+    }
+  }
+  // Future<void> updateBannerId({
+  //   required UserProductDetailsModel product,
+  //   required String bannerId,
+  //   required VoidCallback onSuccess,
+  //   required VoidCallback onFailure,
+  //   required bool isWebBanner,
+  // }) async {
+  //   String idKey = '';
+  //   if (isWebBanner) {
+  //     idKey = 'webBannerId';
+  //   } else {
+  //     idKey = 'mobileBannerId';
+  //   }
+
+  //   final prIndex =
+  //       suggestions.indexWhere((element) => element.id == product.id);
+
+  //   if (product.id == bannerId) {
+  //     log('product.$idKey == $bannerId');
+  //     final result = await _updateMobileAndWebBannerId(
+  //       productId: null,
+  //       webBannerId: isWebBanner ? bannerId : null,
+  //       mobileBannerId: isWebBanner ? null : bannerId,
+  //     );
+
+  //     result.fold(
+  //       (l) {
+  //         onFailure();
+  //       },
+  //       (r) {
+  //         // suggestions[prIndex] = product.copyWith(
+  //         //   webBannerId: isWebBanner ? null : bannerId,
+  //         //   mobileBannerId: isWebBanner ? bannerId : null,
+  //         // );
+
+  //         suggestions[suggestions.indexWhere(
+  //             (element) => product.id == element.id)] = product.copyWith(
+  //           webBannerId: isWebBanner ? null : bannerId,
+  //           mobileBannerId: isWebBanner ? bannerId : null,
+  //         );
+  //         notifyListeners();
+  //         onSuccess();
+
+  //         log('$idKey ${suggestions[prIndex].id}');
+  //       },
+  //     );
+  //   } else {
+  //     log('product.$idKey != $bannerId');
+  //     if (prIndex != -1) {
+  //       log('prIndex != -1');
+  //       suggestions[prIndex] = suggestions[prIndex].copyWith(
+  //         webBannerId: isWebBanner ? null : bannerId,
+  //         mobileBannerId: isWebBanner ? bannerId : null,
+  //       );
+  //       notifyListeners();
+  //     }
+
+  //     final result = await _updateMobileAndWebBannerId(
+  //       productId: product.id,
+  //       webBannerId: isWebBanner ? bannerId : null,
+  //       mobileBannerId: isWebBanner ? null : bannerId,
+  //     );
+
+  //     result.fold(
+  //       (l) => onFailure(),
+  //       (r) {
+  //         // suggestions[prIndex] = product.copyWith(
+  //         //   webBannerId: isWebBanner ? bannerId : null,
+  //         //   mobileBannerId: isWebBanner ? null : bannerId,
+  //         // );
+
+  //         suggestions[suggestions.indexWhere(
+  //             (element) => product.id == element.id)] = product.copyWith(
+  //           webBannerId: isWebBanner ? bannerId : null,
+  //           mobileBannerId: isWebBanner ? null : bannerId,
+  //         );
+  //         notifyListeners();
+  //         onSuccess();
+  //       },
+  //     );
+  //   }
+  // }
+
+  FutureResult<void> _updateWebBannerId({
     String? productId,
-    String webBannerId,
-  ) {
-    return iBannerFacade.updateWebBannerId(productId, webBannerId);
+    String? webBannerId,
+  }) {
+    return iBannerFacade.updateWebBannerId(
+      id: productId,
+      webBannerId: webBannerId,
+    );
+  }
+
+  FutureResult<void> _updateMobileBannerId({
+    String? productId,
+    String? mobileBannerId,
+  }) {
+    return iBannerFacade.updateMobileBannerId(
+      id: productId,
+      mobileBannerId: mobileBannerId,
+    );
   }
 }

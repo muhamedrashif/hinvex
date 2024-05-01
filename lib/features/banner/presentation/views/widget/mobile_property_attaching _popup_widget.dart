@@ -3,17 +3,17 @@ import 'package:hinvex/features/banner/presentation/provider/banner_provider.dar
 import 'package:hinvex/general/utils/progress_indicator_widget/progress_indicator_widget.dart';
 import 'package:provider/provider.dart';
 
-class PropertyAttachingPopupScreen extends StatefulWidget {
+class MobilePropertyAttachingPopupScreen extends StatefulWidget {
   final String id;
-  const PropertyAttachingPopupScreen({super.key, required this.id});
+  const MobilePropertyAttachingPopupScreen({super.key, required this.id});
 
   @override
-  State<PropertyAttachingPopupScreen> createState() =>
-      _PropertyAttachingPopupScreenState();
+  State<MobilePropertyAttachingPopupScreen> createState() =>
+      _MobilePropertyAttachingPopupScreenState();
 }
 
-class _PropertyAttachingPopupScreenState
-    extends State<PropertyAttachingPopupScreen> {
+class _MobilePropertyAttachingPopupScreenState
+    extends State<MobilePropertyAttachingPopupScreen> {
   final TextEditingController _searchController = TextEditingController();
 
   @override
@@ -147,14 +147,14 @@ class _PropertyAttachingPopupScreenState
                                       padding: const EdgeInsets.all(8.0),
                                       child: Checkbox(
                                         value: state.suggestions[index]
-                                                .webBannerId ==
+                                                .mobileBannerId ==
                                             widget.id,
                                         onChanged: (bool? value) {
                                           if (value != null) {
                                             showProgress(context);
-                                            state.updateWebBannerId(
+                                            state.updateMobileBannerId(
                                               product: state.suggestions[index],
-                                              webBannerId: widget.id,
+                                              mobileBannerId: widget.id,
                                               onSuccess: () {
                                                 Navigator.pop(context);
                                               },

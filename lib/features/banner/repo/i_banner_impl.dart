@@ -220,17 +220,47 @@ class IBannerImpl implements IBannerFacade {
   }
 
   @override
-  FutureResult<void> updateWebBannerId(String? id, String webBannerId) async {
+  FutureResult<void> updateWebBannerId({
+    String? id,
+    String? webBannerId,
+  }) async {
+    try {
+      await _updateBannerId(
+          bannerId: webBannerId, fieldName: 'webBannerId', id: id);
+
+      return right(null);
+    } on CustomExeception catch (e) {
+      print(e);
+      return left(MainFailure.serverFailure(errorMsg: e.errorMsg));
+    }
+  }
+
+  @override
+  FutureResult<void> updateMobileBannerId({
+    String? id,
+    String? mobileBannerId,
+  }) async {
+    try {
+      await _updateBannerId(
+          bannerId: mobileBannerId, fieldName: 'mobileBannerId', id: id);
+
+      return right(null);
+    } on CustomExeception catch (e) {
+      print(e);
+      return left(MainFailure.serverFailure(errorMsg: e.errorMsg));
+    }
+  }
+
+  Future<void> _updateBannerId({
+    required String fieldName,
+    required String? id,
+    required String? bannerId,
+  }) async {
     final batch = _firestore.batch();
-
-    log(webBannerId);
-
-    log(id.toString());
-
     try {
       final result = await _firestore
           .collection('posts')
-          .where('webBannerId', isEqualTo: webBannerId)
+          .where(fieldName, isEqualTo: bannerId)
           .get();
 
       log(result.docs.length.toString());
@@ -239,20 +269,20 @@ class IBannerImpl implements IBannerFacade {
         for (var doc in result.docs) {
           batch.update(_firestore.collection('posts').doc(doc.id), {
             'webBannerId': null,
+            'mobileBannerId': null,
           });
         }
       }
       if (id != null) {
         batch.update(_firestore.collection('posts').doc(id), {
-          'webBannerId': webBannerId,
+          fieldName: bannerId,
         });
       }
 
       await batch.commit();
-
-      return right(null);
-    } on CustomExeception catch (e) {
-      return left(MainFailure.serverFailure(errorMsg: e.errorMsg));
+    } on FirebaseException catch (e) {
+      print(e);
+      rethrow;
     }
   }
 }

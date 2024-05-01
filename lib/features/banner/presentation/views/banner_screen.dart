@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:hinvex/features/banner/presentation/provider/banner_provider.dart';
 import 'package:hinvex/features/banner/presentation/views/widget/add_mobile_banner_popup_widget.dart';
-import 'package:hinvex/features/banner/presentation/views/widget/property_attaching%20_popup_widget.dart';
+import 'package:hinvex/features/banner/presentation/views/widget/web_property_attaching%20_popup_widget.dart';
 import 'package:hinvex/general/utils/app_theme/colors.dart';
 import 'package:provider/provider.dart';
 import 'widget/add_web_banner_popup_widget.dart';
@@ -11,6 +11,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
 
 import 'widget/deletePopup_widget.dart';
+import 'widget/mobile_property_attaching _popup_widget.dart';
 
 class BannerScreen extends StatefulWidget {
   const BannerScreen({super.key});
@@ -154,7 +155,7 @@ class _BannerScreenState extends State<BannerScreen> {
                                                       barrierDismissible: false,
                                                       builder: (BuildContext
                                                           context) {
-                                                        return PropertyAttachingPopupScreen(
+                                                        return WebPropertyAttachingPopupScreen(
                                                             id: state
                                                                 .webBannerList[
                                                                     index]
@@ -355,7 +356,7 @@ class _BannerScreenState extends State<BannerScreen> {
                                                       barrierDismissible: false,
                                                       builder: (BuildContext
                                                           context) {
-                                                        return PropertyAttachingPopupScreen(
+                                                        return MobilePropertyAttachingPopupScreen(
                                                             id: state
                                                                 .mobileBannerList[
                                                                     index]

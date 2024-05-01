@@ -42,6 +42,7 @@ class UserProductDetailsModel {
   final List? keywords;
   final String? webBannerId;
   List? reportReasons;
+  final String? mobileBannerId;
   UserProductDetailsModel({
     this.id,
     this.userId,
@@ -80,6 +81,7 @@ class UserProductDetailsModel {
     this.keywords,
     this.webBannerId,
     this.reportReasons,
+    this.mobileBannerId,
   });
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -119,6 +121,7 @@ class UserProductDetailsModel {
         "keywords": keywords,
         "webBannerId": webBannerId,
         "reportReasons": reportReasons,
+        "mobileBannerId": mobileBannerId,
       };
 
   static UserProductDetailsModel fromSnap(
@@ -164,6 +167,7 @@ class UserProductDetailsModel {
       keywords: snapshot['keywords'],
       webBannerId: snapshot['webBannerId'],
       reportReasons: snapshot['reportReasons'],
+      mobileBannerId: snapshot['mobileBannerId'],
     );
   }
 
@@ -489,6 +493,7 @@ class UserProductDetailsModel {
     List? keywords,
     String? webBannerId,
     List? reportReasons,
+    String? mobileBannerId,
   }) {
     return UserProductDetailsModel(
       id: id ?? this.id,
@@ -528,6 +533,7 @@ class UserProductDetailsModel {
       keywords: keywords ?? this.keywords,
       webBannerId: webBannerId,
       reportReasons: reportReasons ?? this.reportReasons,
+      mobileBannerId: mobileBannerId,
     );
   }
 }

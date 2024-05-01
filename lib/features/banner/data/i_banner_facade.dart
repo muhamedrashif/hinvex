@@ -43,8 +43,18 @@ abstract class IBannerFacade {
     throw UnimplementedError('fetchProduct is not implemented');
   }
 
-  FutureResult<void> updateWebBannerId(String? id, String webBannerId) {
+  FutureResult<void> updateWebBannerId({
+    String? id,
+    String? webBannerId,
+  }) {
     throw UnimplementedError('updatewebBannerId() not impl');
+  }
+
+  FutureResult<void> updateMobileBannerId({
+    String? id,
+    String? mobileBannerId,
+  }) {
+    throw UnimplementedError('updateMobileBannerId() not impl');
   }
 
   void clearDoc() {}
