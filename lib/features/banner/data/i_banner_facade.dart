@@ -43,7 +43,7 @@ abstract class IBannerFacade {
     throw UnimplementedError('fetchProduct is not implemented');
   }
 
-  FutureResult<void> updateBannerId(String id, String bannerId) {
+  FutureResult<void> updateBannerId(String? id, String bannerId) {
     throw UnimplementedError('updateBannerId() not impl');
   }
 

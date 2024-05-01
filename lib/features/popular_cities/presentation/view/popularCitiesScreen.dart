@@ -292,6 +292,7 @@ class _PopularCiteisScreenState extends State<PopularCiteisScreen> {
 
                                             showDialog(
                                               context: context,
+                                              barrierDismissible: false,
                                               builder: (BuildContext context) {
                                                 return DeletePopularCitiesConfirmationDialog(
                                                   id: state

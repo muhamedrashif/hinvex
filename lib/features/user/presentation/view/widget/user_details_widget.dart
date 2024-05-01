@@ -341,6 +341,7 @@ class _UserDetailWidgetState extends State<UserDetailWidget> {
                                               onTap: () {
                                                 showDialog(
                                                   context: context,
+                                                  barrierDismissible: false,
                                                   builder:
                                                       (BuildContext context) {
                                                     return DeletePostsOrReportsConfirmationDialog(
@@ -609,6 +610,7 @@ class _UserDetailWidgetState extends State<UserDetailWidget> {
                                               onTap: () {
                                                 showDialog(
                                                   context: context,
+                                                  barrierDismissible: false,
                                                   builder:
                                                       (BuildContext context) {
                                                     return DeletePostsOrReportsConfirmationDialog(

@@ -12,6 +12,7 @@ import 'package:hinvex/features/banner/data/model/banner_model.dart';
 import 'package:hinvex/features/user/data/model/user_product_details_model.dart';
 import 'package:hinvex/general/failures/failures.dart';
 import 'package:hinvex/general/services/image_picker_service.dart';
+import 'package:hinvex/general/typedefs/typedefs.dart';
 import 'package:uuid/uuid.dart';
 
 class BannerProvider with ChangeNotifier {
@@ -208,7 +209,7 @@ class BannerProvider with ChangeNotifier {
       (r) {
         log(r.length.toString());
         log(r.first.toString());
-
+        clearSuggestions();
         suggestions.addAll(r);
         isLoading = false;
         notifyListeners();
@@ -226,29 +227,100 @@ class BannerProvider with ChangeNotifier {
     iBannerFacade.clearDoc();
   }
 
+  // Future<void> updateBannerId({
+  //   required UserProductDetailsModel product,
+  //   required String bannerId,
+  //   required VoidCallback onSuccess,
+  //   required VoidCallback onFailure,
+  // }) async {
+  //   final int index =
+  //       suggestions.indexWhere((element) => element.id == product.id);
+
+  //   if (index != -1) {
+  //     // Deselect all items with the same bannerId
+  //     if (bannerId.isEmpty) {
+  //       for (int i = 0; i < suggestions.length; i++) {
+  //         if (suggestions[i].bannerId == bannerId) {
+  //           final updatedProduct = suggestions[i].copyWith(bannerId: '');
+  //           suggestions[i] = updatedProduct;
+  //         }
+  //       }
+  //     }
+
+  //     // Update the banner ID for the current item
+  //     final updatedProduct = product.copyWith(bannerId: bannerId);
+  //     suggestions[index] = updatedProduct;
+
+  //     // Call the API or perform other necessary operations
+  //     final result = await iBannerFacade.updateBannerId(product.id!, bannerId);
+  //     result.fold(
+  //       (error) {
+  //         debugPrint(error.errorMsg);
+  //         onFailure();
+  //       },
+  //       (success) {
+  //         onSuccess();
+  //       },
+  //     );
+
+  //     notifyListeners(); // Notify listeners about the change
+  //   }
+  // }
+
   Future<void> updateBannerId({
     required UserProductDetailsModel product,
     required String bannerId,
     required VoidCallback onSuccess,
     required VoidCallback onFailure,
   }) async {
-    suggestions[
-            suggestions.indexWhere((element) => element.bannerId == bannerId)] =
-        product.copyWith(bannerId: null);
+    final prIndex =
+        suggestions.indexWhere((element) => element.bannerId == bannerId);
 
-    notifyListeners();
+    if (product.bannerId == bannerId) {
+      log('product.bannerId == bannerId');
+      final result = await _updateBannerId(null, bannerId);
 
-    final result = await iBannerFacade.updateBannerId(product.id!, bannerId);
-    result.fold((error) {
-      debugPrint(error.errorMsg);
-      onFailure();
-    }, (success) {
-      suggestions[
-              suggestions.indexWhere((element) => element.id == product.id)] =
-          product.copyWith(bannerId: bannerId);
+      result.fold(
+        (l) {
+          onFailure();
+        },
+        (r) {
+          suggestions[suggestions
+                  .indexWhere((element) => product.id == element.id)] =
+              product.copyWith(bannerId: null);
+          notifyListeners();
+          onSuccess();
 
-      notifyListeners();
-      onSuccess();
-    });
+          log('bannerid ${suggestions[0].bannerId}');
+        },
+      );
+    } else {
+      log('product.bannerId != bannerId');
+      if (prIndex != -1) {
+        log('prIndex != -1');
+        suggestions[prIndex] = suggestions[prIndex].copyWith(bannerId: null);
+        notifyListeners();
+      }
+
+      final result = await _updateBannerId(product.id, bannerId);
+
+      result.fold(
+        (l) => onFailure(),
+        (r) {
+          suggestions[suggestions
+                  .indexWhere((element) => product.id == element.id)] =
+              product.copyWith(bannerId: bannerId);
+          notifyListeners();
+          onSuccess();
+        },
+      );
+    }
+  }
+
+  FutureResult<void> _updateBannerId(
+    String? productId,
+    String bannerId,
+  ) {
+    return iBannerFacade.updateBannerId(productId, bannerId);
   }
 }

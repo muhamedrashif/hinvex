@@ -526,7 +526,7 @@ class UserProductDetailsModel {
       pricePerstft: pricePerstft ?? this.pricePerstft,
       bhk: bhk ?? this.bhk,
       keywords: keywords ?? this.keywords,
-      bannerId: bannerId ?? this.bannerId,
+      bannerId: bannerId,
       reportReasons: reportReasons ?? this.reportReasons,
     );
   }

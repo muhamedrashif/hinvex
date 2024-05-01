@@ -151,6 +151,7 @@ class _BannerScreenState extends State<BannerScreen> {
                                                   onTap: () {
                                                     showDialog(
                                                       context: context,
+                                                      barrierDismissible: false,
                                                       builder: (BuildContext
                                                           context) {
                                                         return PropertyAttachingPopupScreen(
@@ -202,6 +203,7 @@ class _BannerScreenState extends State<BannerScreen> {
 
                                                     showDialog(
                                                       context: context,
+                                                      barrierDismissible: false,
                                                       builder: (BuildContext
                                                           context) {
                                                         return DeletePostConfirmationDialog(
@@ -390,6 +392,7 @@ class _BannerScreenState extends State<BannerScreen> {
                                                     // );
                                                     showDialog(
                                                       context: context,
+                                                      barrierDismissible: false,
                                                       builder: (BuildContext
                                                           context) {
                                                         return DeletePostConfirmationDialog(

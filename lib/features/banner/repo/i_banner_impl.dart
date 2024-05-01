@@ -220,8 +220,12 @@ class IBannerImpl implements IBannerFacade {
   }
 
   @override
-  FutureResult<void> updateBannerId(String id, String bannerId) async {
+  FutureResult<void> updateBannerId(String? id, String bannerId) async {
     final batch = _firestore.batch();
+
+    log(bannerId);
+
+    log(id.toString());
 
     try {
       final result = await _firestore
@@ -229,13 +233,16 @@ class IBannerImpl implements IBannerFacade {
           .where('bannerId', isEqualTo: bannerId)
           .get();
 
+      log(result.docs.length.toString());
+
       if (result.docs.isNotEmpty) {
         for (var doc in result.docs) {
           batch.update(_firestore.collection('posts').doc(doc.id), {
             'bannerId': null,
           });
         }
-
+      }
+      if (id != null) {
         batch.update(_firestore.collection('posts').doc(id), {
           'bannerId': bannerId,
         });

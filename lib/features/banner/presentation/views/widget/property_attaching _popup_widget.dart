@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hinvex/features/banner/presentation/provider/banner_provider.dart';
+import 'package:hinvex/general/utils/progress_indicator_widget/progress_indicator_widget.dart';
 import 'package:provider/provider.dart';
 
 class PropertyAttachingPopupScreen extends StatefulWidget {
@@ -14,13 +15,6 @@ class PropertyAttachingPopupScreen extends StatefulWidget {
 class _PropertyAttachingPopupScreenState
     extends State<PropertyAttachingPopupScreen> {
   final TextEditingController _searchController = TextEditingController();
-  int? _selectedCheckboxIndex;
-
-  @override
-  void initState() {
-    super.initState();
-    _selectedCheckboxIndex = null;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -156,12 +150,19 @@ class _PropertyAttachingPopupScreenState
                                             state.suggestions[index].bannerId ==
                                                 widget.id,
                                         onChanged: (bool? value) {
-                                          state.updateBannerId(
-                                            product: state.suggestions[index],
-                                            bannerId: widget.id,
-                                            onSuccess: () {},
-                                            onFailure: () {},
-                                          );
+                                          if (value != null) {
+                                            showProgress(context);
+                                            state.updateBannerId(
+                                              product: state.suggestions[index],
+                                              bannerId: widget.id,
+                                              onSuccess: () {
+                                                Navigator.pop(context);
+                                              },
+                                              onFailure: () {
+                                                Navigator.pop(context);
+                                              },
+                                            );
+                                          }
                                         },
                                       ),
                                     ),

@@ -151,6 +151,7 @@ class _ReportsAndIssuesScreenState extends State<ReportsAndIssuesScreen> {
                                   onTap: () {
                                     showDialog(
                                       context: context,
+                                      barrierDismissible: false,
                                       builder: (BuildContext context) {
                                         return const DateRangeService();
                                       },
