@@ -235,6 +235,7 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                 ],
                               ),
                             ),
+///////////////////////////////////////////////////////////////Choose Location"
                             Padding(
                               padding: const EdgeInsets.all(10.0),
                               child: Row(
@@ -409,7 +410,7 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                               ),
                             ),
 
-                            // CATEGORY
+////////////////////////////////////////////////////////////////// CATEGORY
 
                             Padding(
                               padding: const EdgeInsets.all(10.0),
@@ -477,7 +478,7 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                               ),
                             ),
 
-                            // TYPE
+///////////////////////////////////////////////////////////////////// TYPE
 
                             // if (_selectedCategory != 'PG & Guest House')
                             Padding(
@@ -537,7 +538,7 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                               ),
                             ),
 
-                            // BEDROOM
+//////////////////////////////////////////////////////////////////// BEDROOM
 
                             if (_selectedCategory == 'House' ||
                                 _selectedCategory == 'Apartments')
@@ -600,6 +601,7 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                   ],
                                 ),
                               ),
+////////////////////////////////////////////////////////////// BATHROOM
                             if (_selectedCategory == 'House' ||
                                 _selectedCategory == 'Apartments')
                               Padding(
@@ -662,6 +664,7 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                   ],
                                 ),
                               ),
+/////////////////////////////////////////////////////// FURNISHING
                             if (_selectedCategory == 'House' ||
                                 _selectedCategory == 'Apartments' ||
                                 _selectedCategory == 'Commercial' ||
@@ -726,6 +729,7 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                   ],
                                 ),
                               ),
+///////////////////////////////////////////////////////////////////Construction Status
                             if (_selectedCategory == 'House' ||
                                 _selectedCategory == 'Apartments' ||
                                 _selectedCategory == 'Co-Working Soace' ||
@@ -790,6 +794,7 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                   ],
                                 ),
                               ),
+///////////////////////////////////////////////////////////////////isted By
                             Padding(
                               padding: const EdgeInsets.all(10.0),
                               child: Row(
@@ -846,6 +851,7 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                 ],
                               ),
                             ),
+///////////////////////////////////////////////////////////////////Super Builup Area(ft2)
                             if (_selectedCategory == 'House' ||
                                 _selectedCategory == 'Apartments' ||
                                 _selectedCategory == 'Co-Working Soace' ||
@@ -895,6 +901,7 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                   ],
                                 ),
                               ),
+///////////////////////////////////////////////////////////////////Price Per sq.ft
                             if (_selectedCategory == 'House' ||
                                 _selectedCategory == 'Apartments')
                               Padding(
@@ -941,6 +948,7 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                   ],
                                 ),
                               ),
+///////////////////////////////////////////////////////////////////Carpet Area
                             if (_selectedCategory == 'House' ||
                                 _selectedCategory == 'Apartments' ||
                                 _selectedCategory == 'Co-Working Soace' ||
@@ -989,6 +997,7 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                   ],
                                 ),
                               ),
+////////////////////////////////////////////////////////////////////Wash Room
                             if (_selectedCategory == 'Commercial' ||
                                 _selectedCategory == 'Co-Working Soace')
                               Padding(
@@ -1035,6 +1044,7 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                   ],
                                 ),
                               ),
+///////////////////////////////////////////////////////////////////Plot Area
                             if (_selectedCategory == 'Lands/Plots')
                               Padding(
                                 padding: const EdgeInsets.all(10.0),
@@ -1080,6 +1090,7 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                   ],
                                 ),
                               ),
+/////////////////////////////////////////////////////////////////// Length
                             if (_selectedCategory == 'Lands/Plots')
                               Padding(
                                 padding: const EdgeInsets.all(10.0),
@@ -1125,6 +1136,7 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                   ],
                                 ),
                               ),
+/////////////////////////////////////////////////////////////////////Breadth
                             if (_selectedCategory == 'Lands/Plots')
                               Padding(
                                 padding: const EdgeInsets.all(10.0),
@@ -1170,6 +1182,7 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                   ],
                                 ),
                               ),
+///////////////////////////////////////////////////////////////////////Total Floors
                             if (_selectedCategory == 'House' ||
                                 _selectedCategory == 'Apartments')
                               Padding(
@@ -1216,6 +1229,7 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                   ],
                                 ),
                               ),
+/////////////////////////////////////////////////////////////////////////Floor No
                             if (_selectedCategory == 'House' ||
                                 _selectedCategory == 'Apartments')
                               Padding(
@@ -1262,6 +1276,7 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                   ],
                                 ),
                               ),
+///////////////////////////////////////////////////////////////////////Car Parking
                             if (_selectedCategory == 'House' ||
                                 _selectedCategory == 'Apartments' ||
                                 _selectedCategory == 'Commercial' ||
@@ -1327,6 +1342,7 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                   ],
                                 ),
                               ),
+/////////////////////////////////////////////////////////////////////////BHK
                             if (_selectedCategory == 'House' ||
                                 _selectedCategory == 'Apartments')
                               Padding(
@@ -1392,6 +1408,7 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                   ],
                                 ),
                               ),
+/////////////////////////////////////////////////////////////////////////Facing,
                             // if (_selectedCategory == 'House' ||
                             //     _selectedCategory == 'Apartments' ||
                             //     _selectedCategory == 'Lands/Plots')
@@ -1453,6 +1470,7 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                             //       ],
                             //     ),
                             //   ),
+/////////////////////////////////////////////////////////////////////////Project Name
                             if (_selectedCategory == 'House' ||
                                 _selectedCategory == 'Apartments' ||
                                 _selectedCategory == 'Commercial' ||

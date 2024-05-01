@@ -67,7 +67,9 @@ class UploadedByAdminProvider with ChangeNotifier {
     sendLoading = true;
     notifyListeners();
     final result = await iUploadedByAdminFacade.uploadPropertyToFireStore(
-        userProductDetailsModel: userProductDetailsModel, imageByte: imageFile);
+      userProductDetailsModel: userProductDetailsModel,
+      imageByte: imageFile,
+    );
     result.fold((error) {
       log(error.errorMsg);
     }, (success) {

@@ -41,11 +41,11 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
   }
 
   String _selectedMenuItem =
-      'all'; // Initialize with 'all' as the default selected item
+      'All'; // Initialize with 'all' as the default selected item
 
   // Helper method to filter properties based on the selected option
   List<UserProductDetailsModel> _filterProperties() {
-    if (_selectedMenuItem == 'all') {
+    if (_selectedMenuItem == 'All') {
       return Provider.of<PropertiesProvider>(context, listen: false)
           .filteredPropertiesList; // Return all properties
     } else {
@@ -132,6 +132,9 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: PopupMenuButton<String>(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
                                   splashRadius: 10,
                                   initialValue: _selectedMenuItem,
                                   onSelected: (value) {

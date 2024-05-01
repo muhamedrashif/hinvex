@@ -119,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: SizedBox(
                         height: 25,
                         width: 130,
-                        child: Image.network(
+                        child: Image.asset(
                           ImageConstant.hinvex,
                           fit: BoxFit.cover,
                         ),

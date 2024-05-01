@@ -435,6 +435,12 @@ class _UploadedViewScreenState extends State<UploadedViewScreen> {
                                                 padding:
                                                     const EdgeInsets.all(8.0),
                                                 child: PopupMenuButton(
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                  ),
+                                                  splashRadius: 20,
                                                   itemBuilder: (context) {
                                                     return [
                                                       PopupMenuItem(

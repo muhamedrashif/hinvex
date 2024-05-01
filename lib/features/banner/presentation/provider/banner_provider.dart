@@ -49,6 +49,7 @@ class BannerProvider with ChangeNotifier {
   Future saveImage({
     required Uint8List imagePath,
     required VoidCallback onSuccess,
+    required VoidCallback onFailure,
     required String status,
   }) async {
     // log(imageFile.toString());
@@ -57,6 +58,7 @@ class BannerProvider with ChangeNotifier {
     final result = await iBannerFacade.saveImages(imagePath: imageFile!);
     result.fold((error) {
       log(error.errorMsg);
+      onFailure();
       saveImageloading = false;
     }, (success) {
       log(success);
@@ -67,10 +69,9 @@ class BannerProvider with ChangeNotifier {
           status: status);
       saveImageloading = false;
       uploadImageToFireStore(url: success, status: status);
-
-      onSuccess.call();
     });
     notifyListeners();
+    onSuccess.call();
   }
 
 // CLEAR IMAGE

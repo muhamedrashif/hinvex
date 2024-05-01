@@ -109,6 +109,7 @@ class IReportsAndIssuesImpl implements IReportsAndIssuesFacade {
       // Handle the error as needed, e.g., throw a custom exception
       // throw CustomExeception('Error fetching next reports: $e');
     }
+    return null;
   }
 
   // FETCH USER

@@ -13,9 +13,10 @@ abstract class IUploadedByAdminFacade {
     throw UnimplementedError('getImage() not impl');
   }
 
-  FutureResult<UserProductDetailsModel> uploadPropertyToFireStore(
-      {required UserProductDetailsModel userProductDetailsModel,
-      required List<Uint8List> imageByte}) {
+  FutureResult<UserProductDetailsModel> uploadPropertyToFireStore({
+    required UserProductDetailsModel userProductDetailsModel,
+    required List<Uint8List> imageByte,
+  }) {
     throw UnimplementedError('uploadPropertyToFireStore() not impl');
   }
 

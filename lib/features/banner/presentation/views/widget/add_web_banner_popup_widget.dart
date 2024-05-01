@@ -2,6 +2,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:hinvex/features/banner/presentation/provider/banner_provider.dart';
 import 'package:hinvex/general/utils/app_theme/colors.dart';
+import 'package:hinvex/general/utils/progress_indicator_widget/progress_indicator_widget.dart';
 import 'package:provider/provider.dart';
 
 showAddWebBannerPopUpWidget(BuildContext context) {
@@ -52,20 +53,20 @@ showAddWebBannerPopUpWidget(BuildContext context) {
                             children: [
                               Padding(
                                 padding: const EdgeInsets.all(8),
-                                child: DottedBorder(
-                                  color: Colors.grey,
-                                  strokeWidth: 1,
-                                  dashPattern: const [
-                                    5,
-                                    5,
-                                  ],
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 51.0, vertical: 30),
-                                    child: InkWell(
-                                      onTap: () async {
-                                        state.getImage();
-                                      },
+                                child: InkWell(
+                                  onTap: () async {
+                                    state.getImage();
+                                  },
+                                  child: DottedBorder(
+                                    color: Colors.grey,
+                                    strokeWidth: 1,
+                                    dashPattern: const [
+                                      5,
+                                      5,
+                                    ],
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 51.0, vertical: 30),
                                       child: const Icon(
                                         Icons.image,
                                         color: Colors.grey,
@@ -87,12 +88,21 @@ showAddWebBannerPopUpWidget(BuildContext context) {
                       child: InkWell(
                         onTap: () async {
                           state.saveImage(
-                              imagePath: state.imageFile!,
-                              status: "0",
-                              onSuccess: () {
-                                state.clearImage();
-                                Navigator.pop(context);
-                              });
+                            imagePath: state.imageFile!,
+                            status: "0",
+                            onSuccess: () {
+                              showProgress(context);
+                              state.clearImage();
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            },
+                            onFailure: () {
+                              showProgress(context);
+                              state.clearImage();
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            },
+                          );
                         },
                         child: state.saveImageloading
                             ? const CircularProgressIndicator()
