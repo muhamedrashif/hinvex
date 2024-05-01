@@ -27,7 +27,7 @@ class IUserImpl implements IUserFacade {
         log('lastdoc');
       }
       final result = lastDoc == null
-          ? await _firestore.collection('users').limit(4).get()
+          ? await _firestore.collection('users').limit(10).get()
           : await _firestore
               .collection('users')
               .startAfterDocument(lastDoc!)
@@ -98,7 +98,7 @@ class IUserImpl implements IUserFacade {
         .orderBy('createDate', descending: true)
         .where(Filter.and(
           Filter(
-            'userid',
+            'userId',
             isEqualTo: userId,
           ),
           Filter(
@@ -107,6 +107,7 @@ class IUserImpl implements IUserFacade {
           ),
         ))
         .get();
+    log(result.toString());
     return result;
   }
 

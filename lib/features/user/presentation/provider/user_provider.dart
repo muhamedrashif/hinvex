@@ -13,6 +13,7 @@ class UserProvider with ChangeNotifier {
   }
 
   bool fetchUserLoding = false;
+  bool fetchNextUserLoading = false;
   UserModel? selectedUserDetails;
   bool fetchPostLoding = false;
   bool fetchReportLoading = false;
@@ -22,26 +23,28 @@ class UserProvider with ChangeNotifier {
 
   Future<void> fetchUser() async {
     log('called ');
+    if (!fetchUserLoding && !fetchNextUserLoading) {
+      fetchUserLoding = true;
 
-    fetchUserLoding = true;
+      notifyListeners();
 
-    notifyListeners();
-    final result = await iUserFacade.fetchUser();
+      final result = await iUserFacade.fetchUser();
 
-    result.fold(
-      (l) {
-        log(l.errorMsg);
-        fetchUserLoding = false;
-        notifyListeners();
-      },
-      (r) {
-        log(r.length.toString());
-        fetchUserLoding = false;
-        log(r.first.toString());
-        fetchUserList.addAll(r);
-        notifyListeners();
-      },
-    );
+      result.fold(
+        (l) {
+          log(l.errorMsg);
+          fetchUserLoding = false;
+          notifyListeners();
+        },
+        (r) {
+          log(r.length.toString());
+          fetchUserLoding = false;
+          log(r.first.toString());
+          fetchUserList.addAll(r);
+          notifyListeners();
+        },
+      );
+    }
   }
 
   void clearDoc() {
@@ -134,8 +137,11 @@ class UserProvider with ChangeNotifier {
 
   // DELETE POSTS
 
-  Future deletePosts(
-      {required String id, required VoidCallback onSuccess}) async {
+  Future deletePosts({
+    required String id,
+    required VoidCallback onSuccess,
+    required VoidCallback onFailure,
+  }) async {
     final result = await iUserFacade.deletePosts(id);
     result.fold((error) {
       log(error.errorMsg);
