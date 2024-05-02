@@ -229,184 +229,213 @@ class _UserDetailWidgetState extends State<UserDetailWidget> {
                               ),
                             ),
                             Expanded(
-                              child: ListView.builder(
-                                physics: const BouncingScrollPhysics(),
-                                scrollDirection: Axis.vertical,
-                                itemCount: state.fetchPostsList.length,
-                                itemBuilder: (context, index) {
-                                  DateTime postDate = state
-                                      .fetchPostsList[index].createDate!
-                                      .toDate();
-                                  String formattedDate =
-                                      "${postDate.day}/${postDate.month}/${postDate.year}";
-                                  return Padding(
-                                    padding: const EdgeInsets.only(left: 8.0),
-                                    child: Container(
-                                      height:
-                                          40, // Adjusted height for better visibility
-                                      decoration: const BoxDecoration(
-                                        border: Border(
-                                            bottom: BorderSide(
-                                                width: 1.0,
-                                                color: Colors.grey)),
+                              child: state.fetchPostsList.isEmpty
+                                  ? const Center(
+                                      child: Text(
+                                        "No Posts Available",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w500),
                                       ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          SizedBox(
-                                              width: 140,
-                                              child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Text(formattedDate,
-                                                      style: const TextStyle(
-                                                          fontSize: 10,
-                                                          fontWeight: FontWeight
-                                                              .bold)))),
-
-                                          // Adjusted widths for better alignment
-                                          SizedBox(
-                                              width: 210,
-                                              child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Text(
-                                                      state
-                                                          .fetchPostsList[index]
-                                                          .propertyCategory!
-                                                          .name
-                                                          .capitalize,
-                                                      style: const TextStyle(
-                                                          fontSize: 10,
-                                                          fontWeight: FontWeight
-                                                              .bold)))),
-
-                                          SizedBox(
-                                              width: 140,
-                                              child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Text(
-                                                      state
-                                                          .fetchPostsList[index]
-                                                          .getSelectedTypeString,
-                                                      style: const TextStyle(
-                                                          fontSize: 10,
-                                                          fontWeight: FontWeight
-                                                              .bold)))),
-
-                                          SizedBox(
-                                              width: 150,
-                                              child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Text(
-                                                      state
-                                                          .fetchPostsList[index]
-                                                          .propertyPrice
-                                                          .toString(),
-                                                      style: const TextStyle(
-                                                          fontSize: 10,
-                                                          fontWeight: FontWeight
-                                                              .bold)))),
-
-                                          SizedBox(
-                                              width: 290,
-                                              child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: RichText(
-                                                    text: TextSpan(
-                                                        text: "View More",
-                                                        style: const TextStyle(
-                                                          fontSize: 10,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: Colors.blue,
-                                                          decoration:
-                                                              TextDecoration
-                                                                  .underline,
-                                                        ),
-                                                        recognizer:
-                                                            TapGestureRecognizer()
-                                                              ..onTap = () {
-                                                                launchUrlString(
-                                                                    'https://hinvex.com/all-categories/${state.fetchReportList[index].id}');
-                                                              }),
-                                                  ))),
-                                          SizedBox(
-                                            width: 100,
-                                            child: InkWell(
-                                              onTap: () {
-                                                showDialog(
-                                                  context: context,
-                                                  barrierDismissible: false,
-                                                  builder:
-                                                      (BuildContext context) {
-                                                    return DeletePostsOrReportsConfirmationDialog(
-                                                      id: state
-                                                          .fetchPostsList[index]
-                                                          .id
-                                                          .toString(),
-                                                    );
-                                                  },
-                                                );
-                                                // state.deletePosts(
-                                                //   id: state
-                                                //       .fetchPostsList[index].id
-                                                //       .toString(),
-                                                //   onSuccess: () {},
-                                                //   onFailure: () {},
-                                                // );
-                                              },
-                                              child: const Padding(
-                                                padding: EdgeInsets.all(8.0),
-                                                child: Icon(
-                                                  Icons.delete,
-                                                  color: Colors.red,
-                                                  size: 15,
-                                                ),
-                                              ),
+                                    )
+                                  : ListView.builder(
+                                      physics: const BouncingScrollPhysics(),
+                                      scrollDirection: Axis.vertical,
+                                      itemCount: state.fetchPostsList.length,
+                                      itemBuilder: (context, index) {
+                                        DateTime postDate = state
+                                            .fetchPostsList[index].createDate!
+                                            .toDate();
+                                        String formattedDate =
+                                            "${postDate.day}/${postDate.month}/${postDate.year}";
+                                        return Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 8.0),
+                                          child: Container(
+                                            height:
+                                                40, // Adjusted height for better visibility
+                                            decoration: const BoxDecoration(
+                                              border: Border(
+                                                  bottom: BorderSide(
+                                                      width: 1.0,
+                                                      color: Colors.grey)),
                                             ),
-                                          )
-                                          // Positioned(
-                                          //   top: 4,
-                                          //   right: 4,
-                                          //   child: PopupMenuButton(
-                                          //     splashRadius: 10,
-                                          //     icon: const Icon(
-                                          //       Icons.delete,
-                                          //       size: 15,
-                                          //       color: Colors.red,
-                                          //     ),
-                                          //     itemBuilder: (context) {
-                                          //       return [
-                                          //         PopupMenuItem(
-                                          //           height: 20,
-                                          //           onTap: () {
-                                          //             state.deletePosts(
-                                          //               id: state
-                                          //                   .fetchPostsList[
-                                          //                       index]
-                                          //                   .id
-                                          //                   .toString(),
-                                          //               onSuccess: () {},
-                                          //             );
-                                          //           },
-                                          //           child: const Text(
-                                          //               "Delete"),
-                                          //         )
-                                          //       ];
-                                          //     },
-                                          //   ),
-                                          // ),
-                                        ],
-                                      ),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                SizedBox(
+                                                    width: 140,
+                                                    child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: Text(
+                                                            formattedDate,
+                                                            style: const TextStyle(
+                                                                fontSize: 10,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)))),
+
+                                                // Adjusted widths for better alignment
+                                                SizedBox(
+                                                    width: 210,
+                                                    child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: Text(
+                                                            state
+                                                                .fetchPostsList[
+                                                                    index]
+                                                                .propertyCategory!
+                                                                .name
+                                                                .capitalize,
+                                                            style: const TextStyle(
+                                                                fontSize: 10,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)))),
+
+                                                SizedBox(
+                                                    width: 140,
+                                                    child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: Text(
+                                                            state
+                                                                .fetchPostsList[
+                                                                    index]
+                                                                .getSelectedTypeString,
+                                                            style: const TextStyle(
+                                                                fontSize: 10,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)))),
+
+                                                SizedBox(
+                                                    width: 150,
+                                                    child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: Text(
+                                                            state
+                                                                .fetchPostsList[
+                                                                    index]
+                                                                .propertyPrice
+                                                                .toString(),
+                                                            style: const TextStyle(
+                                                                fontSize: 10,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)))),
+
+                                                SizedBox(
+                                                    width: 290,
+                                                    child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: RichText(
+                                                          text: TextSpan(
+                                                              text: "View More",
+                                                              style:
+                                                                  const TextStyle(
+                                                                fontSize: 10,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                color:
+                                                                    Colors.blue,
+                                                                decoration:
+                                                                    TextDecoration
+                                                                        .underline,
+                                                              ),
+                                                              recognizer:
+                                                                  TapGestureRecognizer()
+                                                                    ..onTap =
+                                                                        () {
+                                                                      launchUrlString(
+                                                                          'https://hinvex.com/all-categories/${state.fetchReportList[index].id}');
+                                                                    }),
+                                                        ))),
+                                                SizedBox(
+                                                  width: 100,
+                                                  child: InkWell(
+                                                    onTap: () {
+                                                      showDialog(
+                                                        context: context,
+                                                        barrierDismissible:
+                                                            false,
+                                                        builder: (BuildContext
+                                                            context) {
+                                                          return DeletePostsOrReportsConfirmationDialog(
+                                                            id: state
+                                                                .fetchPostsList[
+                                                                    index]
+                                                                .id
+                                                                .toString(),
+                                                          );
+                                                        },
+                                                      );
+                                                      // state.deletePosts(
+                                                      //   id: state
+                                                      //       .fetchPostsList[index].id
+                                                      //       .toString(),
+                                                      //   onSuccess: () {},
+                                                      //   onFailure: () {},
+                                                      // );
+                                                    },
+                                                    child: const Padding(
+                                                      padding:
+                                                          EdgeInsets.all(8.0),
+                                                      child: Icon(
+                                                        Icons.delete,
+                                                        color: Colors.red,
+                                                        size: 15,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )
+                                                // Positioned(
+                                                //   top: 4,
+                                                //   right: 4,
+                                                //   child: PopupMenuButton(
+                                                //     splashRadius: 10,
+                                                //     icon: const Icon(
+                                                //       Icons.delete,
+                                                //       size: 15,
+                                                //       color: Colors.red,
+                                                //     ),
+                                                //     itemBuilder: (context) {
+                                                //       return [
+                                                //         PopupMenuItem(
+                                                //           height: 20,
+                                                //           onTap: () {
+                                                //             state.deletePosts(
+                                                //               id: state
+                                                //                   .fetchPostsList[
+                                                //                       index]
+                                                //                   .id
+                                                //                   .toString(),
+                                                //               onSuccess: () {},
+                                                //             );
+                                                //           },
+                                                //           child: const Text(
+                                                //               "Delete"),
+                                                //         )
+                                                //       ];
+                                                //     },
+                                                //   ),
+                                                // ),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      },
                                     ),
-                                  );
-                                },
-                              ),
                             ),
                           ],
                         ),
@@ -485,167 +514,192 @@ class _UserDetailWidgetState extends State<UserDetailWidget> {
                               ),
                             ),
                             Expanded(
-                              child: ListView.builder(
-                                physics: const BouncingScrollPhysics(),
-                                scrollDirection: Axis.vertical,
-                                itemCount: state.fetchReportList.length,
-                                itemBuilder: (context, index) {
-                                  DateTime postDate = state
-                                      .fetchReportList[index].createDate!
-                                      .toDate();
-                                  String formattedDate =
-                                      "${postDate.day}/${postDate.month}/${postDate.year}";
-                                  return Padding(
-                                    padding: const EdgeInsets.only(left: 8.0),
-                                    child: Container(
-                                      height:
-                                          40, // Adjusted height for better visibility
-                                      decoration: const BoxDecoration(
-                                        border: Border(
-                                            bottom: BorderSide(
-                                                width: 1.0,
-                                                color: Colors.grey)),
+                              child: state.fetchReportList.isEmpty
+                                  ? const Center(
+                                      child: Text(
+                                        "No Reports Available",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w500),
                                       ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          SizedBox(
-                                              width: 140,
-                                              child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Text(formattedDate,
-                                                      style: const TextStyle(
-                                                          fontSize: 10,
-                                                          fontWeight: FontWeight
-                                                              .bold)))),
-
-                                          // Adjusted widths for better alignment
-                                          SizedBox(
-                                              width: 210,
-                                              child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Text(
-                                                      state
-                                                          .fetchReportList[
-                                                              index]
-                                                          .getSelectedCategoryString,
-                                                      style: const TextStyle(
-                                                          fontSize: 10,
-                                                          fontWeight: FontWeight
-                                                              .bold)))),
-
-                                          SizedBox(
-                                              width: 140,
-                                              child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Text(
-                                                      state
-                                                          .fetchReportList[
-                                                              index]
-                                                          .getSelectedTypeString,
-                                                      style: const TextStyle(
-                                                          fontSize: 10,
-                                                          fontWeight: FontWeight
-                                                              .bold)))),
-
-                                          SizedBox(
-                                              width: 150,
-                                              child: InkWell(
-                                                onTap: () {
-                                                  showDialog(
-                                                    context: context,
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return ReportReasonsPopupScreen(
-                                                        reasonList: state
-                                                            .fetchReportList[
-                                                                index]
-                                                            .reportReasons,
-                                                      );
-                                                    },
-                                                  );
-                                                },
-                                                child: const Padding(
-                                                    padding:
-                                                        EdgeInsets.all(8.0),
-                                                    child: Text("View More",
-                                                        style: TextStyle(
-                                                            fontSize: 10,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold))),
-                                              )),
-
-                                          SizedBox(
-                                              width: 290,
-                                              child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: RichText(
-                                                    text: TextSpan(
-                                                        text: "View More",
-                                                        style: const TextStyle(
-                                                          fontSize: 10,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: Colors.blue,
-                                                          decoration:
-                                                              TextDecoration
-                                                                  .underline,
-                                                        ),
-                                                        recognizer:
-                                                            TapGestureRecognizer()
-                                                              ..onTap = () {
-                                                                launchUrlString(
-                                                                    'https://hinvex.com/all-categories/${state.fetchReportList[index].id}');
-                                                              }),
-                                                  ))),
-                                          SizedBox(
-                                            width: 100,
-                                            child: InkWell(
-                                              onTap: () {
-                                                showDialog(
-                                                  context: context,
-                                                  barrierDismissible: false,
-                                                  builder:
-                                                      (BuildContext context) {
-                                                    return DeletePostsOrReportsConfirmationDialog(
-                                                      id: state
-                                                          .fetchReportList[
-                                                              index]
-                                                          .id
-                                                          .toString(),
-                                                    );
-                                                  },
-                                                );
-                                                // state.deletePosts(
-                                                //   id: state
-                                                //       .fetchReportList[index].id
-                                                //       .toString(),
-                                                //   onSuccess: () {},
-                                                //   onFailure: () {},
-                                                // );
-                                              },
-                                              child: const Padding(
-                                                padding: EdgeInsets.all(8.0),
-                                                child: Icon(
-                                                  Icons.delete,
-                                                  color: Colors.red,
-                                                  size: 15,
-                                                ),
-                                              ),
+                                    )
+                                  : ListView.builder(
+                                      physics: const BouncingScrollPhysics(),
+                                      scrollDirection: Axis.vertical,
+                                      itemCount: state.fetchReportList.length,
+                                      itemBuilder: (context, index) {
+                                        DateTime postDate = state
+                                            .fetchReportList[index].createDate!
+                                            .toDate();
+                                        String formattedDate =
+                                            "${postDate.day}/${postDate.month}/${postDate.year}";
+                                        return Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 8.0),
+                                          child: Container(
+                                            height:
+                                                40, // Adjusted height for better visibility
+                                            decoration: const BoxDecoration(
+                                              border: Border(
+                                                  bottom: BorderSide(
+                                                      width: 1.0,
+                                                      color: Colors.grey)),
                                             ),
-                                          )
-                                        ],
-                                      ),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                SizedBox(
+                                                    width: 140,
+                                                    child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: Text(
+                                                            formattedDate,
+                                                            style: const TextStyle(
+                                                                fontSize: 10,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)))),
+
+                                                // Adjusted widths for better alignment
+                                                SizedBox(
+                                                    width: 210,
+                                                    child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: Text(
+                                                            state
+                                                                .fetchReportList[
+                                                                    index]
+                                                                .getSelectedCategoryString,
+                                                            style: const TextStyle(
+                                                                fontSize: 10,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)))),
+
+                                                SizedBox(
+                                                    width: 140,
+                                                    child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: Text(
+                                                            state
+                                                                .fetchReportList[
+                                                                    index]
+                                                                .getSelectedTypeString,
+                                                            style: const TextStyle(
+                                                                fontSize: 10,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)))),
+
+                                                SizedBox(
+                                                    width: 150,
+                                                    child: InkWell(
+                                                      onTap: () {
+                                                        showDialog(
+                                                          context: context,
+                                                          builder: (BuildContext
+                                                              context) {
+                                                            return ReportReasonsPopupScreen(
+                                                              reasonList: state
+                                                                  .fetchReportList[
+                                                                      index]
+                                                                  .reportReasons,
+                                                            );
+                                                          },
+                                                        );
+                                                      },
+                                                      child: const Padding(
+                                                          padding:
+                                                              EdgeInsets.all(
+                                                                  8.0),
+                                                          child: Text(
+                                                              "View More",
+                                                              style: TextStyle(
+                                                                  fontSize: 10,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold))),
+                                                    )),
+
+                                                SizedBox(
+                                                    width: 290,
+                                                    child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: RichText(
+                                                          text: TextSpan(
+                                                              text: "View More",
+                                                              style:
+                                                                  const TextStyle(
+                                                                fontSize: 10,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                color:
+                                                                    Colors.blue,
+                                                                decoration:
+                                                                    TextDecoration
+                                                                        .underline,
+                                                              ),
+                                                              recognizer:
+                                                                  TapGestureRecognizer()
+                                                                    ..onTap =
+                                                                        () {
+                                                                      launchUrlString(
+                                                                          'https://hinvex.com/all-categories/${state.fetchReportList[index].id}');
+                                                                    }),
+                                                        ))),
+                                                SizedBox(
+                                                  width: 100,
+                                                  child: InkWell(
+                                                    onTap: () {
+                                                      showDialog(
+                                                        context: context,
+                                                        barrierDismissible:
+                                                            false,
+                                                        builder: (BuildContext
+                                                            context) {
+                                                          return DeletePostsOrReportsConfirmationDialog(
+                                                            id: state
+                                                                .fetchReportList[
+                                                                    index]
+                                                                .id
+                                                                .toString(),
+                                                          );
+                                                        },
+                                                      );
+                                                      // state.deletePosts(
+                                                      //   id: state
+                                                      //       .fetchReportList[index].id
+                                                      //       .toString(),
+                                                      //   onSuccess: () {},
+                                                      //   onFailure: () {},
+                                                      // );
+                                                    },
+                                                    child: const Padding(
+                                                      padding:
+                                                          EdgeInsets.all(8.0),
+                                                      child: Icon(
+                                                        Icons.delete,
+                                                        color: Colors.red,
+                                                        size: 15,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      },
                                     ),
-                                  );
-                                },
-                              ),
                             ),
                           ],
                         )

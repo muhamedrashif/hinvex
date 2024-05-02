@@ -274,7 +274,11 @@ class _ReportsAndIssuesScreenState extends State<ReportsAndIssuesScreen> {
                                   flex: 1,
                                   child: state.filteredReportsList.isEmpty
                                       ? const Center(
-                                          child: Text('No reports found'),
+                                          child: Text(
+                                            "No Reports Available",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w500),
+                                          ),
                                         )
                                       : ListView.builder(
                                           physics:

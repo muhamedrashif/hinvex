@@ -383,150 +383,171 @@ class _UserScreenState extends State<UserScreen> {
                     ),
                     Flexible(
                       flex: 1,
-                      child: state.fetchUserList.isEmpty &&
-                              state.fetchUserLoding
+                      child: state.fetchUserList.isEmpty
                           ? const Center(
-                              child: CircularProgressIndicator(),
+                              child: Text(
+                                "No Users Available",
+                                style: TextStyle(fontWeight: FontWeight.w500),
+                              ),
                             )
-                          : ListView.builder(
-                              controller: _scrollController,
-                              itemCount: state.fetchUserList.length,
-                              scrollDirection: Axis.vertical,
-                              itemBuilder: (context, index) {
-                                final user = state.fetchUserList[index];
-                                return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      color: Colors.grey[200],
-                                    ),
-                                    child: Padding(
+                          : state.fetchUserList.isEmpty && state.fetchUserLoding
+                              ? const Center(
+                                  child: CircularProgressIndicator(),
+                                )
+                              : ListView.builder(
+                                  controller: _scrollController,
+                                  itemCount: state.fetchUserList.length,
+                                  scrollDirection: Axis.vertical,
+                                  itemBuilder: (context, index) {
+                                    final user = state.fetchUserList[index];
+                                    return Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Text(
-                                                  "ID:${user.userId}",
-                                                  style: const TextStyle(
-                                                      color: Colors.grey),
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                          Row(
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          color: Colors.grey[200],
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             mainAxisAlignment:
                                                 MainAxisAlignment.start,
                                             children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: CircleAvatar(
-                                                  backgroundImage: NetworkImage(
-                                                      user.userImage),
-                                                  radius: 30,
-                                                ),
+                                              Row(
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Text(
+                                                      "ID:${user.userId}",
+                                                      style: const TextStyle(
+                                                          color: Colors.grey),
+                                                    ),
+                                                  )
+                                                ],
                                               ),
-                                              Column(
+                                              Row(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.start,
                                                 children: [
                                                   Padding(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        horizontal: 8.0,
-                                                        vertical: 4.0),
-                                                    child: Text(
-                                                      "Name                : ${user.userName}",
-                                                      style: const TextStyle(
-                                                          fontSize: 13),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        horizontal: 8.0,
-                                                        vertical: 4.0),
-                                                    child: Text(
-                                                      "PhoneNumber  : ${user.userPhoneNumber}",
-                                                      style: const TextStyle(
-                                                          fontSize: 13),
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                              Flexible(
-                                                child: Align(
-                                                  alignment:
-                                                      Alignment.bottomRight,
-                                                  child: Padding(
                                                     padding:
                                                         const EdgeInsets.all(
                                                             8.0),
-                                                    child: InkWell(
-                                                      onTap: () {
-                                                        state.userDetails(
-                                                            userModel: user);
-                                                        state.fetchPosts(
-                                                            userId:
-                                                                user.userId);
-                                                        state.fetchRepors(
-                                                            userId:
-                                                                user.userId);
-                                                        Provider.of<RoutingProvider>(
-                                                                context,
-                                                                listen: false)
-                                                            .userRouting(
-                                                                UserRoutingEnum
-                                                                    .userDetailWidget);
-                                                      },
-                                                      child: Container(
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(4),
-                                                          color: buttonColor,
+                                                    child: CircleAvatar(
+                                                      backgroundImage:
+                                                          NetworkImage(
+                                                              user.userImage),
+                                                      radius: 30,
+                                                    ),
+                                                  ),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal: 8.0,
+                                                                vertical: 4.0),
+                                                        child: Text(
+                                                          "Name                : ${user.userName}",
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontSize: 13),
                                                         ),
-                                                        child: const Padding(
-                                                          padding:
-                                                              EdgeInsets.all(
-                                                                  8.0),
-                                                          child: Text(
-                                                            "View Account",
-                                                            style: TextStyle(
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal: 8.0,
+                                                                vertical: 4.0),
+                                                        child: Text(
+                                                          "PhoneNumber  : ${user.userPhoneNumber}",
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontSize: 13),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                  Flexible(
+                                                    child: Align(
+                                                      alignment:
+                                                          Alignment.bottomRight,
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: InkWell(
+                                                          onTap: () {
+                                                            state.userDetails(
+                                                                userModel:
+                                                                    user);
+                                                            state.fetchPosts(
+                                                                userId: user
+                                                                    .userId);
+                                                            state.fetchRepors(
+                                                                userId: user
+                                                                    .userId);
+                                                            Provider.of<RoutingProvider>(
+                                                                    context,
+                                                                    listen:
+                                                                        false)
+                                                                .userRouting(
+                                                                    UserRoutingEnum
+                                                                        .userDetailWidget);
+                                                          },
+                                                          child: Container(
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          4),
                                                               color:
-                                                                  buttonTextColor,
-                                                              fontSize: 10,
+                                                                  buttonColor,
+                                                            ),
+                                                            child:
+                                                                const Padding(
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .all(8.0),
+                                                              child: Text(
+                                                                "View Account",
+                                                                style:
+                                                                    TextStyle(
+                                                                  color:
+                                                                      buttonTextColor,
+                                                                  fontSize: 10,
+                                                                ),
+                                                              ),
                                                             ),
                                                           ),
                                                         ),
                                                       ),
                                                     ),
-                                                  ),
-                                                ),
-                                              )
+                                                  )
+                                                ],
+                                              ),
                                             ],
                                           ),
-                                        ],
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
+                                    );
+                                  },
+                                ),
                     ),
                     if (state.fetchNextUserLoading)
                       const Padding(

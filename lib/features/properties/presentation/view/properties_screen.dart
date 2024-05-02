@@ -225,7 +225,11 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
                           Expanded(
                             child: _filterProperties().isEmpty
                                 ? const Center(
-                                    child: Text("No Property found"),
+                                    child: Text(
+                                      "No Property Available",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500),
+                                    ),
                                   )
                                 : ListView.builder(
                                     controller: _scrollController,

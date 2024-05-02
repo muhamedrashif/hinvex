@@ -173,7 +173,11 @@ class _UploadedViewScreenState extends State<UploadedViewScreen> {
                           Expanded(
                             child: state.filteredUploadedPropertiesList.isEmpty
                                 ? const Center(
-                                    child: Text("No Property found"),
+                                    child: Text(
+                                      "No Property Available",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500),
+                                    ),
                                   )
                                 : ListView.builder(
                                     controller: _scrollController,

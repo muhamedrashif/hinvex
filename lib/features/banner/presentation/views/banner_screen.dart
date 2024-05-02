@@ -89,7 +89,7 @@ class _BannerScreenState extends State<BannerScreen> {
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: state.webBannerList.length == 0
+                      child: state.webBannerList.isEmpty
                           ? const Center(
                               child: Text(
                                 "No Banner Available (Add New Banner)",
@@ -310,7 +310,7 @@ class _BannerScreenState extends State<BannerScreen> {
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: state.mobileBannerList.length == 0
+                      child: state.mobileBannerList.isEmpty
                           ? const Center(
                               child: Text(
                                 "No Banner Available (Add New Banner)",

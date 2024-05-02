@@ -226,95 +226,107 @@ class _PopularCiteisScreenState extends State<PopularCiteisScreen> {
                         : SizedBox(
                             height: 350,
                             width: 700,
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: state.popularcitiesList.length >= 6
-                                  ? 6
-                                  : state.popularcitiesList.length,
-                              itemBuilder: (context, index) {
-                                return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    height: 40,
-                                    decoration: const BoxDecoration(
-                                      border: Border(
-                                          bottom: BorderSide(
-                                              width: 1.0, color: Colors.grey)),
+                            child: state.popularcitiesList.isEmpty
+                                ? const Center(
+                                    child: Text(
+                                      "No Popular Cities Available (Search Location)",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500),
                                     ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        SizedBox(
-                                          width: 170,
-                                          child: Text(state
-                                              .popularcitiesList[index]
-                                              .placeCell!
-                                              .localArea
-                                              .toString()),
-                                        ),
-                                        SizedBox(
-                                          width: 170,
-                                          child: Text(
-                                            state.popularcitiesList[index]
-                                                .placeCell!.district,
+                                  )
+                                : ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount:
+                                        state.popularcitiesList.length >= 6
+                                            ? 6
+                                            : state.popularcitiesList.length,
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                          height: 40,
+                                          decoration: const BoxDecoration(
+                                            border: Border(
+                                                bottom: BorderSide(
+                                                    width: 1.0,
+                                                    color: Colors.grey)),
                                           ),
-                                        ),
-                                        SizedBox(
-                                            width: 150,
-                                            child: Text(state
-                                                .popularcitiesList[index]
-                                                .placeCell!
-                                                .state)),
-                                        SizedBox(
-                                            width: 150,
-                                            child: Text(state
-                                                .popularcitiesList[index]
-                                                .placeCell!
-                                                .country)),
-                                        InkWell(
-                                          onTap: () {
-                                            // state.deletePopularCities(
-                                            //     id: state
-                                            //         .popularcitiesList[
-                                            //             index]
-                                            //         .id
-                                            //         .toString(),
-                                            //     onSuccess: () {
-                                            //       state.popularcitiesList
-                                            //           .clear();
-                                            //       state
-                                            //           .fetchPopularCities();
-                                            //     },
-                                            //     onFailure: () {});
-
-                                            showDialog(
-                                              context: context,
-                                              barrierDismissible: false,
-                                              builder: (BuildContext context) {
-                                                return DeletePopularCitiesConfirmationDialog(
-                                                  id: state
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              SizedBox(
+                                                width: 170,
+                                                child: Text(state
+                                                    .popularcitiesList[index]
+                                                    .placeCell!
+                                                    .localArea
+                                                    .toString()),
+                                              ),
+                                              SizedBox(
+                                                width: 170,
+                                                child: Text(
+                                                  state.popularcitiesList[index]
+                                                      .placeCell!.district,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                  width: 150,
+                                                  child: Text(state
                                                       .popularcitiesList[index]
-                                                      .id
-                                                      .toString(),
-                                                );
-                                              },
-                                            );
-                                          },
-                                          child: const Icon(
-                                            Icons.delete,
-                                            color: Colors.red,
-                                            size: 17,
+                                                      .placeCell!
+                                                      .state)),
+                                              SizedBox(
+                                                  width: 150,
+                                                  child: Text(state
+                                                      .popularcitiesList[index]
+                                                      .placeCell!
+                                                      .country)),
+                                              InkWell(
+                                                onTap: () {
+                                                  // state.deletePopularCities(
+                                                  //     id: state
+                                                  //         .popularcitiesList[
+                                                  //             index]
+                                                  //         .id
+                                                  //         .toString(),
+                                                  //     onSuccess: () {
+                                                  //       state.popularcitiesList
+                                                  //           .clear();
+                                                  //       state
+                                                  //           .fetchPopularCities();
+                                                  //     },
+                                                  //     onFailure: () {});
+
+                                                  showDialog(
+                                                    context: context,
+                                                    barrierDismissible: false,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return DeletePopularCitiesConfirmationDialog(
+                                                        id: state
+                                                            .popularcitiesList[
+                                                                index]
+                                                            .id
+                                                            .toString(),
+                                                      );
+                                                    },
+                                                  );
+                                                },
+                                                child: const Icon(
+                                                  Icons.delete,
+                                                  color: Colors.red,
+                                                  size: 17,
+                                                ),
+                                              )
+                                            ],
                                           ),
-                                        )
-                                      ],
-                                    ),
+                                        ),
+                                      );
+                                    },
                                   ),
-                                );
-                              },
-                            ),
                           ),
                   ],
                 ),
