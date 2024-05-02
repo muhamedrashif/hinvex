@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
-import 'package:flutter/services.dart';
-// import 'package:hinvex/features/uploadedByAdmin/data/model/location_model_main.dart/location_model_main.dart';
 import 'package:hinvex/features/uploadedByAdmin/data/model/search_location_model/search_location_model.dart';
 import 'package:hinvex/features/user/data/model/user_product_details_model.dart';
 import 'package:hinvex/general/typedefs/typedefs.dart';
@@ -9,13 +7,15 @@ import 'package:hinvex/general/typedefs/typedefs.dart';
 import 'model/location_model_main.dart/location_model_main.dart';
 
 abstract class IUploadedByAdminFacade {
-  FutureResult<List<Uint8List?>> getImage() {
-    throw UnimplementedError('getImage() not impl');
-  }
+  // FutureResult<List<String?>> getImage({
+  //   required List<Uint8List> imageByte,
+  // }) {
+  //   throw UnimplementedError('getImage() not impl');
+  // }
 
   FutureResult<UserProductDetailsModel> uploadPropertyToFireStore({
     required UserProductDetailsModel userProductDetailsModel,
-    required List<Uint8List> imageByte,
+    required List<String> imageByte,
   }) {
     throw UnimplementedError('uploadPropertyToFireStore() not impl');
   }

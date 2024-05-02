@@ -1,11 +1,14 @@
 import 'dart:developer';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hinvex/features/home/presantation/provider/routing_provider.dart';
 import 'package:hinvex/features/uploadedByAdmin/presentation/provider/uploadedByAdmin_provider.dart';
 import 'package:hinvex/general/utils/app_theme/colors.dart';
 import 'package:hinvex/general/utils/enums/enums.dart';
+import 'package:hinvex/general/utils/progress_indicator_widget/progress_indicator_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 class UploadedViewScreen extends StatefulWidget {
   const UploadedViewScreen({super.key});
@@ -213,8 +216,30 @@ class _UploadedViewScreenState extends State<UploadedViewScreen> {
                                                             height: 150,
                                                             width: 150,
                                                             child:
-                                                                Image.network(
-                                                              state
+                                                                CachedNetworkImage(
+                                                              placeholder:
+                                                                  (context,
+                                                                          url) =>
+                                                                      SizedBox(
+                                                                width: 220.0,
+                                                                height: 120.0,
+                                                                child: Shimmer
+                                                                    .fromColors(
+                                                                  baseColor:
+                                                                      Colors
+                                                                          .red,
+                                                                  highlightColor:
+                                                                      Colors
+                                                                          .blue,
+                                                                  child:
+                                                                      const SizedBox(
+                                                                    height: 220,
+                                                                    width: 120,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              fit: BoxFit.cover,
+                                                              imageUrl: state
                                                                       .filteredUploadedPropertiesList[
                                                                           index]
                                                                       .propertyImage!
@@ -224,8 +249,20 @@ class _UploadedViewScreenState extends State<UploadedViewScreen> {
                                                                           index]
                                                                       .propertyImage![0]
                                                                   : "https://media.istockphoto.com/id/1490047352/photo/3d-folder-with-paper-documents-question-mark-and-magnifier-search-information-in-storage-faq.jpg?s=612x612&w=0&k=20&c=g_IqmKq9zvqw0cTnAlNYb_a8oNy6zTl7ky9t9d_aa2E=",
-                                                              fit: BoxFit.cover,
                                                             ),
+                                                            //     Image.network(
+                                                            //   state
+                                                            //           .filteredUploadedPropertiesList[
+                                                            //               index]
+                                                            //           .propertyImage!
+                                                            //           .isNotEmpty
+                                                            //       ? state
+                                                            //           .filteredUploadedPropertiesList[
+                                                            //               index]
+                                                            //           .propertyImage![0]
+                                                            //       : "https://media.istockphoto.com/id/1490047352/photo/3d-folder-with-paper-documents-question-mark-and-magnifier-search-information-in-storage-faq.jpg?s=612x612&w=0&k=20&c=g_IqmKq9zvqw0cTnAlNYb_a8oNy6zTl7ky9t9d_aa2E=",
+                                                            //   fit: BoxFit.cover,
+                                                            // ),
                                                           ),
                                                         ),
                                                       ),
@@ -533,6 +570,7 @@ class _UploadedViewScreenState extends State<UploadedViewScreen> {
                 padding: const EdgeInsets.all(4.0),
                 child: InkWell(
                   onTap: () {
+                    showProgress(context);
                     Provider.of<UploadedByAdminProvider>(context, listen: false)
                         .deleteUploadedPosts(
                       id: id,
@@ -541,6 +579,11 @@ class _UploadedViewScreenState extends State<UploadedViewScreen> {
                             listen: false)
                           ..fetchProducts()
                           ..deleteUploadedPost(id);
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      },
+                      onFailure: () {
+                        Navigator.pop(context);
                         Navigator.pop(context);
                       },
                     );

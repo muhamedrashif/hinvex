@@ -1,8 +1,11 @@
 import 'dart:developer';
 import 'dart:typed_data';
+import 'package:dartz/dartz.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:hinvex/general/failures/exeception/execeptions.dart';
+import 'package:hinvex/general/failures/failures.dart';
+import 'package:hinvex/general/typedefs/typedefs.dart';
 import 'package:image_picker/image_picker.dart';
 
 // Future<Uint8List?> pickImage() async {
@@ -121,12 +124,12 @@ Future<void> deleteUrl({
 
 //   return imageBytesList;
 // }
-Future<List<Uint8List>> pickMultipleImages(int maxImages) async {
+FutureResult<List<String>> pickMultipleImages(int maxImages) async {
   final ImagePicker imagePicker = ImagePicker();
   final List<XFile>? pickedImageFiles = await imagePicker.pickMultiImage();
   final List<Uint8List> imageBytesList = [];
-
-  if (pickedImageFiles != null && pickedImageFiles.isNotEmpty) {
+  List<String> url = [];
+  if (pickedImageFiles != null && pickedImageFiles.length <= maxImages) {
     final List<Future<Uint8List>> futures = pickedImageFiles
         .take(maxImages)
         .map((pickedImageFile) => pickedImageFile.readAsBytes())
@@ -137,12 +140,14 @@ Future<List<Uint8List>> pickMultipleImages(int maxImages) async {
     for (final bytes in bytesList) {
       final Uint8List imageBytes = Uint8List.fromList(bytes);
       imageBytesList.add(imageBytes);
+      url = await saveImages(imagePaths: imageBytesList);
     }
   } else {
-    print('No images picked');
+    return left(
+        const MainFailure.imagePickFailed(errorMsg: 'Failed to pick images'));
   }
 
-  return imageBytesList;
+  return right(url);
 }
 
 // SAVE MULTIPLE IMAGES
@@ -154,7 +159,7 @@ Future<List<String>> saveImages({
 
   for (var imagePath in imagePaths) {
     final String imageName =
-        'BannerImages/${DateTime.now().microsecondsSinceEpoch}.png';
+        'Property/${DateTime.now().microsecondsSinceEpoch}.png';
     try {
       await _storage
           .ref(imageName)

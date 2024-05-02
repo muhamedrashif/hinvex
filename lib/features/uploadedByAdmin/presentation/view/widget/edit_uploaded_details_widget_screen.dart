@@ -12,6 +12,7 @@ import 'package:hinvex/general/utils/app_assets/image_constants.dart';
 import 'package:hinvex/general/utils/app_theme/colors.dart';
 import 'package:hinvex/general/utils/enums/enums.dart';
 import 'package:hinvex/general/utils/progress_indicator_widget/progress_indicator_widget.dart';
+import 'package:hinvex/general/utils/snackbar/snackbar.dart';
 import 'package:provider/provider.dart';
 
 import 'uploading_widget_screen.dart';
@@ -1837,259 +1838,174 @@ class _EditUploadedWidgetScreenState extends State<EditUploadedWidgetScreen> {
                                 ],
                               ),
                             ),
-                            // Padding(
-                            //   padding: const EdgeInsets.all(10.0),
-                            //   child: Row(
-                            //     mainAxisAlignment: MainAxisAlignment.start,
-                            //     crossAxisAlignment: CrossAxisAlignment.start,
-                            //     children: [
-                            //       const SizedBox(
-                            //           width: 200,
-                            //           child: Row(
-                            //             children: [
-                            //               Text("Images"),
-                            //               Text(
-                            //                 "*",
-                            //                 style: TextStyle(color: Colors.red),
-                            //               ),
-                            //             ],
-                            //           )),
-                            //       Column(
-                            //         children: [
-                            //           DottedBorder(
-                            //             color: Colors.grey,
-                            //             strokeWidth: 1,
-                            //             dashPattern: const [5, 5],
-                            //             child: InkWell(
-                            //               onTap: () {
-                            //                 state.getImage();
-                            //               },
-                            //               child: Container(
-                            //                 padding: const EdgeInsets.symmetric(
-                            //                     horizontal: 148.0,
-                            //                     vertical: 20),
-                            //                 child: Column(
-                            //                   children: [
-                            //                     Image.network(
-                            //                       ImageConstant.imageIcon,
-                            //                       fit: BoxFit.cover,
-                            //                     ),
-                            //                     const Text(
-                            //                       "Pick your image from here",
-                            //                       style:
-                            //                           TextStyle(fontSize: 13),
-                            //                     ),
-                            //                     const Text(
-                            //                       "Supports: PNG, JPG, JPEG, WEBP",
-                            //                       style: TextStyle(
-                            //                           fontSize: 8,
-                            //                           color: Colors.grey),
-                            //                     ),
-                            //                   ],
-                            //                 ),
-                            //               ),
-                            //             ),
-                            //           ),
-                            //           state.imageFile
-                            //                   .isEmpty // Check if imageFile is empty
-                            //               ? const SizedBox()
-                            //               : Padding(
-                            //                   padding:
-                            //                       const EdgeInsets.all(8.0),
-                            //                   child: SizedBox(
-                            //                       height: 200,
-                            //                       width: 400,
-                            //                       child: ListView.builder(
-                            //                         itemCount:
-                            //                             state.imageFile.length,
-                            //                         itemBuilder:
-                            //                             (context, index) {
-                            //                           if (state.imageFile[index]
-                            //                               .isNotEmpty) {
-                            //                             return Padding(
-                            //                               padding:
-                            //                                   const EdgeInsets
-                            //                                       .symmetric(
-                            //                                       vertical:
-                            //                                           8.0),
-                            //                               child: Container(
-                            //                                 decoration:
-                            //                                     BoxDecoration(
-                            //                                   border: Border.all(
-                            //                                       color: Colors
-                            //                                           .grey),
-                            //                                   borderRadius:
-                            //                                       BorderRadius
-                            //                                           .circular(
-                            //                                               8),
-                            //                                 ),
-                            //                                 height: 70,
-                            //                                 width: 300,
-                            //                                 child: Column(
-                            //                                   children: [
-                            //                                     Padding(
-                            //                                       padding:
-                            //                                           const EdgeInsets
-                            //                                               .all(
-                            //                                               8.0),
-                            //                                       child: Row(
-                            //                                         children: [
-                            //                                           ClipRRect(
-                            //                                             borderRadius:
-                            //                                                 BorderRadius.circular(10),
-                            //                                             child:
-                            //                                                 SizedBox(
-                            //                                               height:
-                            //                                                   40,
-                            //                                               width:
-                            //                                                   40,
-                            //                                               child:
-                            //                                                   Image.memory(state.imageFile[index]),
-                            //                                             ),
-                            //                                           ),
-                            //                                           const Padding(
-                            //                                             padding:
-                            //                                                 EdgeInsets.symmetric(horizontal: 8.0),
-                            //                                             child: Text(
-                            //                                                 "image"),
-                            //                                           ),
-                            //                                           Expanded(
-                            //                                             child:
-                            //                                                 Align(
-                            //                                               alignment:
-                            //                                                   Alignment.topRight,
-                            //                                               child:
-                            //                                                   GestureDetector(
-                            //                                                 onTap:
-                            //                                                     () {
-                            //                                                   state.removeImageAtIndex(index);
-                            //                                                 },
-                            //                                                 child:
-                            //                                                     const Icon(
-                            //                                                   Icons.close,
-                            //                                                   size: 13,
-                            //                                                   color: Colors.red,
-                            //                                                 ),
-                            //                                               ),
-                            //                                             ),
-                            //                                           ),
-                            //                                         ],
-                            //                                       ),
-                            //                                     ),
-                            //                                   ],
-                            //                                 ),
-                            //                               ),
-                            //                             );
-                            //                           }
-                            //                           return null;
-                            //                         },
-                            //                       )),
-                            //                 ),
-                            //           state.selectedPropertiesDetails!
-                            //                   .propertyImage!.isEmpty
-                            //               ? const SizedBox()
-                            //               : Padding(
-                            //                   padding:
-                            //                       const EdgeInsets.all(8.0),
-                            //                   child: SizedBox(
-                            //                       height: 200,
-                            //                       width: 400,
-                            //                       child: ListView.builder(
-                            //                         itemCount: state
-                            //                             .selectedPropertiesDetails!
-                            //                             .propertyImage!
-                            //                             .length,
-                            //                         itemBuilder:
-                            //                             (context, index) {
-                            //                           if (state
-                            //                               .selectedPropertiesDetails!
-                            //                               .propertyImage!
-                            //                               .isNotEmpty) {
-                            //                             return Padding(
-                            //                               padding:
-                            //                                   const EdgeInsets
-                            //                                       .symmetric(
-                            //                                       vertical:
-                            //                                           8.0),
-                            //                               child: Container(
-                            //                                 decoration:
-                            //                                     BoxDecoration(
-                            //                                   border: Border.all(
-                            //                                       color: Colors
-                            //                                           .grey),
-                            //                                   borderRadius:
-                            //                                       BorderRadius
-                            //                                           .circular(
-                            //                                               8),
-                            //                                 ),
-                            //                                 height: 70,
-                            //                                 width: 300,
-                            //                                 child: Column(
-                            //                                   children: [
-                            //                                     Padding(
-                            //                                       padding:
-                            //                                           const EdgeInsets
-                            //                                               .all(
-                            //                                               8.0),
-                            //                                       child: Row(
-                            //                                         children: [
-                            //                                           ClipRRect(
-                            //                                             borderRadius:
-                            //                                                 BorderRadius.circular(10),
-                            //                                             child:
-                            //                                                 SizedBox(
-                            //                                               height:
-                            //                                                   40,
-                            //                                               width:
-                            //                                                   40,
-                            //                                               child: Image.network(state
-                            //                                                   .selectedPropertiesDetails!
-                            //                                                   .propertyImage![index]),
-                            //                                             ),
-                            //                                           ),
-                            //                                           const Padding(
-                            //                                             padding:
-                            //                                                 EdgeInsets.symmetric(horizontal: 8.0),
-                            //                                             child: Text(
-                            //                                                 "image"),
-                            //                                           ),
-                            //                                           Expanded(
-                            //                                             child:
-                            //                                                 Align(
-                            //                                               alignment:
-                            //                                                   Alignment.topRight,
-                            //                                               child:
-                            //                                                   GestureDetector(
-                            //                                                 onTap:
-                            //                                                     () {
-                            //                                                   // state.removeImageAtIndex(index);
-                            //                                                 },
-                            //                                                 child:
-                            //                                                     const Icon(
-                            //                                                   Icons.close,
-                            //                                                   size: 13,
-                            //                                                   color: Colors.red,
-                            //                                                 ),
-                            //                                               ),
-                            //                                             ),
-                            //                                           ),
-                            //                                         ],
-                            //                                       ),
-                            //                                     ),
-                            //                                   ],
-                            //                                 ),
-                            //                               ),
-                            //                             );
-                            //                           }
-                            //                           return null;
-                            //                         },
-                            //                       )),
-                            //                 ),
-                            //         ],
-                            //       ),
-                            //     ],
-                            //   ),
-                            // ),
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const SizedBox(
+                                      width: 200,
+                                      child: Row(
+                                        children: [
+                                          Text("Images"),
+                                          Text(
+                                            "*",
+                                            style: TextStyle(color: Colors.red),
+                                          ),
+                                        ],
+                                      )),
+                                  Column(
+                                    children: [
+                                      DottedBorder(
+                                        color: Colors.grey,
+                                        strokeWidth: 1,
+                                        dashPattern: const [5, 5],
+                                        child: InkWell(
+                                          onTap: () {
+                                            if (state.imageFile.length > 7) {
+                                              showSnackBar(
+                                                  "Maximum Allowed Images 7",
+                                                  context);
+                                              return;
+                                            }
+
+                                            showProgress(context);
+
+                                            state.getImage(onSuccess: () {
+                                              Navigator.pop(context);
+                                            }, onFailure: () {
+                                              showSnackBar(
+                                                  "Maximum Allowed Images 7",
+                                                  context);
+                                              Navigator.pop(context);
+                                            });
+                                          },
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 148.0,
+                                                vertical: 20),
+                                            child: Column(
+                                              children: [
+                                                Image.network(
+                                                  ImageConstant.imageIcon,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                                const Text(
+                                                  "Pick your image from here",
+                                                  style:
+                                                      TextStyle(fontSize: 13),
+                                                ),
+                                                const Text(
+                                                  "Supports: PNG, JPG, JPEG, WEBP",
+                                                  style: TextStyle(
+                                                      fontSize: 8,
+                                                      color: Colors.grey),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      state.imageFile.isEmpty
+                                          ? const SizedBox()
+                                          : Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: SizedBox(
+                                                  height: 200,
+                                                  width: 400,
+                                                  child: ListView.builder(
+                                                    itemCount:
+                                                        state.imageFile.length,
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      if (state.imageFile
+                                                          .isNotEmpty) {
+                                                        return Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .symmetric(
+                                                                  vertical:
+                                                                      8.0),
+                                                          child: Container(
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              border: Border.all(
+                                                                  color: Colors
+                                                                      .grey),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          8),
+                                                            ),
+                                                            height: 70,
+                                                            width: 300,
+                                                            child: Column(
+                                                              children: [
+                                                                Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .all(
+                                                                          8.0),
+                                                                  child: Row(
+                                                                    children: [
+                                                                      ClipRRect(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(10),
+                                                                        child:
+                                                                            SizedBox(
+                                                                          height:
+                                                                              40,
+                                                                          width:
+                                                                              40,
+                                                                          child:
+                                                                              Image.network(state.imageFile[index]),
+                                                                        ),
+                                                                      ),
+                                                                      const Padding(
+                                                                        padding:
+                                                                            EdgeInsets.symmetric(horizontal: 8.0),
+                                                                        child: Text(
+                                                                            "image"),
+                                                                      ),
+                                                                      Expanded(
+                                                                        child:
+                                                                            Align(
+                                                                          alignment:
+                                                                              Alignment.topRight,
+                                                                          child:
+                                                                              GestureDetector(
+                                                                            onTap:
+                                                                                () {
+                                                                              state.removeImageAtIndex(index);
+                                                                            },
+                                                                            child:
+                                                                                const Icon(
+                                                                              Icons.close,
+                                                                              size: 13,
+                                                                              color: Colors.red,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        );
+                                                      }
+                                                      return null;
+                                                    },
+                                                  )),
+                                            ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
                             SizedBox(
                               width: 367,
                               child: Row(
@@ -2184,9 +2100,8 @@ class _EditUploadedWidgetScreenState extends State<EditUploadedWidgetScreen> {
                                                     propertyPrice: int.tryParse(
                                                         _askingPriceController
                                                             .text),
-                                                    propertyImage: state
-                                                        .selectedPropertiesDetails!
-                                                        .propertyImage,
+                                                    propertyImage:
+                                                        state.imageFile,
                                                     propertyTitle: _adTitleController.text.isEmpty
                                                         ? state
                                                             .selectedPropertiesDetails!
@@ -2194,7 +2109,9 @@ class _EditUploadedWidgetScreenState extends State<EditUploadedWidgetScreen> {
                                                         : _adTitleController
                                                             .text,
                                                     propertyDetils: _describeController.text.isEmpty
-                                                        ? state.selectedPropertiesDetails!.propertyDetils
+                                                        ? state
+                                                            .selectedPropertiesDetails!
+                                                            .propertyDetils
                                                         : _describeController.text,
                                                     propertyLocation: placeCell ?? state.selectedPropertiesDetails!.propertyLocation,
                                                     bedRooms: selectedBedroom,

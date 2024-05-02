@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:hinvex/features/uploadedByAdmin/data/i_uploadedByAdmin_facade.dart';
 // import 'package:hinvex/features/uploadedByAdmin/data/model/location_model_main.dart/location_model_main.dart';
 import 'package:hinvex/features/uploadedByAdmin/data/model/search_location_model/search_location_model.dart';
@@ -11,7 +10,6 @@ import 'package:hinvex/features/user/data/model/user_product_details_model.dart'
 import 'package:hinvex/general/failures/exeception/execeptions.dart';
 import 'package:hinvex/general/failures/failures.dart';
 import 'package:hinvex/general/services/function_service.dart';
-import 'package:hinvex/general/services/image_picker_service.dart';
 import 'package:hinvex/general/services/key_word_generate.dart';
 import 'package:hinvex/general/services/upload_location_service.dart';
 import 'package:hinvex/general/typedefs/typedefs.dart';
@@ -29,21 +27,27 @@ class IUploadedByAdminImpl implements IUploadedByAdminFacade {
 
   QueryDocumentSnapshot<Map<String, dynamic>>? lastDoc;
 
-  @override
-  FutureResult<List<Uint8List?>> getImage() async {
-    try {
-      List<Uint8List?> imageBytes = await pickMultipleImages(7);
-      return right(imageBytes);
-    } catch (ex) {
-      return left(MainFailure.imagePickFailed(errorMsg: ex.toString()));
-    }
-  }
+  // @override
+  // FutureResult<List<String?>> getImage({
+  //   required List<Uint8List> imageByte,
+  // }) async {
+  //   try {
+  //     List<Uint8List?> imageBytes = await pickMultipleImages(7);
+  //     List<String?> imgUrl = [];
+  //     if (imageByte.isNotEmpty) {
+  //       imgUrl = await saveImages(imagePaths: imageByte);
+  //     }
+  //     return right(imgUrl);
+  //   } catch (ex) {
+  //     return left(MainFailure.imagePickFailed(errorMsg: ex.toString()));
+  //   }
+  // }
 
 // UPLOAD TO FIRESTORE
   @override
   FutureResult<UserProductDetailsModel> uploadPropertyToFireStore({
     required UserProductDetailsModel userProductDetailsModel,
-    required List<Uint8List> imageByte,
+    required List<String> imageByte,
   }) async {
     final builder = AlfabetKeywordsBuilder();
 
@@ -52,11 +56,11 @@ class IUploadedByAdminImpl implements IUploadedByAdminFacade {
     final keywords = builder.build();
 
     try {
-      List<String?> imgUrl = [];
-      if (imageByte.isNotEmpty) {
-        imgUrl = await saveImages(imagePaths: imageByte);
-      }
-      userProductDetailsModel.propertyImage = imgUrl;
+      // List<String?> imgUrl = [];
+      // if (imageByte.isNotEmpty) {
+      //   imgUrl = await saveImages(imagePaths: imageByte);
+      // }
+      userProductDetailsModel.propertyImage = imageByte;
       final response = await _firestore
           .collection('posts')
           .add(userProductDetailsModel.copyWith(keywords: keywords).toJson());

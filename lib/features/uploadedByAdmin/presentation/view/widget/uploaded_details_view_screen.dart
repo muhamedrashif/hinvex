@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hinvex/features/home/presantation/provider/routing_provider.dart';
 import 'package:hinvex/features/uploadedByAdmin/presentation/provider/uploadedByAdmin_provider.dart';
@@ -5,6 +6,7 @@ import 'package:hinvex/general/utils/app_assets/image_constants.dart';
 import 'package:hinvex/general/utils/app_theme/colors.dart';
 import 'package:hinvex/general/utils/enums/enums.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 class UploadedDetailWidget extends StatefulWidget {
   const UploadedDetailWidget({super.key});
@@ -213,12 +215,35 @@ class _UploadedDetailWidgetState extends State<UploadedDetailWidget> {
                                                 child: SizedBox(
                                                   height: 110,
                                                   width: 150,
-                                                  child: Image.network(
-                                                    state
+
+                                                  child: CachedNetworkImage(
+                                                    placeholder:
+                                                        (context, url) =>
+                                                            SizedBox(
+                                                      width: 220.0,
+                                                      height: 120.0,
+                                                      child: Shimmer.fromColors(
+                                                        baseColor: Colors.red,
+                                                        highlightColor:
+                                                            Colors.blue,
+                                                        child: const SizedBox(
+                                                          height: 220,
+                                                          width: 120,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    fit: BoxFit.cover,
+                                                    imageUrl: state
                                                         .selectedPropertiesDetails!
                                                         .propertyImage![index],
-                                                    fit: BoxFit.cover,
                                                   ),
+
+                                                  // child: Image.network(
+                                                  //   state
+                                                  //       .selectedPropertiesDetails!
+                                                  //       .propertyImage![index],
+                                                  //   fit: BoxFit.cover,
+                                                  // ),
                                                 ),
                                               );
                                             }),

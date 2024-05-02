@@ -12,6 +12,7 @@ import 'package:hinvex/general/utils/app_assets/image_constants.dart';
 import 'package:hinvex/general/utils/app_theme/colors.dart';
 import 'package:hinvex/general/utils/enums/enums.dart';
 import 'package:hinvex/general/utils/progress_indicator_widget/progress_indicator_widget.dart';
+import 'package:hinvex/general/utils/snackbar/snackbar.dart';
 import 'package:provider/provider.dart';
 
 class Bhk {
@@ -1817,7 +1818,23 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                         dashPattern: const [5, 5],
                                         child: InkWell(
                                           onTap: () {
-                                            state.getImage();
+                                            if (state.imageFile.length > 7) {
+                                              showSnackBar(
+                                                  "Maximum Allowed Images 7",
+                                                  context);
+                                              return;
+                                            }
+
+                                            showProgress(context);
+
+                                            state.getImage(onSuccess: () {
+                                              Navigator.pop(context);
+                                            }, onFailure: () {
+                                              showSnackBar(
+                                                  "Maximum Allowed Images 7",
+                                                  context);
+                                              Navigator.pop(context);
+                                            });
                                           },
                                           child: Container(
                                             padding: const EdgeInsets.symmetric(
@@ -1899,7 +1916,7 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                                                           width:
                                                                               40,
                                                                           child:
-                                                                              Image.memory(state.imageFile[index]),
+                                                                              Image.network(state.imageFile[index]),
                                                                         ),
                                                                       ),
                                                                       const Padding(

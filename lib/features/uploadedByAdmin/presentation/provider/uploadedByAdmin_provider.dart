@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -16,7 +15,7 @@ class UploadedByAdminProvider with ChangeNotifier {
   UploadedByAdminProvider({required this.iUploadedByAdminFacade}) {
     // fetchProducts();
   }
-  List<Uint8List> imageFile = [];
+  List<String> imageFile = [];
   bool sendLoading = false;
   bool fetchUploadedPropertiesLoading = false;
   DocumentSnapshot? lastDocument;
@@ -40,20 +39,33 @@ class UploadedByAdminProvider with ChangeNotifier {
 
   // GET IMAGE
 
-  Future<void> getImage() async {
-    List<Uint8List> imageBytes = await pickMultipleImages(7);
-    if (imageBytes.isNotEmpty) {
-      imageFile.addAll(imageBytes);
-    }
+  Future<void> getImage({
+    required VoidCallback onSuccess,
+    required VoidCallback onFailure,
+  }) async {
+    final result = await pickMultipleImages(7 - imageFile.length);
+
+    result.fold((l) {
+      onFailure();
+    }, (r) {
+      if (r.isNotEmpty) {
+        imageFile.addAll(r);
+      }
+      onSuccess();
+      notifyListeners();
+    });
     log("imageFile::::::::::::${imageFile.toString()}");
     log("imageFile length::::::::::::${imageFile.length}");
     notifyListeners();
   }
 
   // Method to remove image based on index
-  void removeImageAtIndex(int index) {
+  void removeImageAtIndex(int index) async {
+    await deleteUrl(url: imageFile[index]);
+
     if (index >= 0 && index < imageFile.length) {
       imageFile.removeAt(index);
+
       notifyListeners();
     }
   }
@@ -144,6 +156,7 @@ class UploadedByAdminProvider with ChangeNotifier {
 
   propertyDetails({required UserProductDetailsModel userProductDetailsModel}) {
     selectedPropertiesDetails = userProductDetailsModel;
+    imageFile = List<String>.from(userProductDetailsModel.propertyImage ?? []);
     notifyListeners();
   }
 
@@ -278,10 +291,14 @@ class UploadedByAdminProvider with ChangeNotifier {
     );
   }
 
-  Future deleteUploadedPosts(
-      {required String id, required VoidCallback onSuccess}) async {
+  Future deleteUploadedPosts({
+    required String id,
+    required VoidCallback onSuccess,
+    required VoidCallback onFailure,
+  }) async {
     final result = await iUploadedByAdminFacade.deleteUploadedPosts(id);
     result.fold((error) {
+      onFailure();
       log(error.errorMsg);
     }, (success) {
       onSuccess.call();
