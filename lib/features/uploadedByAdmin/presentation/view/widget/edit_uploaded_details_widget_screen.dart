@@ -1604,7 +1604,7 @@ class _EditUploadedWidgetScreenState extends State<EditUploadedWidgetScreen> {
                                   SizedBox(
                                     width: 450,
                                     child: Container(
-                                      height: 50,
+                                      height: 70,
                                       decoration: BoxDecoration(
                                           color: Colors.grey[200]),
                                       child: Padding(
@@ -1817,7 +1817,7 @@ class _EditUploadedWidgetScreenState extends State<EditUploadedWidgetScreen> {
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 8.0),
                                         child: TextFormField(
-                                          maxLines: 4,
+                                          maxLines: 6,
                                           decoration: InputDecoration(
                                             border: InputBorder.none,
                                             hintText: state
@@ -2138,12 +2138,19 @@ class _EditUploadedWidgetScreenState extends State<EditUploadedWidgetScreen> {
                                                     bhk: _selctedBHKValue,
                                                     id: state.selectedPropertiesDetails!.id),
                                             onSuccess: () {
+                                              showSnackBar(
+                                                  "Edit Property Successfully",
+                                                  context);
                                               Navigator.pop(context);
+
                                               // Clear text controllers
 
                                               // Reset selected values to default or clear them
                                             },
                                             onFailure: () {
+                                              showSnackBar(
+                                                  "Edit Property Failed",
+                                                  context);
                                               Navigator.pop(context);
                                             });
 

@@ -72,10 +72,10 @@ class UploadedByAdminProvider with ChangeNotifier {
 
   // STORE PROPERTY TO FIRESTORE
 
-  Future<void> uploadPropertyToFireStore({
-    required UserProductDetailsModel userProductDetailsModel,
-    required VoidCallback onSuccess,
-  }) async {
+  Future<void> uploadPropertyToFireStore(
+      {required UserProductDetailsModel userProductDetailsModel,
+      required VoidCallback onSuccess,
+      required VoidCallback onFailure}) async {
     sendLoading = true;
     notifyListeners();
     final result = await iUploadedByAdminFacade.uploadPropertyToFireStore(
@@ -83,6 +83,7 @@ class UploadedByAdminProvider with ChangeNotifier {
       imageByte: imageFile,
     );
     result.fold((error) {
+      onFailure();
       log(error.errorMsg);
     }, (success) {
       _filteredUploadedPropertiesList.insert(0, success);

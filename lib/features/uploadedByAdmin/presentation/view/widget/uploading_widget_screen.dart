@@ -489,23 +489,24 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const SizedBox(
-                                      width: 200,
-                                      child: Row(
-                                        children: [
-                                          Text("Type"),
-                                          Text(
-                                            "*",
-                                            style: TextStyle(color: Colors.red),
-                                          ),
-                                        ],
-                                      )),
+                                    width: 200,
+                                    child: Row(
+                                      children: [
+                                        Text("Type"),
+                                        Text(
+                                          "*",
+                                          style: TextStyle(color: Colors.red),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                   SizedBox(
                                     width: 450,
                                     child: Container(
                                       height: 50,
                                       decoration: BoxDecoration(
                                           color: Colors.grey[200]),
-                                      child: DropdownButton<String>(
+                                      child: DropdownButtonFormField<String>(
                                         value: _selectedType,
                                         hint: const Text(
                                           "Select",
@@ -517,15 +518,20 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                             _selectedType = newValue!;
                                           });
                                         },
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'Please select a type';
+                                          }
+                                          return null;
+                                        },
                                         isExpanded: true,
-                                        underline: Container(
-                                          height: 0,
-                                          color: Colors.grey[200],
+                                        decoration: const InputDecoration(
+                                          contentPadding: EdgeInsets.all(8),
+                                          border: InputBorder.none,
                                         ),
+                                        style: const TextStyle(fontSize: 13),
                                         itemHeight: 50,
                                         menuMaxHeight: 150,
-                                        style: const TextStyle(fontSize: 13),
-                                        padding: const EdgeInsets.all(8),
                                         items: _type.map((String type) {
                                           return DropdownMenuItem<String>(
                                             value: type,
@@ -819,7 +825,7 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                       height: 50,
                                       decoration: BoxDecoration(
                                           color: Colors.grey[200]),
-                                      child: DropdownButton<String>(
+                                      child: DropdownButtonFormField<String>(
                                         value: _selectedListedBy,
                                         hint: const Text(
                                           "Select",
@@ -831,15 +837,20 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                             _selectedListedBy = newValue!;
                                           });
                                         },
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'Please select a listed by option';
+                                          }
+                                          return null;
+                                        },
                                         isExpanded: true,
-                                        underline: Container(
-                                          height: 0,
-                                          color: Colors.grey[200],
+                                        decoration: const InputDecoration(
+                                          contentPadding: EdgeInsets.all(8),
+                                          border: InputBorder.none,
                                         ),
+                                        style: const TextStyle(fontSize: 13),
                                         itemHeight: 50,
                                         menuMaxHeight: 150,
-                                        style: const TextStyle(fontSize: 13),
-                                        padding: const EdgeInsets.all(8),
                                         items: _listedBy.map((String listed) {
                                           return DropdownMenuItem<String>(
                                             value: listed,
@@ -1520,6 +1531,7 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                   ],
                                 ),
                               ),
+///////////////////////////////////////////////////////////////////////////////Ad Title
                             Padding(
                               padding: const EdgeInsets.all(10.0),
                               child: Row(
@@ -1556,6 +1568,12 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                                 color: Colors.grey),
                                           ),
                                           controller: _adTitleController,
+                                          validator: (text) {
+                                            if (text == null || text.isEmpty) {
+                                              return 'Please Entre Ad Title';
+                                            }
+                                            return null;
+                                          },
                                         ),
                                       ),
                                     ),
@@ -1563,6 +1581,7 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                 ],
                               ),
                             ),
+/////////////////////////////////////////////////////////////////////////Describe
                             Padding(
                               padding: const EdgeInsets.all(10.0),
                               child: Row(
@@ -1583,7 +1602,7 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                   SizedBox(
                                     width: 450,
                                     child: Container(
-                                      height: 50,
+                                      height: 70,
                                       decoration: BoxDecoration(
                                           color: Colors.grey[200]),
                                       child: Padding(
@@ -1600,6 +1619,12 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                           ),
                                           maxLength: 60,
                                           controller: _describeController,
+                                          validator: (text) {
+                                            if (text == null || text.isEmpty) {
+                                              return 'Please Entre Describe';
+                                            }
+                                            return null;
+                                          },
                                         ),
                                       ),
                                     ),
@@ -1777,7 +1802,7 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 8.0),
                                         child: TextFormField(
-                                          maxLines: 4,
+                                          maxLines: 6,
                                           decoration: const InputDecoration(
                                             border: InputBorder.none,
                                             hintText: "Decription",
@@ -1786,6 +1811,12 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                                 color: Colors.grey),
                                           ),
                                           controller: _descriptionController,
+                                          validator: (text) {
+                                            if (text == null || text.isEmpty) {
+                                              return 'Please Entre Decription';
+                                            }
+                                            return null;
+                                          },
                                         ),
                                       ),
                                     ),
@@ -2039,6 +2070,7 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                         }
                                         if (_formKey.currentState!.validate()) {
                                           _formKey.currentState!.save();
+                                          showProgress(context);
                                           state.uploadPropertyToFireStore(
                                             userProductDetailsModel:
                                                 UserProductDetailsModel(
@@ -2145,6 +2177,16 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                               // _selectedFacing = null;
                                               _selctedBHKValue = null;
                                               _selectedBHK = null;
+                                              showSnackBar(
+                                                  "Upload Property Successfully",
+                                                  context);
+                                              Navigator.pop(context);
+                                            },
+                                            onFailure: () {
+                                              showSnackBar(
+                                                  "Upload Property Failed",
+                                                  context);
+                                              Navigator.pop(context);
                                             },
                                           );
                                         }
