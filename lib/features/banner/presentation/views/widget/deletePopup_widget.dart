@@ -15,11 +15,11 @@ class DeletePostConfirmationDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text(
-        'Delete Post',
+        'Delete Banner',
         style: TextStyle(color: buttonTextColor),
       ),
       content: const Text(
-        'Do you want to delete post',
+        'Do you want to delete Banner',
         style: TextStyle(color: buttonTextColor),
       ),
       backgroundColor: titleTextColor,

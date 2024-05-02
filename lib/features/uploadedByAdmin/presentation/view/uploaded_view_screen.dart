@@ -51,7 +51,11 @@ class _UploadedViewScreenState extends State<UploadedViewScreen> {
       body: Consumer<UploadedByAdminProvider>(builder: (context, state, _) {
         return state.isLoading && state.filteredUploadedPropertiesList.isEmpty
             ? const Center(child: CircularProgressIndicator())
-            : SingleChildScrollView(
+            :
+            // state.isLoading && state.filteredUploadedPropertiesList.isEmpty
+            //     ? ShimmerList()
+            //     :
+            SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
@@ -230,15 +234,17 @@ class _UploadedViewScreenState extends State<UploadedViewScreen> {
                                                                 child: Shimmer
                                                                     .fromColors(
                                                                   baseColor:
-                                                                      Colors
-                                                                          .red,
+                                                                      Colors.grey[
+                                                                          300]!,
                                                                   highlightColor:
-                                                                      Colors
-                                                                          .blue,
+                                                                      Colors.grey[
+                                                                          100]!,
                                                                   child:
-                                                                      const SizedBox(
+                                                                      Container(
                                                                     height: 220,
                                                                     width: 120,
+                                                                    color: Colors
+                                                                        .white,
                                                                   ),
                                                                 ),
                                                               ),

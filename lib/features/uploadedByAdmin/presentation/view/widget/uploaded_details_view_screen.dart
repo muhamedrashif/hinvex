@@ -223,12 +223,14 @@ class _UploadedDetailWidgetState extends State<UploadedDetailWidget> {
                                                       width: 220.0,
                                                       height: 120.0,
                                                       child: Shimmer.fromColors(
-                                                        baseColor: Colors.red,
+                                                        baseColor:
+                                                            Colors.grey[300]!,
                                                         highlightColor:
-                                                            Colors.blue,
-                                                        child: const SizedBox(
+                                                            Colors.grey[100]!,
+                                                        child: Container(
                                                           height: 220,
                                                           width: 120,
+                                                          color: Colors.white,
                                                         ),
                                                       ),
                                                     ),

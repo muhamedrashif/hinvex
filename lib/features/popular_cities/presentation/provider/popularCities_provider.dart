@@ -70,6 +70,7 @@ class PopularCitiesProvider with ChangeNotifier {
   List<PopularCitiesModel> popularcitiesList = [];
   bool popularcitiesIsLoading = false;
   Future fetchPopularCities() async {
+    popularcitiesList.clear();
     popularcitiesIsLoading = true;
     notifyListeners();
 

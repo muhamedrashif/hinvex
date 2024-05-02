@@ -2141,6 +2141,9 @@ class _EditUploadedWidgetScreenState extends State<EditUploadedWidgetScreen> {
                                               showSnackBar(
                                                   "Edit Property Successfully",
                                                   context);
+
+                                              // showToast(
+                                              //     "Edit Property Successfully");
                                               Navigator.pop(context);
 
                                               // Clear text controllers

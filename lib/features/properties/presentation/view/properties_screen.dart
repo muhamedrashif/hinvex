@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hinvex/features/home/presantation/provider/routing_provider.dart';
 import 'package:hinvex/features/properties/presentation/provider/properties_provider.dart';
@@ -7,6 +8,7 @@ import 'package:hinvex/features/user/data/model/user_product_details_model.dart'
 import 'package:hinvex/general/utils/app_theme/colors.dart';
 import 'package:hinvex/general/utils/enums/enums.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 class PropertiesScreen extends StatefulWidget {
   const PropertiesScreen({super.key});
@@ -265,20 +267,55 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
                                                           BorderRadius.circular(
                                                               8),
                                                       child: SizedBox(
-                                                        height: 150,
-                                                        width: 150,
-                                                        child: Image.network(
-                                                          _filterProperties()[
-                                                                      index]
-                                                                  .propertyImage!
-                                                                  .isNotEmpty
-                                                              ? _filterProperties()[
-                                                                      index]
-                                                                  .propertyImage![0]
-                                                              : "https://media.istockphoto.com/id/1490047352/photo/3d-folder-with-paper-documents-question-mark-and-magnifier-search-information-in-storage-faq.jpg?s=612x612&w=0&k=20&c=g_IqmKq9zvqw0cTnAlNYb_a8oNy6zTl7ky9t9d_aa2E=",
-                                                          fit: BoxFit.cover,
-                                                        ),
-                                                      ),
+                                                          height: 150,
+                                                          width: 150,
+                                                          child:
+                                                              CachedNetworkImage(
+                                                            placeholder:
+                                                                (context,
+                                                                        url) =>
+                                                                    SizedBox(
+                                                              width: 220.0,
+                                                              height: 120.0,
+                                                              child: Shimmer
+                                                                  .fromColors(
+                                                                baseColor:
+                                                                    Colors.grey[
+                                                                        300]!,
+                                                                highlightColor:
+                                                                    Colors.grey[
+                                                                        100]!,
+                                                                child:
+                                                                    Container(
+                                                                  height: 220,
+                                                                  width: 120,
+                                                                  color: Colors
+                                                                      .white,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            fit: BoxFit.cover,
+                                                            imageUrl: _filterProperties()[
+                                                                        index]
+                                                                    .propertyImage!
+                                                                    .isNotEmpty
+                                                                ? _filterProperties()[
+                                                                        index]
+                                                                    .propertyImage![0]
+                                                                : "https://media.istockphoto.com/id/1490047352/photo/3d-folder-with-paper-documents-question-mark-and-magnifier-search-information-in-storage-faq.jpg?s=612x612&w=0&k=20&c=g_IqmKq9zvqw0cTnAlNYb_a8oNy6zTl7ky9t9d_aa2E=",
+                                                          )
+                                                          // child: Image.network(
+                                                          //   _filterProperties()[
+                                                          //               index]
+                                                          //           .propertyImage!
+                                                          //           .isNotEmpty
+                                                          //       ? _filterProperties()[
+                                                          //               index]
+                                                          //           .propertyImage![0]
+                                                          //       : "https://media.istockphoto.com/id/1490047352/photo/3d-folder-with-paper-documents-question-mark-and-magnifier-search-information-in-storage-faq.jpg?s=612x612&w=0&k=20&c=g_IqmKq9zvqw0cTnAlNYb_a8oNy6zTl7ky9t9d_aa2E=",
+                                                          //   fit: BoxFit.cover,
+                                                          // ),
+                                                          ),
                                                     ),
                                                   ),
                                                   Padding(

@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hinvex/features/banner/presentation/provider/banner_provider.dart';
 import 'package:hinvex/general/utils/progress_indicator_widget/progress_indicator_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 class WebPropertyAttachingPopupScreen extends StatefulWidget {
   final String id;
@@ -114,11 +116,33 @@ class _WebPropertyAttachingPopupScreenState
                                             child: SizedBox(
                                               height: 70,
                                               width: 80,
-                                              child: Image.network(
-                                                state.suggestions[index]
-                                                    .propertyImage![0],
+                                              child: CachedNetworkImage(
+                                                placeholder: (context, url) =>
+                                                    SizedBox(
+                                                  width: 220.0,
+                                                  height: 120.0,
+                                                  child: Shimmer.fromColors(
+                                                    baseColor:
+                                                        Colors.grey[300]!,
+                                                    highlightColor:
+                                                        Colors.grey[100]!,
+                                                    child: Container(
+                                                      height: 220,
+                                                      width: 120,
+                                                      color: Colors.black,
+                                                    ),
+                                                  ),
+                                                ),
                                                 fit: BoxFit.cover,
+                                                imageUrl: state
+                                                    .suggestions[index]
+                                                    .propertyImage![0],
                                               ),
+                                              // child: Image.network(
+                                              //   state.suggestions[index]
+                                              //       .propertyImage![0],
+                                              //   fit: BoxFit.cover,
+                                              // ),
                                             ),
                                           ),
                                         ),

@@ -65,6 +65,7 @@ dependencies:
   gap: ^3.0.1
   cloud_functions: ^4.7.3
   url_launcher: ^6.2.6
+  fluttertoast: ^8.2.5
   
 dev_dependencies:
   flutter_test:

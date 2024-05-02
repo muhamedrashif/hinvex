@@ -1,9 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hinvex/features/home/presantation/provider/routing_provider.dart';
 import 'package:hinvex/features/properties/presentation/provider/properties_provider.dart';
 import 'package:hinvex/general/utils/app_theme/colors.dart';
 import 'package:hinvex/general/utils/enums/enums.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 class PropertiesDetailWidget extends StatefulWidget {
   const PropertiesDetailWidget({super.key});
@@ -206,12 +208,36 @@ class _PropertiesDetailWidgetState extends State<PropertiesDetailWidget> {
                                                 child: SizedBox(
                                                   height: 110,
                                                   width: 150,
-                                                  child: Image.network(
-                                                    state
+                                                  child: CachedNetworkImage(
+                                                    placeholder:
+                                                        (context, url) =>
+                                                            SizedBox(
+                                                      width: 220.0,
+                                                      height: 120.0,
+                                                      child: Shimmer.fromColors(
+                                                        baseColor:
+                                                            Colors.grey[300]!,
+                                                        highlightColor:
+                                                            Colors.grey[100]!,
+                                                        child: Container(
+                                                          height: 220,
+                                                          width: 120,
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    fit: BoxFit.cover,
+                                                    imageUrl: state
                                                         .selectedPropertiesDetails!
                                                         .propertyImage![index],
-                                                    fit: BoxFit.cover,
                                                   ),
+
+                                                  // child: Image.network(
+                                                  //   state
+                                                  //       .selectedPropertiesDetails!
+                                                  //       .propertyImage![index],
+                                                  //   fit: BoxFit.cover,
+                                                  // ),
                                                 ),
                                               );
                                             }),

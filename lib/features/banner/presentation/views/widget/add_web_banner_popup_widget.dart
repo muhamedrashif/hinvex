@@ -132,6 +132,7 @@ showAddWebBannerPopUpWidget(BuildContext context) {
             right: 0,
             child: GestureDetector(
               onTap: () {
+                state.clearImage();
                 Navigator.pop(context);
               },
               child: const CircleAvatar(

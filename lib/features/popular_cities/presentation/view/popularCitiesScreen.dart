@@ -7,6 +7,7 @@ import 'package:hinvex/features/popular_cities/presentation/provider/popularCiti
 import 'package:hinvex/features/uploadedByAdmin/data/model/search_location_model/search_location_model.dart';
 import 'package:hinvex/general/utils/app_theme/colors.dart';
 import 'package:hinvex/general/utils/progress_indicator_widget/progress_indicator_widget.dart';
+import 'package:hinvex/general/utils/shimmer/shimmer.dart';
 import 'package:hinvex/general/utils/snackbar/snackbar.dart';
 import 'package:provider/provider.dart';
 
@@ -218,11 +219,7 @@ class _PopularCiteisScreenState extends State<PopularCiteisScreen> {
                       ),
                     ),
                     state.popularcitiesIsLoading
-                        ? const Center(
-                            child: SizedBox(
-                                height: 20,
-                                width: 20,
-                                child: CircularProgressIndicator()))
+                        ? showListTileShimmer()
                         : SizedBox(
                             height: 350,
                             width: 700,
