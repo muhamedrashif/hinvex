@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hinvex/features/banner/presentation/provider/banner_provider.dart';
 import 'package:hinvex/features/banner/presentation/views/widget/add_mobile_banner_popup_widget.dart';
 import 'package:hinvex/features/banner/presentation/views/widget/web_property_attaching%20_popup_widget.dart';
+import 'package:hinvex/general/utils/app_assets/image_constants.dart';
 import 'package:hinvex/general/utils/app_theme/colors.dart';
 import 'package:provider/provider.dart';
 import 'widget/add_web_banner_popup_widget.dart';
@@ -128,7 +129,17 @@ class _BannerScreenState extends State<BannerScreen> {
                                                       child: Container(
                                                         height: 220,
                                                         width: 120,
-                                                        color: Colors.white,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          image:
+                                                              DecorationImage(
+                                                            image: AssetImage(
+                                                              ImageConstant
+                                                                  .hinvex,
+                                                            ),
+                                                            fit: BoxFit.contain,
+                                                          ),
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
@@ -350,7 +361,17 @@ class _BannerScreenState extends State<BannerScreen> {
                                                       child: Container(
                                                         height: 220,
                                                         width: 120,
-                                                        color: Colors.white,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          image:
+                                                              DecorationImage(
+                                                            image: AssetImage(
+                                                              ImageConstant
+                                                                  .hinvex,
+                                                            ),
+                                                            fit: BoxFit.contain,
+                                                          ),
+                                                        ),
                                                       ),
                                                     ),
                                                   ),

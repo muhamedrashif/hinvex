@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hinvex/features/home/presantation/provider/routing_provider.dart';
 import 'package:hinvex/features/uploadedByAdmin/presentation/provider/uploadedByAdmin_provider.dart';
+import 'package:hinvex/general/utils/app_assets/image_constants.dart';
 import 'package:hinvex/general/utils/app_theme/colors.dart';
 import 'package:hinvex/general/utils/enums/enums.dart';
 import 'package:hinvex/general/utils/progress_indicator_widget/progress_indicator_widget.dart';
@@ -243,8 +244,19 @@ class _UploadedViewScreenState extends State<UploadedViewScreen> {
                                                                       Container(
                                                                     height: 220,
                                                                     width: 120,
-                                                                    color: Colors
-                                                                        .white,
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      image:
+                                                                          DecorationImage(
+                                                                        image:
+                                                                            AssetImage(
+                                                                          ImageConstant
+                                                                              .hinvex,
+                                                                        ),
+                                                                        fit: BoxFit
+                                                                            .contain,
+                                                                      ),
+                                                                    ),
                                                                   ),
                                                                 ),
                                                               ),

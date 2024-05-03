@@ -184,6 +184,11 @@ class _EditUploadedWidgetScreenState extends State<EditUploadedWidgetScreen> {
                                   ),
                                   InkWell(
                                     onTap: () {
+                                      state
+                                        ..imageFile.clear()
+                                        ..clearData()
+                                        ..clearDoc()
+                                        ..fetchProducts();
                                       Provider.of<RoutingProvider>(context,
                                               listen: false)
                                           .uploadedByAdminRouting(
@@ -2145,7 +2150,17 @@ class _EditUploadedWidgetScreenState extends State<EditUploadedWidgetScreen> {
                                               // showToast(
                                               //     "Edit Property Successfully");
                                               Navigator.pop(context);
-
+                                              state
+                                                ..imageFile.clear()
+                                                ..clearData()
+                                                ..clearDoc()
+                                                ..fetchProducts();
+                                              Provider.of<RoutingProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .uploadedByAdminRouting(
+                                                      UploadedByAdminRoutingEnum
+                                                          .uploadedViewScreen);
                                               // Clear text controllers
 
                                               // Reset selected values to default or clear them
@@ -2172,7 +2187,7 @@ class _EditUploadedWidgetScreenState extends State<EditUploadedWidgetScreen> {
                                                     horizontal: 15.0,
                                                     vertical: 10),
                                                 child: Text(
-                                                  "Upload",
+                                                  "Submit",
                                                   style: TextStyle(
                                                     color: buttonTextColor,
                                                     fontSize: 10,

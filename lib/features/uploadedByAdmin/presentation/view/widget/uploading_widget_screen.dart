@@ -2181,6 +2181,17 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                                   "Upload Property Successfully",
                                                   context);
                                               Navigator.pop(context);
+                                              state
+                                                ..imageFile.clear()
+                                                ..clearData()
+                                                ..clearDoc()
+                                                ..fetchProducts();
+                                              Provider.of<RoutingProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .uploadedByAdminRouting(
+                                                      UploadedByAdminRoutingEnum
+                                                          .uploadedViewScreen);
                                             },
                                             onFailure: () {
                                               showSnackBar(

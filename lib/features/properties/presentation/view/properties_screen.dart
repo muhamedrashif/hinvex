@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:hinvex/features/home/presantation/provider/routing_provider.dart';
 import 'package:hinvex/features/properties/presentation/provider/properties_provider.dart';
 import 'package:hinvex/features/user/data/model/user_product_details_model.dart';
+import 'package:hinvex/general/utils/app_assets/image_constants.dart';
 import 'package:hinvex/general/utils/app_theme/colors.dart';
 import 'package:hinvex/general/utils/enums/enums.dart';
 import 'package:provider/provider.dart';
@@ -289,8 +290,19 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
                                                                     Container(
                                                                   height: 220,
                                                                   width: 120,
-                                                                  color: Colors
-                                                                      .white,
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    image:
+                                                                        DecorationImage(
+                                                                      image:
+                                                                          AssetImage(
+                                                                        ImageConstant
+                                                                            .hinvex,
+                                                                      ),
+                                                                      fit: BoxFit
+                                                                          .contain,
+                                                                    ),
+                                                                  ),
                                                                 ),
                                                               ),
                                                             ),

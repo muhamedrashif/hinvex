@@ -61,6 +61,11 @@ class _UploadedDetailWidgetState extends State<UploadedDetailWidget> {
                                     padding: const EdgeInsets.all(8.0),
                                     child: InkWell(
                                       onTap: () {
+                                        state
+                                          ..imageFile.clear()
+                                          ..clearData()
+                                          ..clearDoc()
+                                          ..fetchProducts();
                                         Provider.of<RoutingProvider>(context,
                                                 listen: false)
                                             .uploadedByAdminRouting(
@@ -230,7 +235,18 @@ class _UploadedDetailWidgetState extends State<UploadedDetailWidget> {
                                                         child: Container(
                                                           height: 220,
                                                           width: 120,
-                                                          color: Colors.white,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            image:
+                                                                DecorationImage(
+                                                              image: AssetImage(
+                                                                ImageConstant
+                                                                    .hinvex,
+                                                              ),
+                                                              fit: BoxFit
+                                                                  .contain,
+                                                            ),
+                                                          ),
                                                         ),
                                                       ),
                                                     ),

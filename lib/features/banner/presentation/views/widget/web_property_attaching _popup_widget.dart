@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hinvex/features/banner/presentation/provider/banner_provider.dart';
+import 'package:hinvex/general/utils/app_assets/image_constants.dart';
 import 'package:hinvex/general/utils/progress_indicator_widget/progress_indicator_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
@@ -129,7 +130,15 @@ class _WebPropertyAttachingPopupScreenState
                                                     child: Container(
                                                       height: 220,
                                                       width: 120,
-                                                      color: Colors.black,
+                                                      decoration: BoxDecoration(
+                                                        image: DecorationImage(
+                                                          image: AssetImage(
+                                                            ImageConstant
+                                                                .hinvex,
+                                                          ),
+                                                          fit: BoxFit.contain,
+                                                        ),
+                                                      ),
                                                     ),
                                                   ),
                                                 ),

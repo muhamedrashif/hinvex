@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hinvex/features/uploadedByAdmin/data/i_uploadedByAdmin_facade.dart';
@@ -18,7 +17,7 @@ class UploadedByAdminProvider with ChangeNotifier {
   List<String> imageFile = [];
   bool sendLoading = false;
   bool fetchUploadedPropertiesLoading = false;
-  DocumentSnapshot? lastDocument;
+  // DocumentSnapshot? lastDocument;
   bool fetchNextUploadedPopertiesLoading = false;
   bool fetchNextUploadedPopertiesCompleted = false;
   bool fetchUserLoading = false;
@@ -87,7 +86,7 @@ class UploadedByAdminProvider with ChangeNotifier {
       log(error.errorMsg);
     }, (success) {
       _filteredUploadedPropertiesList.insert(0, success);
-      imageFile.clear();
+      // imageFile.clear();
       sendLoading = false;
       notifyListeners();
       onSuccess.call();
@@ -96,7 +95,6 @@ class UploadedByAdminProvider with ChangeNotifier {
 
   // Future fetchUploadedProperties() async {
   //   isLoading = true;
-
   //   notifyListeners();
   //   fetchUploadedPropertiesLoading = true;
   //   final result = iUploadedByAdminFacade.fetchUploadedProperties();
@@ -128,7 +126,6 @@ class UploadedByAdminProvider with ChangeNotifier {
   //       fetchNextUploadedPopertiesCompleted = true;
   //     }
   //     _filteredUploadedPropertiesList.addAll(uploadedProperties);
-
   //     notifyListeners();
   //   });
   // }
@@ -149,7 +146,6 @@ class UploadedByAdminProvider with ChangeNotifier {
   //               .contains(query.toLowerCase());
   //     }).toList();
   //   }
-
   //   notifyListeners();
   // }
 

@@ -22,7 +22,7 @@ class ReportReasonsPopupScreen extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("Reasons"),
+                const Text("Reasons"),
                 SizedBox(
                   width: 300,
                   child: ListView.builder(
