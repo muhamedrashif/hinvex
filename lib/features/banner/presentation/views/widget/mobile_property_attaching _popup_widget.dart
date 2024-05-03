@@ -104,7 +104,7 @@ class _MobilePropertyAttachingPopupScreenState
                                 children: [
                                   Container(
                                     decoration: BoxDecoration(
-                                      border: Border.all(),
+                                      border: Border.all(color: Colors.grey),
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                     child: Row(
