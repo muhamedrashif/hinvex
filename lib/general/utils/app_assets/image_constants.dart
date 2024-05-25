@@ -10,4 +10,19 @@ class ImageConstant {
 
   // IMAGE ICON
   static String imageIcon = '$imagePath/imageIcon.png';
+
+  // DEFAUILT PROFILE
+  static String defaultProfile = '$imagePath/userProfile.png';
+
+  // calendar
+  static String calendar = '$imagePath/calendar.png';
+
+  //totalReports
+  static String totalReports = '$imagePath/totalReports.png';
+
+  // totalPosts
+  static String totalPosts = '$imagePath/totalPosts.png';
+
+  //totalUsers
+  static String totalUsers = '$imagePath/totalUsers.png';
 }

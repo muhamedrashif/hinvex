@@ -11,38 +11,39 @@ class UserProductDetailsModel {
   final Timestamp? updateDate;
   final SelectedCategory? propertyCategory;
   final SelectedType? propertyType;
-  final int? propertyPrice;
+  final num? propertyPrice;
   // final String? propertyLink;
   List? propertyImage;
   final String? propertyTitle;
   final String? propertyDetils;
   final PlaceCell? propertyLocation;
-  final int? bedRooms;
-  final int? bathRooms;
+  final num? bedRooms;
+  final num? bathRooms;
   final SelectedFurnisher? furnishing;
   final ConstructionStatus? constructionStatus;
   final SelectedListedBy? listedBy;
-  final int? superBuiltupAreaft;
-  final int? carpetAreaft;
-  final int? totalFloors;
-  final int? floorNo;
-  final int? carParking;
+  final num? superBuiltupAreaft;
+  final num? carpetAreaft;
+  final num? totalFloors;
+  final num? floorNo;
+  final num? carParking;
   final SelectedFacing? facing;
   final String? projectName;
   final String? description;
-  final int? noOfReports;
+  final num? noOfReports;
   final String? phoneNumber;
   final String? whatsAppNumber;
-  final int? plotArea;
-  final int? plotLength;
-  final int? plotBreadth;
-  final int? washRoom;
-  final int? pricePerstft;
+  final num? plotArea;
+  final num? plotLength;
+  final num? plotBreadth;
+  final num? washRoom;
+  final num? pricePerstft;
   final int? bhk;
   final List? keywords;
   final String? webBannerId;
   List? reportReasons;
   final String? mobileBannerId;
+  bool? isAdmin;
   UserProductDetailsModel({
     this.id,
     this.userId,
@@ -82,6 +83,7 @@ class UserProductDetailsModel {
     this.webBannerId,
     this.reportReasons,
     this.mobileBannerId,
+    this.isAdmin,
   });
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -122,6 +124,7 @@ class UserProductDetailsModel {
         "webBannerId": webBannerId,
         "reportReasons": reportReasons,
         "mobileBannerId": mobileBannerId,
+        "isAdmin": isAdmin,
       };
 
   static UserProductDetailsModel fromSnap(
@@ -130,7 +133,7 @@ class UserProductDetailsModel {
     // log("etSelectedCategory(snapshot['propertyCategory']) ${getSelectedCategoryEnum(snapshot['propertyCategory'])}");
     return UserProductDetailsModel(
       id: snap.id,
-      userId: snapshot['userId'],
+      userId: snapshot['userId'] ?? '',
       createDate: snapshot['createDate'],
       updateDate: snapshot['updateDate'],
       propertyCategory: getSelectedCategoryEnum(snapshot['propertyCategory']),
@@ -168,6 +171,7 @@ class UserProductDetailsModel {
       webBannerId: snapshot['webBannerId'],
       reportReasons: snapshot['reportReasons'],
       mobileBannerId: snapshot['mobileBannerId'],
+      isAdmin: snapshot['isAdmin'],
     );
   }
 
@@ -191,8 +195,8 @@ class UserProductDetailsModel {
         return ConstructionStatus.newLaunch;
       case 'Ready To Move':
         return ConstructionStatus.readyToMove;
-      case 'Uder-Construction':
-        return ConstructionStatus.uderConstruction;
+      case 'Under-Construction':
+        return ConstructionStatus.underConstruction;
     }
 
     return null;
@@ -204,8 +208,8 @@ class UserProductDetailsModel {
         return ConstructionStatus.newLaunch;
       case 'readyToMove':
         return ConstructionStatus.readyToMove;
-      case 'uderConstruction':
-        return ConstructionStatus.uderConstruction;
+      case 'underConstruction':
+        return ConstructionStatus.underConstruction;
     }
 
     return null;
@@ -217,8 +221,8 @@ class UserProductDetailsModel {
         return 'New Launch';
       case 'readyToMove':
         return 'Ready To Move';
-      case 'uderConstruction':
-        return 'Uder-Construction';
+      case 'underConstruction':
+        return 'Under-Construction';
     }
     return '';
   }
@@ -233,8 +237,8 @@ class UserProductDetailsModel {
         return SelectedCategory.landsPlots;
       case 'Commercial':
         return SelectedCategory.commercial;
-      case 'Co-Working Soace':
-        return SelectedCategory.coWorkingSoace;
+      case 'Co-Working Space':
+        return SelectedCategory.coWorkingSpace;
       case 'PG & Guest House':
         return SelectedCategory.pGGuestHouse;
     }
@@ -252,8 +256,8 @@ class UserProductDetailsModel {
         return SelectedCategory.landsPlots;
       case 'commercial':
         return SelectedCategory.commercial;
-      case 'coWorkingSoace':
-        return SelectedCategory.coWorkingSoace;
+      case 'coWorkingSpace':
+        return SelectedCategory.coWorkingSpace;
       case 'pGGuestHouse':
         return SelectedCategory.pGGuestHouse;
     }
@@ -270,8 +274,8 @@ class UserProductDetailsModel {
         return 'Lands/Plots';
       case 'commercial':
         return 'Commercial';
-      case 'coWorkingSoace':
-        return 'Co-Working Soace';
+      case 'coWorkingSpace':
+        return 'Co-Working Space';
       case 'pGGuestHouse':
         return 'PG & Guest House';
     }
@@ -462,38 +466,39 @@ class UserProductDetailsModel {
     Timestamp? updateDate,
     SelectedCategory? propertyCategory,
     SelectedType? propertyType,
-    int? propertyPrice,
+    num? propertyPrice,
     // String? propertyLink,
     List? propertyImage,
     String? propertyTitle,
     String? propertyDetils,
     PlaceCell? propertyLocation,
-    int? bedRooms,
-    int? bathRooms,
+    num? bedRooms,
+    num? bathRooms,
     SelectedFurnisher? furnishing,
     ConstructionStatus? constructionStatus,
     SelectedListedBy? listedBy,
-    int? superBuiltupAreaft,
-    int? carpetAreaft,
-    int? totalFloors,
-    int? floorNo,
-    int? carParking,
+    num? superBuiltupAreaft,
+    num? carpetAreaft,
+    num? totalFloors,
+    num? floorNo,
+    num? carParking,
     SelectedFacing? facing,
     String? projectName,
     String? description,
-    int? noOfReports,
+    num? noOfReports,
     String? phoneNumber,
     String? whatsAppNumber,
-    int? plotArea,
-    int? plotLength,
-    int? plotBreadth,
-    int? washRoom,
-    int? pricePerstft,
+    num? plotArea,
+    num? plotLength,
+    num? plotBreadth,
+    num? washRoom,
+    num? pricePerstft,
     int? bhk,
     List? keywords,
     String? webBannerId,
     List? reportReasons,
     String? mobileBannerId,
+    bool? isAdmin,
   }) {
     return UserProductDetailsModel(
       id: id ?? this.id,
@@ -534,6 +539,7 @@ class UserProductDetailsModel {
       webBannerId: webBannerId,
       reportReasons: reportReasons ?? this.reportReasons,
       mobileBannerId: mobileBannerId,
+      isAdmin: isAdmin ?? this.isAdmin,
     );
   }
 }

@@ -11,14 +11,14 @@ enum UploadedByAdminRoutingEnum {
 
 enum ReportsAndIssuesEnum { reportsAndIssuesScreen, reportsUserDetailWidget }
 
-enum ConstructionStatus { newLaunch, readyToMove, uderConstruction }
+enum ConstructionStatus { newLaunch, readyToMove, underConstruction }
 
 enum SelectedCategory {
   house,
   apartments,
   landsPlots,
   commercial,
-  coWorkingSoace,
+  coWorkingSpace,
   pGGuestHouse
 }
 

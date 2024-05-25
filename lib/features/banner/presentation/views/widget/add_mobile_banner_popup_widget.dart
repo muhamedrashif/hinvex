@@ -1,4 +1,5 @@
 import 'package:dotted_border/dotted_border.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hinvex/features/banner/presentation/provider/banner_provider.dart';
 import 'package:hinvex/general/utils/app_theme/colors.dart';
@@ -105,7 +106,9 @@ showAddMobileBannerPopUpWidget(BuildContext context) {
                           );
                         },
                         child: state.saveImageloading
-                            ? const CircularProgressIndicator()
+                            ? const CupertinoActivityIndicator(
+                                color: primaryColor,
+                              )
                             : Container(
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(4),

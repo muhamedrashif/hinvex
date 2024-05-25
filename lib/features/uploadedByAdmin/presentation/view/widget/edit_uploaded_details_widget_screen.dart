@@ -1,7 +1,7 @@
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hinvex/features/home/presantation/provider/routing_provider.dart';
@@ -12,7 +12,7 @@ import 'package:hinvex/general/utils/app_assets/image_constants.dart';
 import 'package:hinvex/general/utils/app_theme/colors.dart';
 import 'package:hinvex/general/utils/enums/enums.dart';
 import 'package:hinvex/general/utils/progress_indicator_widget/progress_indicator_widget.dart';
-import 'package:hinvex/general/utils/snackbar/snackbar.dart';
+import 'package:hinvex/general/utils/toast/toast.dart';
 import 'package:provider/provider.dart';
 
 import 'uploading_widget_screen.dart';
@@ -184,16 +184,17 @@ class _EditUploadedWidgetScreenState extends State<EditUploadedWidgetScreen> {
                                   ),
                                   InkWell(
                                     onTap: () {
-                                      state
-                                        ..imageFile.clear()
-                                        ..clearData()
-                                        ..clearDoc()
-                                        ..fetchProducts();
-                                      Provider.of<RoutingProvider>(context,
-                                              listen: false)
-                                          .uploadedByAdminRouting(
-                                              UploadedByAdminRoutingEnum
-                                                  .uploadedViewScreen);
+                                      if (state.imageFile.isNotEmpty) {
+                                        state.imageFile = [];
+
+                                        Provider.of<RoutingProvider>(context,
+                                                listen: false)
+                                            .uploadedByAdminRouting(
+                                                UploadedByAdminRoutingEnum
+                                                    .uploadedViewScreen);
+                                      } else {
+                                        showToast("Please Select Image");
+                                      }
                                     },
                                     child: Container(
                                       decoration: BoxDecoration(
@@ -871,6 +872,10 @@ class _EditUploadedWidgetScreenState extends State<EditUploadedWidgetScreen> {
                                                   color: Colors.grey),
                                             ),
                                             keyboardType: TextInputType.number,
+                                            inputFormatters: <TextInputFormatter>[
+                                              FilteringTextInputFormatter
+                                                  .digitsOnly
+                                            ],
                                             controller:
                                                 _superBuilupAreaController,
                                           ),
@@ -923,6 +928,10 @@ class _EditUploadedWidgetScreenState extends State<EditUploadedWidgetScreen> {
                                                   color: Colors.grey),
                                             ),
                                             keyboardType: TextInputType.number,
+                                            inputFormatters: <TextInputFormatter>[
+                                              FilteringTextInputFormatter
+                                                  .digitsOnly
+                                            ],
                                             controller: _pricePerSqftController,
                                           ),
                                         ),
@@ -976,6 +985,10 @@ class _EditUploadedWidgetScreenState extends State<EditUploadedWidgetScreen> {
                                                   color: Colors.grey),
                                             ),
                                             keyboardType: TextInputType.number,
+                                            inputFormatters: <TextInputFormatter>[
+                                              FilteringTextInputFormatter
+                                                  .digitsOnly
+                                            ],
                                             controller: _carpetAreaController,
                                           ),
                                         ),
@@ -1027,6 +1040,10 @@ class _EditUploadedWidgetScreenState extends State<EditUploadedWidgetScreen> {
                                                   color: Colors.grey),
                                             ),
                                             keyboardType: TextInputType.number,
+                                            inputFormatters: <TextInputFormatter>[
+                                              FilteringTextInputFormatter
+                                                  .digitsOnly
+                                            ],
                                             controller: _washRoomController,
                                           ),
                                         ),
@@ -1076,7 +1093,10 @@ class _EditUploadedWidgetScreenState extends State<EditUploadedWidgetScreen> {
                                                   fontSize: 10,
                                                   color: Colors.grey),
                                             ),
-                                            keyboardType: TextInputType.number,
+                                            inputFormatters: <TextInputFormatter>[
+                                              FilteringTextInputFormatter
+                                                  .digitsOnly
+                                            ],
                                             controller: _plotAreaController,
                                           ),
                                         ),
@@ -1126,7 +1146,10 @@ class _EditUploadedWidgetScreenState extends State<EditUploadedWidgetScreen> {
                                                   fontSize: 10,
                                                   color: Colors.grey),
                                             ),
-                                            keyboardType: TextInputType.number,
+                                            inputFormatters: <TextInputFormatter>[
+                                              FilteringTextInputFormatter
+                                                  .digitsOnly
+                                            ],
                                             controller: _plotLenthController,
                                           ),
                                         ),
@@ -1176,7 +1199,10 @@ class _EditUploadedWidgetScreenState extends State<EditUploadedWidgetScreen> {
                                                   fontSize: 10,
                                                   color: Colors.grey),
                                             ),
-                                            keyboardType: TextInputType.number,
+                                            inputFormatters: <TextInputFormatter>[
+                                              FilteringTextInputFormatter
+                                                  .digitsOnly
+                                            ],
                                             controller: _plotBreadthController,
                                           ),
                                         ),
@@ -1228,6 +1254,10 @@ class _EditUploadedWidgetScreenState extends State<EditUploadedWidgetScreen> {
                                                   color: Colors.grey),
                                             ),
                                             keyboardType: TextInputType.number,
+                                            inputFormatters: <TextInputFormatter>[
+                                              FilteringTextInputFormatter
+                                                  .digitsOnly
+                                            ],
                                             controller: _totalFloorsController,
                                           ),
                                         ),
@@ -1279,6 +1309,10 @@ class _EditUploadedWidgetScreenState extends State<EditUploadedWidgetScreen> {
                                                   color: Colors.grey),
                                             ),
                                             keyboardType: TextInputType.number,
+                                            inputFormatters: <TextInputFormatter>[
+                                              FilteringTextInputFormatter
+                                                  .digitsOnly
+                                            ],
                                             controller: _floorNoController,
                                           ),
                                         ),
@@ -1421,74 +1455,7 @@ class _EditUploadedWidgetScreenState extends State<EditUploadedWidgetScreen> {
                                   ],
                                 ),
                               ),
-                            // if (_selectedCategory == 'House' ||
-                            //     _selectedCategory == 'Apartments' ||
-                            //     _selectedCategory == 'Lands/Plots')
-                            //   Padding(
-                            //     padding: const EdgeInsets.all(10.0),
-                            //     child: Row(
-                            //       mainAxisAlignment: MainAxisAlignment.start,
-                            //       crossAxisAlignment: CrossAxisAlignment.start,
-                            //       children: [
-                            //         const SizedBox(
-                            //             width: 200,
-                            //             child: Row(
-                            //               children: [
-                            //                 Text("Facing"),
-                            //                 Text(
-                            //                   "*",
-                            //                   style:
-                            //                       TextStyle(color: Colors.red),
-                            //                 ),
-                            //               ],
-                            //             )),
-                            //         SizedBox(
-                            //           width: 450,
-                            //           child: Container(
-                            //             height: 50,
-                            //             decoration: BoxDecoration(
-                            //                 color: Colors.grey[200]),
-                            //             child: DropdownButton<String>(
-                            //               value: _selectedFacing,
-                            //               hint: Text(
-                            //                 state
-                            //                         .selectedPropertiesDetails!
-                            //                         .getSelectedFacingString
-                            //                         .isNotEmpty
-                            //                     ? state
-                            //                         .selectedPropertiesDetails!
-                            //                         .getSelectedFacingString
-                            //                     : "Select",
-                            //                 style: const TextStyle(
-                            //                     fontSize: 10,
-                            //                     color: Colors.grey),
-                            //               ),
-                            //               onChanged: (String? newValue) {
-                            //                 setState(() {
-                            //                   _selectedFacing = newValue!;
-                            //                 });
-                            //               },
-                            //               isExpanded: true,
-                            //               underline: Container(
-                            //                 height: 0,
-                            //                 color: Colors.grey[200],
-                            //               ),
-                            //               itemHeight: 50,
-                            //               menuMaxHeight: 150,
-                            //               style: const TextStyle(fontSize: 13),
-                            //               padding: const EdgeInsets.all(8),
-                            //               items: _facing.map((String facing) {
-                            //                 return DropdownMenuItem<String>(
-                            //                   value: facing,
-                            //                   child: Text(facing),
-                            //                 );
-                            //               }).toList(),
-                            //             ),
-                            //           ),
-                            //         ),
-                            //       ],
-                            //     ),
-                            //   ),
+
                             if (_selectedCategory == 'House' ||
                                 _selectedCategory == 'Apartments' ||
                                 _selectedCategory == 'Commercial' ||
@@ -1683,6 +1650,11 @@ class _EditUploadedWidgetScreenState extends State<EditUploadedWidgetScreen> {
                                             }
                                             return null;
                                           },
+                                          keyboardType: TextInputType.number,
+                                          inputFormatters: <TextInputFormatter>[
+                                            FilteringTextInputFormatter
+                                                .digitsOnly
+                                          ],
                                         ),
                                       ),
                                     ),
@@ -1736,6 +1708,11 @@ class _EditUploadedWidgetScreenState extends State<EditUploadedWidgetScreen> {
                                             }
                                             return null;
                                           },
+                                          keyboardType: TextInputType.number,
+                                          inputFormatters: <TextInputFormatter>[
+                                            FilteringTextInputFormatter
+                                                .digitsOnly
+                                          ],
                                         ),
                                       ),
                                     ),
@@ -1789,6 +1766,11 @@ class _EditUploadedWidgetScreenState extends State<EditUploadedWidgetScreen> {
                                             }
                                             return null;
                                           },
+                                          keyboardType: TextInputType.number,
+                                          inputFormatters: <TextInputFormatter>[
+                                            FilteringTextInputFormatter
+                                                .digitsOnly
+                                          ],
                                         ),
                                       ),
                                     ),
@@ -1869,9 +1851,9 @@ class _EditUploadedWidgetScreenState extends State<EditUploadedWidgetScreen> {
                                         child: InkWell(
                                           onTap: () {
                                             if (state.imageFile.length > 7) {
-                                              showSnackBar(
-                                                  "Maximum Allowed Images 7",
-                                                  context);
+                                              showToast(
+                                                "Maximum Allowed Images 7",
+                                              );
                                               return;
                                             }
 
@@ -1880,9 +1862,9 @@ class _EditUploadedWidgetScreenState extends State<EditUploadedWidgetScreen> {
                                             state.getImage(onSuccess: () {
                                               Navigator.pop(context);
                                             }, onFailure: () {
-                                              showSnackBar(
-                                                  "Maximum Allowed Images 7",
-                                                  context);
+                                              showToast(
+                                                "Maximum Allowed Images 7",
+                                              );
                                               Navigator.pop(context);
                                             });
                                           },
@@ -2087,95 +2069,151 @@ class _EditUploadedWidgetScreenState extends State<EditUploadedWidgetScreen> {
                                                 int.parse(_selectedCarParking!);
                                           }
                                         }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                                        showProgress(context);
-                                        state.updateUploadedPosts(
-                                            userProductDetailsModel: state
-                                                .selectedPropertiesDetails!
-                                                .copyWith(
-                                                    userId: userId,
-                                                    updateDate: Timestamp.now(),
-                                                    propertyCategory: UserProductDetailsModel.getSelectedCategory(
-                                                        _selectedCategory ??
-                                                            ''),
-                                                    propertyType: UserProductDetailsModel.getSelectedType(
-                                                        _selectedType ?? ''),
-                                                    propertyPrice: int.tryParse(
-                                                        _askingPriceController
-                                                            .text),
-                                                    propertyImage:
-                                                        state.imageFile,
-                                                    propertyTitle: _adTitleController.text.isEmpty
+
+                                        if (state.imageFile.isNotEmpty) {
+                                          showProgress(context);
+                                          state.updateUploadedPosts(
+                                              userProductDetailsModel: state
+                                                  .selectedPropertiesDetails!
+                                                  .copyWith(
+                                                userId: userId,
+                                                updateDate: Timestamp.now(),
+                                                propertyCategory:
+                                                    UserProductDetailsModel
+                                                        .getSelectedCategory(
+                                                            _selectedCategory ??
+                                                                ''),
+                                                propertyType:
+                                                    UserProductDetailsModel
+                                                        .getSelectedType(
+                                                            _selectedType ??
+                                                                ''),
+                                                propertyPrice: int.tryParse(
+                                                    _askingPriceController
+                                                        .text),
+                                                propertyImage: state.imageFile,
+                                                propertyTitle: _adTitleController
+                                                        .text.isEmpty
+                                                    ? state
+                                                        .selectedPropertiesDetails!
+                                                        .propertyTitle
+                                                    : _adTitleController.text,
+                                                propertyDetils: _describeController
+                                                        .text.isEmpty
+                                                    ? state
+                                                        .selectedPropertiesDetails!
+                                                        .propertyDetils
+                                                    : _describeController.text,
+                                                propertyLocation: placeCell ??
+                                                    state
+                                                        .selectedPropertiesDetails!
+                                                        .propertyLocation,
+                                                bedRooms: selectedBedroom,
+                                                bathRooms: selectedBathroom,
+                                                furnishing:
+                                                    UserProductDetailsModel
+                                                        .getSelectedFurnisher(
+                                                            _selectedFurnisher ??
+                                                                ''),
+                                                constructionStatus:
+                                                    UserProductDetailsModel
+                                                        .getConstructionStatus(
+                                                            _selectedConstructionStatus ??
+                                                                ''),
+                                                listedBy:
+                                                    UserProductDetailsModel
+                                                        .getSelectedListedBy(
+                                                            _selectedListedBy ??
+                                                                ''),
+                                                superBuiltupAreaft: int.tryParse(
+                                                    _superBuilupAreaController
+                                                        .text),
+                                                carpetAreaft: int.tryParse(
+                                                    _carpetAreaController.text),
+                                                totalFloors: int.tryParse(
+                                                    _totalFloorsController
+                                                        .text),
+                                                floorNo: int.tryParse(
+                                                    _floorNoController.text),
+                                                carParking: selectedCarParking,
+                                                // facing: UserProductDetailsModel.getSelectedFacing(_selectedFacing ?? ''),
+                                                projectName: _projectNameController
+                                                        .text.isEmpty
+                                                    ? state
+                                                        .selectedPropertiesDetails!
+                                                        .projectName
+                                                    : _projectNameController
+                                                        .text,
+                                                phoneNumber: _phoneNumberController
+                                                        .text.isEmpty
+                                                    ? state
+                                                        .selectedPropertiesDetails!
+                                                        .phoneNumber
+                                                    : _phoneNumberController
+                                                        .text,
+                                                whatsAppNumber:
+                                                    _whatsappNumberController
+                                                            .text.isEmpty
                                                         ? state
                                                             .selectedPropertiesDetails!
-                                                            .propertyTitle
-                                                        : _adTitleController
+                                                            .whatsAppNumber
+                                                        : _whatsappNumberController
                                                             .text,
-                                                    propertyDetils: _describeController.text.isEmpty
-                                                        ? state
-                                                            .selectedPropertiesDetails!
-                                                            .propertyDetils
-                                                        : _describeController.text,
-                                                    propertyLocation: placeCell ?? state.selectedPropertiesDetails!.propertyLocation,
-                                                    bedRooms: selectedBedroom,
-                                                    bathRooms: selectedBathroom,
-                                                    furnishing: UserProductDetailsModel.getSelectedFurnisher(_selectedFurnisher ?? ''),
-                                                    constructionStatus: UserProductDetailsModel.getConstructionStatus(_selectedConstructionStatus ?? ''),
-                                                    listedBy: UserProductDetailsModel.getSelectedListedBy(_selectedListedBy ?? ''),
-                                                    superBuiltupAreaft: int.tryParse(_superBuilupAreaController.text),
-                                                    carpetAreaft: int.tryParse(_carpetAreaController.text),
-                                                    totalFloors: int.tryParse(_totalFloorsController.text),
-                                                    floorNo: int.tryParse(_floorNoController.text),
-                                                    carParking: selectedCarParking,
-                                                    // facing: UserProductDetailsModel.getSelectedFacing(_selectedFacing ?? ''),
-                                                    projectName: _projectNameController.text.isEmpty ? state.selectedPropertiesDetails!.projectName : _projectNameController.text,
-                                                    phoneNumber: _phoneNumberController.text.isEmpty ? state.selectedPropertiesDetails!.phoneNumber : _phoneNumberController.text,
-                                                    whatsAppNumber: _whatsappNumberController.text.isEmpty ? state.selectedPropertiesDetails!.whatsAppNumber : _whatsappNumberController.text,
-                                                    plotArea: int.tryParse(_plotAreaController.text),
-                                                    plotLength: int.tryParse(_plotLenthController.text),
-                                                    plotBreadth: int.tryParse(_plotBreadthController.text),
-                                                    washRoom: int.tryParse(_washRoomController.text),
-                                                    noOfReports: state.selectedPropertiesDetails!.noOfReports,
-                                                    description: _descriptionController.text.isEmpty ? state.selectedPropertiesDetails!.description : _descriptionController.text,
-                                                    pricePerstft: int.tryParse(_pricePerSqftController.text),
-                                                    bhk: _selctedBHKValue,
-                                                    id: state.selectedPropertiesDetails!.id),
-                                            onSuccess: () {
-                                              showSnackBar(
+                                                plotArea: int.tryParse(
+                                                    _plotAreaController.text),
+                                                plotLength: int.tryParse(
+                                                    _plotLenthController.text),
+                                                plotBreadth: int.tryParse(
+                                                    _plotBreadthController
+                                                        .text),
+                                                washRoom: int.tryParse(
+                                                    _washRoomController.text),
+                                                noOfReports: state
+                                                    .selectedPropertiesDetails!
+                                                    .noOfReports,
+                                                description: _descriptionController
+                                                        .text.isEmpty
+                                                    ? state
+                                                        .selectedPropertiesDetails!
+                                                        .description
+                                                    : _descriptionController
+                                                        .text,
+                                                pricePerstft: int.tryParse(
+                                                    _pricePerSqftController
+                                                        .text),
+                                                bhk: _selctedBHKValue,
+                                                id: state
+                                                    .selectedPropertiesDetails!
+                                                    .id,
+                                                isAdmin: state
+                                                    .selectedPropertiesDetails!
+                                                    .isAdmin,
+                                              ),
+                                              onSuccess: () {
+                                                showToast(
                                                   "Edit Property Successfully",
-                                                  context);
+                                                );
 
-                                              // showToast(
-                                              //     "Edit Property Successfully");
-                                              Navigator.pop(context);
-                                              state
-                                                ..imageFile.clear()
-                                                ..clearData()
-                                                ..clearDoc()
-                                                ..fetchProducts();
-                                              Provider.of<RoutingProvider>(
-                                                      context,
-                                                      listen: false)
-                                                  .uploadedByAdminRouting(
-                                                      UploadedByAdminRoutingEnum
-                                                          .uploadedViewScreen);
-                                              // Clear text controllers
-
-                                              // Reset selected values to default or clear them
-                                            },
-                                            onFailure: () {
-                                              showSnackBar(
+                                                Navigator.pop(context);
+                                              },
+                                              onFailure: () {
+                                                showToast(
                                                   "Edit Property Failed",
-                                                  context);
-                                              Navigator.pop(context);
-                                            });
+                                                );
+                                                Navigator.pop(context);
+                                              });
+                                        } else {
+                                          showToast("Please Select Image");
+                                        }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                                       },
                                       child: state.updateLoading
-                                          ? const CircularProgressIndicator()
+                                          ? const CupertinoActivityIndicator(
+                                              color: primaryColor,
+                                            )
                                           : Container(
                                               decoration: BoxDecoration(
                                                 borderRadius:

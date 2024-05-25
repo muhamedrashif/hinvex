@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:hinvex/features/home/presantation/provider/routing_provider.dart';
@@ -79,7 +80,9 @@ class _ReportsAndIssuesScreenState extends State<ReportsAndIssuesScreen> {
         body: Consumer<ReportsAndIssuesProvider>(builder: (context, state, _) {
       return state.isLoading
           ? const Center(
-              child: CircularProgressIndicator(),
+              child: CupertinoActivityIndicator(
+                color: primaryColor,
+              ),
             )
           : SingleChildScrollView(
               scrollDirection: Axis.horizontal,

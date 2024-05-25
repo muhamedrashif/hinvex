@@ -4,88 +4,44 @@ import 'package:flutter/widgets.dart';
 import 'package:hinvex/features/user/data/i_user_facade.dart';
 import 'package:hinvex/features/user/data/model/user_model.dart';
 import 'package:hinvex/features/user/data/model/user_product_details_model.dart';
+import 'package:hinvex/general/utils/toast/toast.dart';
 
 class UserProvider with ChangeNotifier {
   final IUserFacade iUserFacade;
-  UserProvider({required this.iUserFacade}) {
-    // Fetch user data when the provider is initialized
-    // fetchUser();
-  }
+  UserProvider({required this.iUserFacade});
 
   bool fetchUserLoding = false;
-  bool fetchNextUserLoading = false;
   UserModel? selectedUserDetails;
   bool fetchPostLoding = false;
   bool fetchReportLoading = false;
+  final scrollController = ScrollController();
+  List<UserModel> fetchUserList = [];
 
 // FETCH USER DETAILS
-  List<UserModel> fetchUserList = [];
 
   Future<void> fetchUser() async {
     log('called ');
-    if (!fetchUserLoding && !fetchNextUserLoading) {
-      fetchUserLoding = true;
 
-      notifyListeners();
-
-      final result = await iUserFacade.fetchUser();
-
-      result.fold(
-        (l) {
-          log(l.errorMsg);
-          fetchUserLoding = false;
-          notifyListeners();
-        },
-        (r) {
-          log(r.length.toString());
-          fetchUserLoding = false;
-          log(r.first.toString());
-          fetchUserList.addAll(r);
-          notifyListeners();
-        },
-      );
-    }
+    fetchUserLoding = true;
+    notifyListeners();
+    final result = await iUserFacade.fetchUser();
+    result.fold(
+      (l) {
+        showToast(l.errorMsg);
+        fetchUserLoding = false;
+        notifyListeners();
+      },
+      (r) {
+        fetchUserList.addAll(r);
+        fetchUserLoding = false;
+        notifyListeners();
+      },
+    );
   }
 
   void clearDoc() {
     iUserFacade.clearDoc();
   }
-  // Future<void> fetchUser() async {
-  //   isLoading = true;
-  //   notifyListeners();
-  //   fetchNextUserLoading = true;
-  //   final result = iUserFacade.fetchUser();
-  //   result.listen((event) {
-  //     final users = event.docs.map((e) => UserModel.fromSnap(e)).toList();
-  //     fetchUserList.addAll(users);
-  //     lastDocument = event.docs.isNotEmpty ? event.docs.last : null;
-  //     fetchNextUserLoading = false;
-  //     // Populate _filteredUserList with the fetched data
-  //     _filteredUserList.addAll(fetchUserList);
-  //     isLoading = false;
-  //     notifyListeners();
-  //   });
-  // }
-
-  // Future<void> fetchNextUserBatch() async {
-  //   if (fetchNextUserLoading || fetchNextUserCompleted) return;
-
-  //   notifyListeners();
-  //   fetchNextUserLoading = true;
-  //   final result = iUserFacade.fetchNextUser(lastDocument);
-  //   result.listen((event) {
-  //     final users = event.docs.map((e) => UserModel.fromSnap(e)).toList();
-  //     fetchUserList.addAll(users);
-  //     lastDocument = event.docs.isNotEmpty ? event.docs.last : null;
-  //     fetchNextUserLoading = false;
-  //     if (users.isEmpty) fetchNextUserCompleted = true;
-
-  //     // Update _filteredUserList with the fetched data
-  //     _filteredUserList.addAll(users);
-
-  //     notifyListeners();
-  //   });
-  // }
 
   // SET SELECTED USER DETAILS
   userDetails({required UserModel userModel}) {
@@ -105,13 +61,6 @@ class UserProvider with ChangeNotifier {
     ];
     fetchPostLoding = true;
     notifyListeners();
-    // result.listen((event) {
-    //   fetchPostsList = [
-    //     ...event.docs.map((e) => UserProductDetailsModel.fromSnap(e))
-    //   ];
-    // fetchPostLoding = true;
-    //   notifyListeners();
-    // });
   }
 
   // FETCH USER REPORTS DETAILS
@@ -126,13 +75,6 @@ class UserProvider with ChangeNotifier {
     ];
     fetchReportLoading = false;
     notifyListeners();
-    // result.listen((event) {
-    //   fetchReportList = [
-    //     ...event.docs.map((e) => UserProductDetailsModel.fromSnap(e))
-    //   ];
-    //   fetchReportLoading = false;
-    //   notifyListeners();
-    // });
   }
 
   // DELETE POSTS
@@ -144,7 +86,7 @@ class UserProvider with ChangeNotifier {
   }) async {
     final result = await iUserFacade.deletePosts(id);
     result.fold((error) {
-      log(error.errorMsg);
+      showToast(error.errorMsg);
     }, (success) async {
       if (selectedUserDetails != null) {
         selectedUserDetails!.totalPosts -= 1;
@@ -156,22 +98,7 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // DELETE REPORTS
-
-  // Future deleteReports(
-  //     {required String id, required VoidCallback onSuccess}) async {
-  //   final result = await iUserFacade.deleteReports(id);
-  //   result.fold((error) {
-  //     log(error.errorMsg);
-  //   }, (success) {
-  //     onSuccess.call();
-  //   });
-  //   notifyListeners();
-  // }
-
   // FILTER USER FOR SEARCH
-
-  // List<UserModel> filteredUserList = [];
 
   void onSearchChanged(String query) {
     if (query.isEmpty) {
@@ -186,9 +113,6 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // // GET FILTERED USER LIST
-  // List<UserModel> get filteredUserList => _filteredUserList;
-
   // BLOCK OR UNBLOCK SELECTED USER
   void toggleUserBlockStatus() {
     if (selectedUserDetails != null) {
@@ -196,5 +120,21 @@ class UserProvider with ChangeNotifier {
       notifyListeners();
       iUserFacade.updateUser(selectedUserDetails!);
     }
+  }
+
+  Future<void> init() async {
+    if (fetchUserList.isEmpty) {
+      iUserFacade.clearDoc();
+      fetchUserList = [];
+      await fetchUser();
+    }
+
+    scrollController.addListener(() {
+      if (scrollController.position.maxScrollExtent != 0 &&
+          scrollController.position.atEdge &&
+          fetchUserLoding == false) {
+        fetchUser();
+      }
+    });
   }
 }

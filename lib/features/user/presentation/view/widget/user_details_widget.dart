@@ -5,9 +5,9 @@ import 'package:hinvex/features/home/presantation/provider/routing_provider.dart
 import 'package:hinvex/features/reports_and_issues/presentation/view/widget/reports_reasons_popup_widget.dart';
 import 'package:hinvex/features/user/presentation/provider/user_provider.dart';
 import 'package:hinvex/features/user/presentation/view/widget/delete_post_or_reports_popup_widget.dart';
+import 'package:hinvex/general/utils/app_assets/image_constants.dart';
 import 'package:hinvex/general/utils/app_theme/colors.dart';
 import 'package:hinvex/general/utils/enums/enums.dart';
-import 'package:hinvex/general/utils/extensions.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -87,19 +87,28 @@ class _UserDetailWidgetState extends State<UserDetailWidget> {
                         child: Row(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: CircleAvatar(
-                                backgroundImage: NetworkImage(
-                                    state.selectedUserDetails!.userImage),
-                                radius: 40,
-                              ),
-                            ),
+                                padding: const EdgeInsets.all(8.0),
+                                child: state.selectedUserDetails!.userImage
+                                        .isNotEmpty
+                                    ? CircleAvatar(
+                                        backgroundImage: NetworkImage(state
+                                            .selectedUserDetails!.userImage),
+                                        radius: 40,
+                                      )
+                                    : CircleAvatar(
+                                        backgroundImage: AssetImage(
+                                            ImageConstant.defaultProfile),
+                                        radius: 40,
+                                      )),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const SizedBox(height: 2),
                                 Text(
-                                    "Name: ${state.selectedUserDetails?.userName}",
+                                    state.selectedUserDetails!.userName
+                                            .isNotEmpty
+                                        ? "Name: ${state.selectedUserDetails?.userName}"
+                                        : "User",
                                     style: const TextStyle(fontSize: 13)),
                                 Text(
                                     "Phone Number: ${state.selectedUserDetails?.userPhoneNumber}",
@@ -288,9 +297,10 @@ class _UserDetailWidgetState extends State<UserDetailWidget> {
                                                             state
                                                                 .fetchPostsList[
                                                                     index]
-                                                                .propertyCategory!
-                                                                .name
-                                                                .capitalize,
+                                                                .getSelectedCategoryString,
+                                                            // .propertyCategory!
+                                                            // .name
+                                                            // .capitalize,
                                                             style: const TextStyle(
                                                                 fontSize: 10,
                                                                 fontWeight:

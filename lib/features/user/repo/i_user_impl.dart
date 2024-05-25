@@ -15,78 +15,53 @@ class IUserImpl implements IUserFacade {
   final FirebaseFirestore _firestore;
 
   QueryDocumentSnapshot<Map<String, dynamic>>? lastDoc;
-
-// // FETCH USER DETAILS
-
+  bool noMoreData = false;
   @override
   FutureResult<List<UserModel>> fetchUser() async {
+    if (noMoreData == true) return right([]); //THERE IS NOMORE DATA
     try {
-      if (lastDoc == null) {
-        log('lastdoc null');
-      } else {
-        log('lastdoc');
-      }
       final result = lastDoc == null
-          ? await _firestore.collection('users').limit(10).get()
+          ? await _firestore.collection('users').limit(5).get()
           : await _firestore
               .collection('users')
               .startAfterDocument(lastDoc!)
-              .limit(10)
+              .limit(5)
               .get();
+      log("result  ${result.docs.length}");
 
-      if (result.docs.isNotEmpty) {
+      if (result.docs.length < 5 || result.docs.isEmpty) {
+        noMoreData = true;
+      } else {
         lastDoc = result.docs.last;
-        return right(
-          [
-            ...result.docs.map(
-              (e) => UserModel.fromSnap(e),
-            ),
-          ],
-        );
       }
-
-      return left(
-          const MainFailure.noDataFountFailure(errorMsg: 'No Data Fount'));
-    } on FirebaseException catch (e) {
-      return left(MainFailure.noDataFountFailure(errorMsg: e.code));
+      final userList = result.docs.map((e) => UserModel.fromSnap(e)).toList();
+      return right(userList);
+    } catch (e) {
+      print(e.toString());
+      return left(MainFailure.noDataFountFailure(errorMsg: e.toString()));
     }
   }
 
   @override
   void clearDoc() {
     lastDoc = null;
+    noMoreData = false;
   }
-
-  // @override
-  // Stream<QuerySnapshot<Map<String, dynamic>>> fetchUser() {
-  //   final result = _firestore.collection('users').limit(5).snapshots();
-  //   return result;
-  // }
-
-  // @override
-  // Stream<QuerySnapshot<Map<String, dynamic>>> fetchNextUser(
-  //     DocumentSnapshot? lastDocument) {
-  //   if (lastDocument == null) {
-  //     return const Stream.empty();
-  //   }
-  //   final result = _firestore
-  //       .collection('users')
-  //       .startAfterDocument(lastDocument)
-  //       .limit(5)
-  //       .snapshots();
-  //   return result;
-  // }
 
 // FETCH USER POSTS DETAILS
   @override
   Future<QuerySnapshot<Map<String, dynamic>>> fetchPosts(String userId) {
-    final result = _firestore
-        .collection('posts')
-        .orderBy('createDate', descending: true)
-        .where('userId', isEqualTo: userId)
-        .get();
+    try {
+      final result = _firestore
+          .collection('posts')
+          .orderBy('createDate', descending: true)
+          .where('userId', isEqualTo: userId)
+          .get();
 
-    return result;
+      return result;
+    } on Exception catch (e) {
+      return Future.error(e);
+    }
   }
 
 // FETCH REPORTS
@@ -122,18 +97,6 @@ class IUserImpl implements IUserFacade {
       return left(MainFailure.serverFailure(errorMsg: e.errorMsg));
     }
   }
-
-// // DELETE REPORTS
-
-//   @override
-//   FutureResult<Unit> deleteReports(String id) async {
-//     try {
-//       await _firestore.collection('posts').doc(id).delete();
-//       return right(unit);
-//     } on CustomExeception catch (e) {
-//       return left(MainFailure.serverFailure(errorMsg: e.errorMsg));
-//     }
-//   }
 
   @override
   FutureResult<void> updateUser(UserModel userModel) async {

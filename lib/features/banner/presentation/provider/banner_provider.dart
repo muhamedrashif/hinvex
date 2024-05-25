@@ -1,12 +1,9 @@
 // ignore_for_file: unused_field, prefer_final_fields
 
 import 'dart:developer';
-import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:hinvex/features/banner/data/i_banner_facade.dart';
 import 'package:hinvex/features/banner/data/model/banner_model.dart';
 import 'package:hinvex/features/user/data/model/user_product_details_model.dart';

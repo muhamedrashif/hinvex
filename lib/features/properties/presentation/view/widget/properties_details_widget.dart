@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hinvex/features/home/presantation/provider/routing_provider.dart';
 import 'package:hinvex/features/properties/presentation/provider/properties_provider.dart';
@@ -20,83 +21,82 @@ class _PropertiesDetailWidgetState extends State<PropertiesDetailWidget> {
   Widget build(BuildContext context) {
     return Scaffold(body: SingleChildScrollView(
       child: Consumer<PropertiesProvider>(builder: (context, state, _) {
-        return state.fetchUserLoading
-            ? const Center(child: CircularProgressIndicator())
-            : SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 1100,
-                      child: Center(
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: SizedBox(
-                                  height: 80,
-                                  child: Text("Hello Admin"),
+        return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              SizedBox(
+                width: 1100,
+                child: Center(
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: SizedBox(
+                            height: 80,
+                            child: Text("Hello Admin"),
+                          ),
+                        ),
+                        const Divider(
+                          thickness: 2,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                state.selectedPropertiesDetails!.propertyTitle!,
+                                style: const TextStyle(
+                                  color: titleTextColor,
                                 ),
                               ),
-                              const Divider(
-                                thickness: 2,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: InkWell(
+                                onTap: () {
+                                  Provider.of<RoutingProvider>(context,
+                                          listen: false)
+                                      .propertiesRouting(PropertiesRoutingEnum
+                                          .propertiesScreen);
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(4),
+                                      color: backButtonColor),
+                                  child: const Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 8.0, horizontal: 16),
                                     child: Text(
-                                      state.selectedPropertiesDetails!
-                                          .propertyTitle!,
-                                      style: const TextStyle(
-                                        color: titleTextColor,
-                                      ),
+                                      "Back",
+                                      style: TextStyle(
+                                          color: buttonTextColor, fontSize: 10),
                                     ),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: InkWell(
-                                      onTap: () {
-                                        Provider.of<RoutingProvider>(context,
-                                                listen: false)
-                                            .propertiesRouting(
-                                                PropertiesRoutingEnum
-                                                    .propertiesScreen);
-                                      },
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(4),
-                                            color: backButtonColor),
-                                        child: const Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 8.0, horizontal: 16),
-                                          child: Text(
-                                            "Back",
-                                            style: TextStyle(
-                                                color: buttonTextColor,
-                                                fontSize: 10),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  "Posted By",
-                                  style: TextStyle(
-                                      color: titleTextColor,
-                                      fontWeight: FontWeight.bold),
                                 ),
                               ),
-                              Row(
+                            ),
+                          ],
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            "Posted By",
+                            style: TextStyle(
+                                color: titleTextColor,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        state.fetchUserLoading
+                            ? const Center(
+                                child: CupertinoActivityIndicator(
+                                  color: primaryColor,
+                                ),
+                              )
+                            : Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -133,7 +133,8 @@ class _PropertiesDetailWidgetState extends State<PropertiesDetailWidget> {
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 4.0, vertical: 2),
                                           child: Text(
-                                            state.userModel!.partnership
+                                            state.selectedPropertiesDetails!
+                                                .getSelectedListedByString
                                                 .toString(),
                                             style:
                                                 const TextStyle(fontSize: 11),
@@ -171,367 +172,329 @@ class _PropertiesDetailWidgetState extends State<PropertiesDetailWidget> {
                                   )
                                 ],
                               ),
-                              const Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  "About Property",
-                                  style: TextStyle(
-                                      color: titleTextColor,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: SizedBox(
-                                        height: 110,
-                                        width: 150,
-                                        child: ListView.builder(
-                                            scrollDirection: Axis.horizontal,
-                                            itemCount: state
-                                                .selectedPropertiesDetails!
-                                                .propertyImage!
-                                                .length,
-                                            // itemCount: state.selectedPropertiesDetails!
-                                            //             .propertyImage!.length <=
-                                            //         5
-                                            //     ? state.selectedPropertiesDetails!
-                                            //         .propertyImage!.length
-                                            //     : 5,
-                                            itemBuilder: (context, index) {
-                                              return Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 4.0,
-                                                        vertical: 4.0),
+                        const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            "About Property",
+                            style: TextStyle(
+                                color: titleTextColor,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: SizedBox(
+                                  height: 110,
+                                  width: 150,
+                                  child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: state
+                                          .selectedPropertiesDetails!
+                                          .propertyImage!
+                                          .length,
+                                      itemBuilder: (context, index) {
+                                        return Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 4.0, vertical: 4.0),
+                                          child: SizedBox(
+                                            height: 110,
+                                            width: 150,
+                                            child: CachedNetworkImage(
+                                              placeholder: (context, url) =>
+                                                  Shimmer.fromColors(
+                                                baseColor: Colors.grey[300]!,
+                                                highlightColor:
+                                                    Colors.grey[100]!,
                                                 child: SizedBox(
-                                                  height: 110,
-                                                  width: 150,
-                                                  child: CachedNetworkImage(
-                                                    placeholder:
-                                                        (context, url) =>
-                                                            SizedBox(
-                                                      width: 220.0,
-                                                      height: 120.0,
-                                                      child: Shimmer.fromColors(
-                                                        baseColor:
-                                                            Colors.grey[300]!,
-                                                        highlightColor:
-                                                            Colors.grey[100]!,
-                                                        child: Container(
-                                                          height: 220,
-                                                          width: 120,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            image:
-                                                                DecorationImage(
-                                                              image: AssetImage(
-                                                                ImageConstant
-                                                                    .hinvex,
-                                                              ),
-                                                              fit: BoxFit
-                                                                  .contain,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    fit: BoxFit.cover,
-                                                    imageUrl: state
-                                                        .selectedPropertiesDetails!
-                                                        .propertyImage![index],
+                                                  height: 220,
+                                                  width: 120,
+                                                  child: Transform.scale(
+                                                    scale: .6,
+                                                    child: Image.asset(
+                                                        ImageConstant.hinvex),
                                                   ),
-
-                                                  // child: Image.network(
-                                                  //   state
-                                                  //       .selectedPropertiesDetails!
-                                                  //       .propertyImage![index],
-                                                  //   fit: BoxFit.cover,
-                                                  // ),
                                                 ),
-                                              );
-                                            }),
-                                      ),
-                                    ),
-                                  ],
+                                              ),
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      Container(
+                                                color: Colors.grey[300],
+                                                child: const Center(
+                                                  child: Icon(
+                                                    Icons.error_outline,
+                                                    color: Colors.red,
+                                                    size: 36,
+                                                  ),
+                                                ),
+                                              ),
+                                              fit: BoxFit.cover,
+                                              imageUrl: state
+                                                  .selectedPropertiesDetails!
+                                                  .propertyImage![index],
+                                            ),
+
+                                            // child: Image.network(
+                                            //   state
+                                            //       .selectedPropertiesDetails!
+                                            //       .propertyImage![index],
+                                            //   fit: BoxFit.cover,
+                                            // ),
+                                          ),
+                                        );
+                                      }),
                                 ),
                               ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8.0, vertical: 4.0),
-                                    child: Text(
-                                      "\u{20B9}"
-                                      "${state.selectedPropertiesDetails!.propertyPrice}",
-                                      style: const TextStyle(
-                                          fontSize: 13,
-                                          color: Color.fromRGBO(1, 40, 95, 1),
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8.0, vertical: 2.0),
-                                    child: Text(
-                                      state.selectedPropertiesDetails!
-                                          .propertyTitle!,
-                                      style: const TextStyle(fontSize: 11),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8.0, vertical: 2.0),
-                                    child: Text(
-                                      state.selectedPropertiesDetails!
-                                          .propertyDetils!,
-                                      style: const TextStyle(fontSize: 11),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8.0, vertical: 2.0),
-                                    child: Text(
-                                      state.selectedPropertiesDetails!
-                                          .propertyLocation!.localArea
-                                          .toString(),
-                                      style: const TextStyle(fontSize: 11),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8.0, vertical: 2.0),
-                                    child: Text(
-                                      "Category: ${state.selectedPropertiesDetails!.propertyCategory}",
-                                      style: const TextStyle(fontSize: 11),
-                                    ),
-                                  ),
-                                ],
+                            ],
+                          ),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8.0, vertical: 4.0),
+                              child: Text(
+                                "\u{20B9}"
+                                "${state.selectedPropertiesDetails!.propertyPrice}",
+                                style: const TextStyle(
+                                    fontSize: 13,
+                                    color: Color.fromRGBO(1, 40, 95, 1),
+                                    fontWeight: FontWeight.w500),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8.0, vertical: 4.0),
-                                child: Row(
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8.0, vertical: 2.0),
+                              child: Text(
+                                state.selectedPropertiesDetails!.propertyTitle!,
+                                style: const TextStyle(fontSize: 11),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8.0, vertical: 2.0),
+                              child: Text(
+                                state
+                                    .selectedPropertiesDetails!.propertyDetils!,
+                                style: const TextStyle(fontSize: 11),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8.0, vertical: 2.0),
+                              child: Text(
+                                state.selectedPropertiesDetails!
+                                    .propertyLocation!.localArea
+                                    .toString(),
+                                style: const TextStyle(fontSize: 11),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8.0, vertical: 2.0),
+                              child: Text(
+                                "Category: ${state.selectedPropertiesDetails!.propertyCategory}",
+                                style: const TextStyle(fontSize: 11),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0, vertical: 4.0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Expanded(
+                                flex: 2,
+                                child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Expanded(
-                                      flex: 2,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "Type:",
-                                            style: TextStyle(
-                                                fontSize: 13,
-                                                color: Colors.grey),
-                                          ),
-                                          Text(
-                                            "Bedrooms:",
-                                            style: TextStyle(
-                                                fontSize: 13,
-                                                color: Colors.grey),
-                                          ),
-                                          Text(
-                                            "Bathrooms:",
-                                            style: TextStyle(
-                                                fontSize: 13,
-                                                color: Colors.grey),
-                                          ),
-                                          Text(
-                                            "Furnishing:",
-                                            style: TextStyle(
-                                                fontSize: 13,
-                                                color: Colors.grey),
-                                          ),
-                                          Text(
-                                            "Construction Status:",
-                                            style: TextStyle(
-                                                fontSize: 13,
-                                                color: Colors.grey),
-                                          ),
-                                          Text(
-                                            "Listed by:",
-                                            style: TextStyle(
-                                                fontSize: 13,
-                                                color: Colors.grey),
-                                          ),
-                                        ],
-                                      ),
+                                    Text(
+                                      "Type:",
+                                      style: TextStyle(
+                                          fontSize: 13, color: Colors.grey),
                                     ),
-                                    Expanded(
-                                      flex: 3,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            state.selectedPropertiesDetails!
-                                                .getSelectedTypeString,
-                                            style:
-                                                const TextStyle(fontSize: 13),
-                                          ),
-                                          Text(
-                                            state.selectedPropertiesDetails!
-                                                .bedRooms!
-                                                .toString(),
-                                            style:
-                                                const TextStyle(fontSize: 13),
-                                          ),
-                                          Text(
-                                            state.selectedPropertiesDetails!
-                                                .bathRooms!
-                                                .toString(),
-                                            style:
-                                                const TextStyle(fontSize: 13),
-                                          ),
-                                          Text(
-                                            state.selectedPropertiesDetails!
-                                                .getSelectedFurnisherString,
-                                            style:
-                                                const TextStyle(fontSize: 13),
-                                          ),
-                                          Text(
-                                            state.selectedPropertiesDetails!
-                                                .getConstructionStatusString,
-                                            style:
-                                                const TextStyle(fontSize: 13),
-                                          ),
-                                          Text(
-                                            state.selectedPropertiesDetails!
-                                                .getSelectedListedByString,
-                                            style:
-                                                const TextStyle(fontSize: 13),
-                                          ),
-                                        ],
-                                      ),
+                                    Text(
+                                      "Bedrooms:",
+                                      style: TextStyle(
+                                          fontSize: 13, color: Colors.grey),
                                     ),
-                                    const SizedBox(
-                                        width:
-                                            30), // Adjust spacing between columns
-                                    const Expanded(
-                                      flex: 2,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "Super Builtup area (ft²):",
-                                            style: TextStyle(
-                                                fontSize: 13,
-                                                color: Colors.grey),
-                                          ),
-                                          Text(
-                                            "Carpet Area (ft²):",
-                                            style: TextStyle(
-                                                fontSize: 13,
-                                                color: Colors.grey),
-                                          ),
-                                          Text(
-                                            "Total Floors:",
-                                            style: TextStyle(
-                                                fontSize: 13,
-                                                color: Colors.grey),
-                                          ),
-                                          Text(
-                                            "Car Parking:",
-                                            style: TextStyle(
-                                                fontSize: 13,
-                                                color: Colors.grey),
-                                          ),
-                                          Text(
-                                            "Facing:",
-                                            style: TextStyle(
-                                                fontSize: 13,
-                                                color: Colors.grey),
-                                          ),
-                                          Text(
-                                            "Project Name:",
-                                            style: TextStyle(
-                                                fontSize: 13,
-                                                color: Colors.grey),
-                                          ),
-                                        ],
-                                      ),
+                                    Text(
+                                      "Bathrooms:",
+                                      style: TextStyle(
+                                          fontSize: 13, color: Colors.grey),
                                     ),
-                                    Expanded(
-                                      flex: 3,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            state.selectedPropertiesDetails!
-                                                .superBuiltupAreaft!
-                                                .toString(),
-                                            style:
-                                                const TextStyle(fontSize: 13),
-                                          ),
-                                          Text(
-                                            state.selectedPropertiesDetails!
-                                                .carpetAreaft!
-                                                .toString(),
-                                            style:
-                                                const TextStyle(fontSize: 13),
-                                          ),
-                                          Text(
-                                            state.selectedPropertiesDetails!
-                                                .totalFloors!
-                                                .toString(),
-                                            style:
-                                                const TextStyle(fontSize: 13),
-                                          ),
-                                          Text(
-                                            state.selectedPropertiesDetails!
-                                                .carParking!
-                                                .toString(),
-                                            style:
-                                                const TextStyle(fontSize: 13),
-                                          ),
-                                          Text(
-                                            state.selectedPropertiesDetails!
-                                                .getSelectedFacingString,
-                                            style:
-                                                const TextStyle(fontSize: 13),
-                                          ),
-                                          Text(
-                                            state.selectedPropertiesDetails!
-                                                .projectName!,
-                                            style:
-                                                const TextStyle(fontSize: 13),
-                                          ),
-                                        ],
-                                      ),
+                                    Text(
+                                      "Furnishing:",
+                                      style: TextStyle(
+                                          fontSize: 13, color: Colors.grey),
+                                    ),
+                                    Text(
+                                      "Construction Status:",
+                                      style: TextStyle(
+                                          fontSize: 13, color: Colors.grey),
+                                    ),
+                                    Text(
+                                      "Listed by:",
+                                      style: TextStyle(
+                                          fontSize: 13, color: Colors.grey),
                                     ),
                                   ],
                                 ),
                               ),
-                              const Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  "Description",
-                                  style: TextStyle(
-                                      color: titleTextColor,
-                                      fontWeight: FontWeight.bold),
+                              Expanded(
+                                flex: 3,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      state.selectedPropertiesDetails!
+                                          .getSelectedTypeString,
+                                      style: const TextStyle(fontSize: 13),
+                                    ),
+                                    Text(
+                                      state.selectedPropertiesDetails!.bedRooms!
+                                          .toString(),
+                                      style: const TextStyle(fontSize: 13),
+                                    ),
+                                    Text(
+                                      state
+                                          .selectedPropertiesDetails!.bathRooms!
+                                          .toString(),
+                                      style: const TextStyle(fontSize: 13),
+                                    ),
+                                    Text(
+                                      state.selectedPropertiesDetails!
+                                          .getSelectedFurnisherString,
+                                      style: const TextStyle(fontSize: 13),
+                                    ),
+                                    Text(
+                                      state.selectedPropertiesDetails!
+                                          .getConstructionStatusString,
+                                      style: const TextStyle(fontSize: 13),
+                                    ),
+                                    Text(
+                                      state.selectedPropertiesDetails!
+                                          .getSelectedListedByString,
+                                      style: const TextStyle(fontSize: 13),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  state.selectedPropertiesDetails!.description!,
-                                  style: const TextStyle(fontSize: 13),
+                              const SizedBox(
+                                  width: 30), // Adjust spacing between columns
+                              const Expanded(
+                                flex: 2,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Super Builtup area (ft²):",
+                                      style: TextStyle(
+                                          fontSize: 13, color: Colors.grey),
+                                    ),
+                                    Text(
+                                      "Carpet Area (ft²):",
+                                      style: TextStyle(
+                                          fontSize: 13, color: Colors.grey),
+                                    ),
+                                    Text(
+                                      "Total Floors:",
+                                      style: TextStyle(
+                                          fontSize: 13, color: Colors.grey),
+                                    ),
+                                    Text(
+                                      "Car Parking:",
+                                      style: TextStyle(
+                                          fontSize: 13, color: Colors.grey),
+                                    ),
+                                    // Text(
+                                    //   "Facing:",
+                                    //   style: TextStyle(
+                                    //       fontSize: 13,
+                                    //       color: Colors.grey),
+                                    // ),
+                                    Text(
+                                      "Project Name:",
+                                      style: TextStyle(
+                                          fontSize: 13, color: Colors.grey),
+                                    ),
+                                  ],
                                 ),
-                              )
-                            ]),
-                      ),
-                    ),
-                  ],
+                              ),
+                              Expanded(
+                                flex: 3,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      state.selectedPropertiesDetails!
+                                          .superBuiltupAreaft!
+                                          .toString(),
+                                      style: const TextStyle(fontSize: 13),
+                                    ),
+                                    Text(
+                                      state.selectedPropertiesDetails!
+                                          .carpetAreaft!
+                                          .toString(),
+                                      style: const TextStyle(fontSize: 13),
+                                    ),
+                                    Text(
+                                      state.selectedPropertiesDetails!
+                                          .totalFloors!
+                                          .toString(),
+                                      style: const TextStyle(fontSize: 13),
+                                    ),
+                                    Text(
+                                      state.selectedPropertiesDetails!
+                                          .carParking!
+                                          .toString(),
+                                      style: const TextStyle(fontSize: 13),
+                                    ),
+                                    // Text(
+                                    //   state.selectedPropertiesDetails!
+                                    //       .getSelectedFacingString,
+                                    //   style:
+                                    //       const TextStyle(fontSize: 13),
+                                    // ),
+                                    Text(
+                                      state.selectedPropertiesDetails!
+                                          .projectName!,
+                                      style: const TextStyle(fontSize: 13),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            "Description",
+                            style: TextStyle(
+                                color: titleTextColor,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            state.selectedPropertiesDetails!.description!,
+                            style: const TextStyle(fontSize: 13),
+                          ),
+                        )
+                      ]),
                 ),
-              );
+              ),
+            ],
+          ),
+        );
       }),
     ));
   }

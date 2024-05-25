@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:hinvex/features/home/presantation/provider/routing_provider.dart';
@@ -25,7 +26,9 @@ class _ReportsUserDetailWidgetState extends State<ReportsUserDetailWidget> {
       log(state.fetchUsertList.toString());
       return state.fetchUsertLoading || state.fetchUserReportstLoading
           ? const Center(
-              child: CircularProgressIndicator(),
+              child: CupertinoActivityIndicator(
+                color: primaryColor,
+              ),
             )
           : Scaffold(
               body: SingleChildScrollView(

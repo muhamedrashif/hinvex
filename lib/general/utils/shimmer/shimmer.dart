@@ -9,13 +9,16 @@ showListTileShimmer() {
       baseColor: Colors.grey[300]!,
       highlightColor: Colors.grey[100]!,
       child: ListView.builder(
-        itemCount: 3, // Adjust the count based on your needs
+        itemCount: 6, // Adjust the count based on your needs
         itemBuilder: (context, index) {
           return ListTile(
             title: Container(
               height: 40,
               width: 200,
-              color: Colors.white,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                color: Colors.white,
+              ),
             ),
           );
         },

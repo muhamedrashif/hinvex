@@ -3,6 +3,7 @@
 import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:flutter/material.dart';
 import 'package:hinvex/features/banner/presentation/views/banner_screen.dart';
+import 'package:hinvex/features/dashboard/presentation/view/dashboard_screen.dart';
 import 'package:hinvex/features/home/presantation/provider/routing_provider.dart';
 import 'package:hinvex/features/notification/presentation/view/notification_screen.dart';
 import 'package:hinvex/features/popular_cities/presentation/view/popularCitiesScreen.dart';
@@ -131,51 +132,18 @@ class _HomeScreenState extends State<HomeScreen> {
               items: [
                 SideMenuItem(
                   title: 'Dashboard',
-                  // trailing: const Padding(
-                  //   padding: EdgeInsets.symmetric(horizontal: 4.0),
-                  //   child: Text(
-                  //     "|",
-                  //     style: TextStyle(
-                  //       fontWeight: FontWeight.bold,
-                  //       fontSize: 15,
-                  //       color: Color.fromRGBO(1, 40, 95, 1),
-                  //     ),
-                  //   ),
-                  // ),
                   onTap: (index, _) {
                     sideMenu.changePage(index);
                   },
                 ),
                 SideMenuItem(
                   title: 'Users',
-                  // trailing: const Padding(
-                  //   padding: EdgeInsets.symmetric(horizontal: 4.0),
-                  //   child: Text(
-                  //     "|",
-                  //     style: TextStyle(
-                  //       fontWeight: FontWeight.bold,
-                  //       fontSize: 15,
-                  //       color: Color.fromRGBO(1, 40, 95, 1),
-                  //     ),
-                  //   ),
-                  // ),
                   onTap: (index, _) {
                     sideMenu.changePage(index);
                   },
                 ),
                 SideMenuItem(
                   title: 'Properties',
-                  // trailing: const Padding(
-                  //   padding: EdgeInsets.symmetric(horizontal: 4.0),
-                  //   child: Text(
-                  //     "|",
-                  //     style: TextStyle(
-                  //       fontWeight: FontWeight.bold,
-                  //       fontSize: 15,
-                  //       color: Color.fromRGBO(1, 40, 95, 1),
-                  //     ),
-                  //   ),
-                  // ),
                   onTap: (index, _) {
                     sideMenu.changePage(index);
                   },
@@ -188,68 +156,24 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 SideMenuItem(
                   title: 'Reports And Issues',
-                  // trailing: const Padding(
-                  //   padding: EdgeInsets.symmetric(horizontal: 4.0),
-                  //   child: Text(
-                  //     "|",
-                  //     style: TextStyle(
-                  //       fontWeight: FontWeight.bold,
-                  //       fontSize: 15,
-                  //       color: Color.fromRGBO(1, 40, 95, 1),
-                  //     ),
-                  //   ),
-                  // ),
                   onTap: (index, _) {
                     sideMenu.changePage(index);
                   },
                 ),
                 SideMenuItem(
                   title: 'Banners',
-                  // trailing: const Padding(
-                  //   padding: EdgeInsets.symmetric(horizontal: 4.0),
-                  //   child: Text(
-                  //     "|",
-                  //     style: TextStyle(
-                  //       fontWeight: FontWeight.bold,
-                  //       fontSize: 15,
-                  //       color: Color.fromRGBO(1, 40, 95, 1),
-                  //     ),
-                  //   ),
-                  // ),
                   onTap: (index, _) {
                     sideMenu.changePage(index);
                   },
                 ),
                 SideMenuItem(
                   title: 'Notification',
-                  // trailing: const Padding(
-                  //   padding: EdgeInsets.symmetric(horizontal: 4.0),
-                  //   child: Text(
-                  //     "|",
-                  //     style: TextStyle(
-                  //       fontWeight: FontWeight.bold,
-                  //       fontSize: 15,
-                  //       color: Color.fromRGBO(1, 40, 95, 1),
-                  //     ),
-                  //   ),
-                  // ),
                   onTap: (index, _) {
                     sideMenu.changePage(index);
                   },
                 ),
                 SideMenuItem(
                   title: 'Popular Cites',
-                  // trailing: const Padding(
-                  //   padding: EdgeInsets.symmetric(horizontal: 4.0),
-                  //   child: Text(
-                  //     "|",
-                  //     style: TextStyle(
-                  //       fontWeight: FontWeight.bold,
-                  //       fontSize: 15,
-                  //       color: Color.fromRGBO(1, 40, 95, 1),
-                  //     ),
-                  //   ),
-                  // ),
                   onTap: (index, _) {
                     sideMenu.changePage(index);
                   },
@@ -261,24 +185,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 physics: const NeverScrollableScrollPhysics(),
                 controller: pageController,
                 children: [
-                  Container(
-                    color: Colors.white,
-                    child: const Center(
-                      child: Text(
-                        'Dashboard',
-                        style: TextStyle(fontSize: 35),
-                      ),
-                    ),
-                  ),
+                  const Center(child: DashboardScreen()),
                   currentUserScreen(state.userRoutingEnum),
                   currentPropertiesScreen(state.propertiesRoutingEnum),
                   currentUploadedByAdminScreen(state.uploadedByAdminEnum),
                   currentReportsAndIssuesScreen(state.reportsAndIssuesEnum),
                   const Center(child: BannerScreen()),
                   const Center(child: NotificationScreen()),
-                  const Center(
-                    child: PopularCiteisScreen(),
-                  )
+                  const Center(child: PopularCiteisScreen())
                 ],
               ),
             ),

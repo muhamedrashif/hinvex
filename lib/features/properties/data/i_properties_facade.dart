@@ -1,14 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hinvex/features/user/data/model/user_product_details_model.dart';
+import 'package:hinvex/general/typedefs/typedefs.dart';
 
 abstract class IPropertiesFacade {
-  Future<QuerySnapshot<Map<String, dynamic>>> fetchProperties() {
+  FutureResult<List<UserProductDetailsModel>> fetchProperties() {
     throw UnimplementedError('fetchProperties() not impl');
   }
 
-  Future<QuerySnapshot<Map<String, dynamic>>?> fetchNextPoperties(
-      DocumentSnapshot? lastDocument) {
-    throw UnimplementedError('fetchNextPoperties() not impl');
-  }
+  void clearDoc() {}
 
   Future<QuerySnapshot<Map<String, dynamic>>> fetchUser(String userId) {
     throw UnimplementedError('fetchUser() not impl');

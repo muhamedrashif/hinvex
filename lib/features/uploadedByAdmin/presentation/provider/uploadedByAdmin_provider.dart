@@ -6,6 +6,7 @@ import 'package:hinvex/features/uploadedByAdmin/data/model/search_location_model
 import 'package:hinvex/features/user/data/model/user_model.dart';
 import 'package:hinvex/features/user/data/model/user_product_details_model.dart';
 import 'package:hinvex/general/services/image_picker_service.dart';
+import 'package:hinvex/general/utils/toast/toast.dart';
 
 import '../../data/model/location_model_main.dart/location_model_main.dart';
 
@@ -32,9 +33,9 @@ class UploadedByAdminProvider with ChangeNotifier {
 
   List<PlaceResult> get suggestions => _suggestions;
 
-  // // FETCH PROPERTIES
   bool isLoading = false;
-  // List<UserProductDetailsModel> fetchUploadedPropertiesList = [];
+  bool fetchPropertyLoading = false;
+  final scrollController = ScrollController();
 
   // GET IMAGE
 
@@ -45,6 +46,7 @@ class UploadedByAdminProvider with ChangeNotifier {
     final result = await pickMultipleImages(7 - imageFile.length);
 
     result.fold((l) {
+      showToast(l.errorMsg);
       onFailure();
     }, (r) {
       if (r.isNotEmpty) {
@@ -83,71 +85,14 @@ class UploadedByAdminProvider with ChangeNotifier {
     );
     result.fold((error) {
       onFailure();
-      log(error.errorMsg);
+      showToast(error.errorMsg);
     }, (success) {
       _filteredUploadedPropertiesList.insert(0, success);
-      // imageFile.clear();
       sendLoading = false;
       notifyListeners();
       onSuccess.call();
     });
   }
-
-  // Future fetchUploadedProperties() async {
-  //   isLoading = true;
-  //   notifyListeners();
-  //   fetchUploadedPropertiesLoading = true;
-  //   final result = iUploadedByAdminFacade.fetchUploadedProperties();
-  //   result.listen((event) {
-  //     final uploadedProperties = event.docs.map((e) => e.data()).toList();
-  //     fetchUploadedPropertiesList.addAll(uploadedProperties);
-  //     lastDocument = event.docs.isNotEmpty ? event.docs.last : null;
-  //     fetchNextUploadedPopertiesLoading = false;
-  //     _filteredUploadedPropertiesList.addAll(fetchUploadedPropertiesList);
-  //     isLoading = false;
-  //     notifyListeners();
-  //   });
-  // }
-
-  // Future<void> fetchNextUploadedProperties() async {
-  //   if (fetchNextUploadedPopertiesLoading ||
-  //       fetchNextUploadedPopertiesCompleted) return;
-  //   fetchUploadedPropertiesList.clear();
-  //   notifyListeners();
-  //   fetchNextUploadedPopertiesLoading = true;
-  //   final result =
-  //       iUploadedByAdminFacade.fetchNextUploadedProperties(lastDocument);
-  //   result.listen((event) {
-  //     final uploadedProperties = event.docs.map((e) => e.data()).toList();
-  //     fetchUploadedPropertiesList.addAll(uploadedProperties);
-  //     lastDocument = event.docs.isNotEmpty ? event.docs.last : null;
-  //     fetchNextUploadedPopertiesLoading = false;
-  //     if (uploadedProperties.isEmpty) {
-  //       fetchNextUploadedPopertiesCompleted = true;
-  //     }
-  //     _filteredUploadedPropertiesList.addAll(uploadedProperties);
-  //     notifyListeners();
-  //   });
-  // }
-
-  // FILTER PROPERTIES FOR SEARCH
-
-  // void search(String query) {
-  //   if (query.isEmpty) {
-  //     _filteredUploadedPropertiesList.addAll(_filteredUploadedPropertiesList);
-  //   } else {
-  //     _filteredUploadedPropertiesList =
-  //         _filteredUploadedPropertiesList.where((property) {
-  //       return property.getSelectedCategoryString
-  //               .toLowerCase()
-  //               .contains(query.toLowerCase()) ||
-  //           property.getSelectedTypeString
-  //               .toLowerCase()
-  //               .contains(query.toLowerCase());
-  //     }).toList();
-  //   }
-  //   notifyListeners();
-  // }
 
   // SELECTED PROPERTY DETAILS
 
@@ -196,48 +141,7 @@ class UploadedByAdminProvider with ChangeNotifier {
     );
   }
 
-  // List<OpentreetMapModel> _locations = [];
-  // List<OpentreetMapModel> _suggestions = [];
-
-  // List<OpentreetMapModel> get locations => _locations;
-  // List<OpentreetMapModel> get suggestions => _suggestions;
-
-  // Future<void> getLocations(String query) async {
-  //   log("inside");
-  //   try {
-  //     isGetLocationLoading = true;
-  //     notifyListeners();
-  //     final response = await Dio().get(
-  //         "https://nominatim.openstreetmap.org/search.php?q=$query&format=json&addressdetails=1&limit=20&countrycodes=in");
-  //     if (response.statusCode == 200) {
-  //       log(response.statusCode.toString());
-  //       final parsed = response.data.cast<Map<String, dynamic>>();
-  //       log("parsed$parsed");
-  //       _locations = parsed
-  //           .map<OpentreetMapModel>((json) => OpentreetMapModel.fromMap(json))
-  //           .toList();
-  //       _suggestions = _locations
-  //           .where(
-  //               (location) => location.localArea!.toLowerCase().contains(query))
-  //           .cast<OpentreetMapModel>()
-  //           .toList();
-  //       notifyListeners();
-  //     } else {
-  //       throw Exception('Failed to load area............');
-  //     }
-  //   } catch (e) {
-  //     throw Exception('Failed to load area: $e');
-  //   } finally {
-  //     // Set loading to false regardless of success or failure
-  //     isGetLocationLoading = false;
-  //     notifyListeners();
-  //   }
-  // }
-
-  void clearSuggestions() {
-    _suggestions.clear();
-    notifyListeners();
-  }
+// UPLOAD LOCATION
 
   Future<void> uploadLocation(PlaceCell place) async {
     final result = await iUploadedByAdminFacade.uploadLocation(place);
@@ -245,29 +149,29 @@ class UploadedByAdminProvider with ChangeNotifier {
     result.fold((l) => null, (r) => null);
   }
 
+// FETCH PROPERTY
+
   Future<void> fetchProducts() async {
     log('called fetchProducts');
 
-    isLoading = true;
-
+    fetchPropertyLoading = true;
     notifyListeners();
     final result = await iUploadedByAdminFacade.fetchProduct();
-
     result.fold(
       (l) {
-        log(l.errorMsg);
-        isLoading = false;
+        showToast(l.errorMsg);
+        fetchPropertyLoading = false;
         notifyListeners();
       },
       (r) {
-        log(r.length.toString());
-        isLoading = false;
-        log(r.first.toString());
         _filteredUploadedPropertiesList.addAll(r);
+        fetchPropertyLoading = false;
         notifyListeners();
       },
     );
   }
+
+  // SEARCH PROPERTY
 
   Future<void> searchProperty(String categoryName) async {
     final result = await iUploadedByAdminFacade.searchProperty(categoryName);
@@ -288,6 +192,8 @@ class UploadedByAdminProvider with ChangeNotifier {
     );
   }
 
+// DELETE PROPERTY
+
   Future deleteUploadedPosts({
     required String id,
     required VoidCallback onSuccess,
@@ -296,12 +202,13 @@ class UploadedByAdminProvider with ChangeNotifier {
     final result = await iUploadedByAdminFacade.deleteUploadedPosts(id);
     result.fold((error) {
       onFailure();
-      log(error.errorMsg);
+      showToast(error.errorMsg);
     }, (success) {
       onSuccess.call();
     });
     notifyListeners();
   }
+// UPDATE UPLOADED PROPERTY
 
   Future<void> updateUploadedPosts({
     required UserProductDetailsModel userProductDetailsModel,
@@ -313,7 +220,7 @@ class UploadedByAdminProvider with ChangeNotifier {
     final result = await iUploadedByAdminFacade
         .updateUploadedPosts(userProductDetailsModel);
     result.fold((error) {
-      log(error.errorMsg);
+      showToast(error.errorMsg);
     }, (success) {
       updateLoading = false;
       _filteredUploadedPropertiesList[
@@ -325,14 +232,37 @@ class UploadedByAdminProvider with ChangeNotifier {
     });
   }
 
-  void clearDoc() {
-    iUploadedByAdminFacade.clearDoc();
-  }
-
-  void deleteUploadedPost(String id) {
+// REMOVE LOCALY FROM THE LIST
+  void removeFromfilteredUploadedPropertiesList(String id) {
     _filteredUploadedPropertiesList = _filteredUploadedPropertiesList
         .where((element) => element.id != id)
         .toList();
+    notifyListeners();
+  }
+
+  Future<void> init() async {
+    if (_filteredUploadedPropertiesList.isEmpty) {
+      iUploadedByAdminFacade.clearDoc();
+      _filteredUploadedPropertiesList = [];
+      await fetchProducts();
+    }
+
+    scrollController.addListener(() {
+      if (scrollController.position.maxScrollExtent != 0 &&
+          scrollController.position.atEdge &&
+          fetchPropertyLoading == false) {
+        fetchProducts();
+      }
+    });
+  }
+
+  void clearSuggestions() {
+    _suggestions.clear();
+    notifyListeners();
+  }
+
+  void clearDoc() {
+    iUploadedByAdminFacade.clearDoc();
   }
 
   void clearData() {

@@ -119,26 +119,29 @@ class _MobilePropertyAttachingPopupScreenState
                                               width: 80,
                                               child: CachedNetworkImage(
                                                 placeholder: (context, url) =>
-                                                    SizedBox(
-                                                  width: 220.0,
-                                                  height: 120.0,
-                                                  child: Shimmer.fromColors(
-                                                    baseColor:
-                                                        Colors.grey[300]!,
-                                                    highlightColor:
-                                                        Colors.grey[100]!,
-                                                    child: Container(
-                                                      height: 220,
-                                                      width: 120,
-                                                      decoration: BoxDecoration(
-                                                        image: DecorationImage(
-                                                          image: AssetImage(
-                                                            ImageConstant
-                                                                .hinvex,
-                                                          ),
-                                                          fit: BoxFit.contain,
-                                                        ),
-                                                      ),
+                                                    Shimmer.fromColors(
+                                                  baseColor: Colors.grey[300]!,
+                                                  highlightColor:
+                                                      Colors.grey[100]!,
+                                                  child: SizedBox(
+                                                    height: 220,
+                                                    width: 120,
+                                                    child: Transform.scale(
+                                                      scale: 1,
+                                                      child: Image.asset(
+                                                          ImageConstant.hinvex),
+                                                    ),
+                                                  ),
+                                                ),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        Container(
+                                                  color: Colors.grey[300],
+                                                  child: const Center(
+                                                    child: Icon(
+                                                      Icons.error_outline,
+                                                      color: Colors.red,
+                                                      size: 36,
                                                     ),
                                                   ),
                                                 ),

@@ -41,15 +41,19 @@ class UserModel {
     var snapshot = snap.data() as Map<String, dynamic>;
     return UserModel(
       id: snap.id,
-      userId: snapshot['userId'],
-      userName: snapshot['userName'],
-      userPhoneNumber: snapshot['userPhoneNumber'],
-      userWhatsAppNumber: snapshot['userWhatsAppNumber'],
-      userImage: snapshot['userImage'],
-      totalPosts: snapshot['totalPosts'],
-      userLocation: PlaceCell.fromMap(snapshot['userLocation']),
-      partnership: snapshot['partnership'],
-      isBlocked: snapshot['isBlocked'],
+      userId: snapshot['userId'] ?? '',
+      userName: snapshot['userName'] ?? '',
+      userPhoneNumber: snapshot['userPhoneNumber'] ?? '',
+      userWhatsAppNumber: snapshot['userWhatsAppNumber'] ?? '',
+      userImage: snapshot['userImage'] ?? '',
+      totalPosts: snapshot['totalPosts'] ?? 0,
+      // userLocation: PlaceCell.fromMap(snapshot['userLocation']),
+      userLocation: snapshot['userLocation'] != null
+          ? PlaceCell.fromMap(snapshot['userLocation'])
+          : null,
+
+      partnership: snapshot['partnership'] ?? '',
+      isBlocked: snapshot['isBlocked'] ?? false,
     );
   }
 }

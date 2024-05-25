@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hinvex/features/home/presantation/provider/routing_provider.dart';
 import 'package:hinvex/features/uploadedByAdmin/presentation/provider/uploadedByAdmin_provider.dart';
@@ -21,7 +22,11 @@ class _UploadedDetailWidgetState extends State<UploadedDetailWidget> {
     return Scaffold(body: SingleChildScrollView(
       child: Consumer<UploadedByAdminProvider>(builder: (context, state, _) {
         return state.fetchUserLoading
-            ? const Center(child: CircularProgressIndicator())
+            ? const Center(
+                child: CupertinoActivityIndicator(
+                  color: primaryColor,
+                ),
+              )
             : SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
@@ -61,11 +66,8 @@ class _UploadedDetailWidgetState extends State<UploadedDetailWidget> {
                                     padding: const EdgeInsets.all(8.0),
                                     child: InkWell(
                                       onTap: () {
-                                        state
-                                          ..imageFile.clear()
-                                          ..clearData()
-                                          ..clearDoc()
-                                          ..fetchProducts();
+                                        state.imageFile.clear();
+                                        // log("fetchProducts called uploaded details view widget");
                                         Provider.of<RoutingProvider>(context,
                                                 listen: false)
                                             .uploadedByAdminRouting(
@@ -142,23 +144,16 @@ class _UploadedDetailWidgetState extends State<UploadedDetailWidget> {
                                                 fontSize: 13),
                                           ),
                                         ),
-                                        const Padding(
-                                          padding: EdgeInsets.symmetric(
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
                                               horizontal: 4.0, vertical: 2),
                                           child: Text(
-                                            "Indivitual",
-                                            style: TextStyle(fontSize: 11),
+                                            state.selectedPropertiesDetails!
+                                                .getSelectedListedByString,
+                                            style:
+                                                const TextStyle(fontSize: 11),
                                           ),
                                         ),
-                                        // Padding(
-                                        //   padding: const EdgeInsets.symmetric(
-                                        //       horizontal: 4.0, vertical: 2),
-                                        //   child: Text(
-                                        //     "Location; ",
-                                        //     style:
-                                        //         const TextStyle(fontSize: 11),
-                                        //   ),
-                                        // ),
                                         Padding(
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 4.0, vertical: 2),
@@ -205,12 +200,6 @@ class _UploadedDetailWidgetState extends State<UploadedDetailWidget> {
                                                 .selectedPropertiesDetails!
                                                 .propertyImage!
                                                 .length,
-                                            // itemCount: state.selectedPropertiesDetails!
-                                            //             .propertyImage!.length <=
-                                            //         5
-                                            //     ? state.selectedPropertiesDetails!
-                                            //         .propertyImage!.length
-                                            //     : 5,
                                             itemBuilder: (context, index) {
                                               return Padding(
                                                 padding:
@@ -220,33 +209,34 @@ class _UploadedDetailWidgetState extends State<UploadedDetailWidget> {
                                                 child: SizedBox(
                                                   height: 110,
                                                   width: 150,
-
                                                   child: CachedNetworkImage(
                                                     placeholder:
                                                         (context, url) =>
-                                                            SizedBox(
-                                                      width: 220.0,
-                                                      height: 120.0,
-                                                      child: Shimmer.fromColors(
-                                                        baseColor:
-                                                            Colors.grey[300]!,
-                                                        highlightColor:
-                                                            Colors.grey[100]!,
-                                                        child: Container(
-                                                          height: 220,
-                                                          width: 120,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            image:
-                                                                DecorationImage(
-                                                              image: AssetImage(
-                                                                ImageConstant
-                                                                    .hinvex,
-                                                              ),
-                                                              fit: BoxFit
-                                                                  .contain,
-                                                            ),
-                                                          ),
+                                                            Shimmer.fromColors(
+                                                      baseColor:
+                                                          Colors.grey[300]!,
+                                                      highlightColor:
+                                                          Colors.grey[100]!,
+                                                      child: SizedBox(
+                                                        height: 220,
+                                                        width: 120,
+                                                        child: Transform.scale(
+                                                          scale: .6,
+                                                          child: Image.asset(
+                                                              ImageConstant
+                                                                  .hinvex),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    errorWidget:
+                                                        (context, url, error) =>
+                                                            Container(
+                                                      color: Colors.grey[300],
+                                                      child: const Center(
+                                                        child: Icon(
+                                                          Icons.error_outline,
+                                                          color: Colors.red,
+                                                          size: 36,
                                                         ),
                                                       ),
                                                     ),
@@ -255,13 +245,6 @@ class _UploadedDetailWidgetState extends State<UploadedDetailWidget> {
                                                         .selectedPropertiesDetails!
                                                         .propertyImage![index],
                                                   ),
-
-                                                  // child: Image.network(
-                                                  //   state
-                                                  //       .selectedPropertiesDetails!
-                                                  //       .propertyImage![index],
-                                                  //   fit: BoxFit.cover,
-                                                  // ),
                                                 ),
                                               );
                                             }),

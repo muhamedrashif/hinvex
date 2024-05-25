@@ -23,25 +23,8 @@ class IUploadedByAdminImpl implements IUploadedByAdminFacade {
   final FirebaseFirestore _firestore;
   final UploadPlaceService _placeService;
 
-  // GET IMAGE
-
+  bool noMoreData = false;
   QueryDocumentSnapshot<Map<String, dynamic>>? lastDoc;
-
-  // @override
-  // FutureResult<List<String?>> getImage({
-  //   required List<Uint8List> imageByte,
-  // }) async {
-  //   try {
-  //     List<Uint8List?> imageBytes = await pickMultipleImages(7);
-  //     List<String?> imgUrl = [];
-  //     if (imageByte.isNotEmpty) {
-  //       imgUrl = await saveImages(imagePaths: imageByte);
-  //     }
-  //     return right(imgUrl);
-  //   } catch (ex) {
-  //     return left(MainFailure.imagePickFailed(errorMsg: ex.toString()));
-  //   }
-  // }
 
 // UPLOAD TO FIRESTORE
   @override
@@ -69,46 +52,8 @@ class IUploadedByAdminImpl implements IUploadedByAdminFacade {
       return left(MainFailure.imageUploadFailure(errorMsg: e.errorMsg));
     }
   }
-  // FETCH PROPERTIES
 
-  // @override
-  // Stream<QuerySnapshot<UserProductDetailsModel>> fetchUploadedProperties() {
-  //   log("message");
-  //   final result = _firestore
-  //       .collection('posts')
-  //       .orderBy('createDate', descending: true)
-  //       .where('userId', isEqualTo: "owner")
-  //       .withConverter(
-  //         fromFirestore: (snapshot, options) =>
-  //             UserProductDetailsModel.fromSnap(snapshot),
-  //         toFirestore: (value, options) => value.toJson(),
-  //       )
-  //       .limit(5)
-  //       .snapshots();
-  //   log("result.toString()");
-  //   return result;
-  // }
-
-  // @override
-  // Stream<QuerySnapshot<UserProductDetailsModel>> fetchNextUploadedProperties(
-  //     DocumentSnapshot<Object?>? lastDocument) {
-  //   if (lastDocument == null) {
-  //     return const Stream.empty();
-  //   }
-  //   final result = _firestore
-  //       .collection('posts')
-  //       .orderBy('createDate', descending: true)
-  //       .where('userId', isEqualTo: "owner")
-  //       .withConverter(
-  //         fromFirestore: (snapshot, options) =>
-  //             UserProductDetailsModel.fromSnap(snapshot),
-  //         toFirestore: (value, options) => value.toJson(),
-  //       )
-  //       .startAfterDocument(lastDocument)
-  //       .limit(5)
-  //       .snapshots();
-  //   return result;
-  // }
+// FETCH USER
 
   @override
   Future<QuerySnapshot<Map<String, dynamic>>> fetchUser(String userId) {
@@ -117,52 +62,57 @@ class IUploadedByAdminImpl implements IUploadedByAdminFacade {
     return reuslt;
   }
 
+// UPLOAD LOCATION
+
   @override
   FutureResult<Unit> uploadLocation(PlaceCell place) {
     return _placeService.uploadPlace(place);
   }
 
+  // FETCH PROPERTIES
+
   @override
   FutureResult<List<UserProductDetailsModel>> fetchProduct() async {
+    log("FETCH PROPERTY CALLED");
+    if (noMoreData == true) return right([]); //THERE IS NOMORE DATA
     try {
-      if (lastDoc == null) {
-        log('lastdoc null');
-      } else {
-        log('lastdoc');
-      }
       final result = lastDoc == null
           ? await _firestore
               .collection('posts')
+              .where('isAdmin', isEqualTo: true)
               .orderBy('createDate', descending: true)
-              .where('userId', isEqualTo: "owner")
               .limit(10)
               .get()
           : await _firestore
               .collection('posts')
+              .where('isAdmin', isEqualTo: true)
               .orderBy('createDate', descending: true)
-              .where('userId', isEqualTo: "owner")
               .startAfterDocument(lastDoc!)
               .limit(10)
               .get();
+      log("result  ${result.docs.length}");
 
-      if (result.docs.isNotEmpty) {
+      if (result.docs.length < 10 || result.docs.isEmpty) {
+        noMoreData = true;
+      } else {
         lastDoc = result.docs.last;
-        return right(
-          [
-            ...result.docs.map(
-              (e) => UserProductDetailsModel.fromSnap(e),
-            ),
-          ],
-        );
       }
-
-      return left(
-          const MainFailure.noDataFountFailure(errorMsg: 'No Data Fount'));
-    } on FirebaseException catch (e) {
-      return left(MainFailure.noDataFountFailure(errorMsg: e.code));
+      final propertyList =
+          result.docs.map((e) => UserProductDetailsModel.fromSnap(e)).toList();
+      return right(propertyList);
+    } catch (e) {
+      print(e.toString());
+      return left(MainFailure.noDataFountFailure(errorMsg: e.toString()));
     }
   }
 
+  @override
+  void clearDoc() {
+    lastDoc = null;
+    noMoreData = false;
+  }
+
+// SEARCH PROPERTY
   @override
   FutureResult<List<UserProductDetailsModel>> searchProperty(
       String categoryName) async {
@@ -196,6 +146,10 @@ class IUploadedByAdminImpl implements IUploadedByAdminFacade {
                 Filter.and(
                   Filter('userId', isEqualTo: "owner"),
                   Filter('propertyCategory', isEqualTo: categoryName),
+                  Filter(
+                    'keywords',
+                    arrayContains: categoryName,
+                  ),
                 ),
               )
               .startAfterDocument(lastDoc!)
@@ -221,6 +175,7 @@ class IUploadedByAdminImpl implements IUploadedByAdminFacade {
     }
   }
 
+// LOCATION
   @override
   FutureResult<PlaceCell> serchLocationByAddres({
     required String latitude,
@@ -266,25 +221,6 @@ class IUploadedByAdminImpl implements IUploadedByAdminFacade {
     );
   }
 
-  // @override
-  // FutureResult<List<PlaceResult>> pickLocationFromSearch(
-  //   String searchText,
-  // ) async {
-  //   try {
-  //     final res = await LocationService.searchPlaces(searchText.toLowerCase());
-  //     log("SEARCH:::::::::::${res.toString()}");
-  //     if (res != null) {
-  //       return right(res);
-  //     } else {
-  //       return left(
-  //         const MainFailure.serverFailure(errorMsg: 'No result found'),
-  //       );
-  //     }
-  //   } catch (err) {
-  //     return left(MainFailure.serverFailure(errorMsg: err.toString()));
-  //   }
-  // }
-
   @override
   FutureResult<List<PlaceResult>> pickLocationFromSearch(
     String searchText,
@@ -304,10 +240,7 @@ class IUploadedByAdminImpl implements IUploadedByAdminFacade {
     }
   }
 
-  @override
-  void clearDoc() {
-    lastDoc = null;
-  }
+// DELETE UPLOADED PROPERTY
 
   @override
   FutureResult<Unit> deleteUploadedPosts(String id) async {
@@ -318,6 +251,7 @@ class IUploadedByAdminImpl implements IUploadedByAdminFacade {
       return left(MainFailure.serverFailure(errorMsg: e.errorMsg));
     }
   }
+// UPDATE UPLOADED PROPERTY
 
   @override
   FutureResult<void> updateUploadedPosts(

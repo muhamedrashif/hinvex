@@ -1,16 +1,13 @@
 import 'dart:developer';
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hinvex/features/banner/presentation/provider/banner_provider.dart';
 import 'package:hinvex/features/banner/presentation/views/widget/add_mobile_banner_popup_widget.dart';
 import 'package:hinvex/features/banner/presentation/views/widget/web_property_attaching%20_popup_widget.dart';
-import 'package:hinvex/general/utils/app_assets/image_constants.dart';
 import 'package:hinvex/general/utils/app_theme/colors.dart';
+import 'package:hinvex/general/widgets/custom_network_image._widget.dart';
 import 'package:provider/provider.dart';
 import 'widget/add_web_banner_popup_widget.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:shimmer/shimmer.dart';
-
 import 'widget/deletePopup_widget.dart';
 import 'widget/mobile_property_attaching _popup_widget.dart';
 
@@ -37,7 +34,11 @@ class _BannerScreenState extends State<BannerScreen> {
     return Scaffold(
       body: Consumer<BannerProvider>(builder: (context, state, _) {
         return state.fetchwebBannerloading || state.fetchMobileBannerloading
-            ? const Center(child: CircularProgressIndicator())
+            ? const Center(
+                child: CupertinoActivityIndicator(
+                  color: primaryColor,
+                ),
+              )
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -104,53 +105,19 @@ class _BannerScreenState extends State<BannerScreen> {
                               itemBuilder: (context, index) {
                                 log("BANNER LENGTH ${state.webBannerList.length}");
                                 return state.bannerIsLoading
-                                    ? const CircularProgressIndicator()
+                                    ? const CupertinoActivityIndicator(
+                                        color: primaryColor,
+                                      )
                                     : Padding(
                                         padding: const EdgeInsets.all(4.0),
                                         child: Stack(
                                           children: [
-                                            SizedBox(
-                                              width: 220, // Increase the width
-                                              height:
-                                                  120, // Increase the height
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(7.5),
-                                                child: CachedNetworkImage(
-                                                  placeholder: (context, url) =>
-                                                      SizedBox(
-                                                    width: 220.0,
-                                                    height: 120.0,
-                                                    child: Shimmer.fromColors(
-                                                      baseColor:
-                                                          Colors.grey[300]!,
-                                                      highlightColor:
-                                                          Colors.grey[100]!,
-                                                      child: Container(
-                                                        height: 220,
-                                                        width: 120,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          image:
-                                                              DecorationImage(
-                                                            image: AssetImage(
-                                                              ImageConstant
-                                                                  .hinvex,
-                                                            ),
-                                                            fit: BoxFit.contain,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  fit: BoxFit.cover,
-                                                  imageUrl: state
-                                                      .webBannerList[index]
-                                                      .image
-                                                      .toString(),
-                                                ),
-                                              ),
-                                            ),
+                                            CustomNetworkImageWidget(
+                                                imageUrl: state
+                                                    .webBannerList[index].image
+                                                    .toString(),
+                                                width: 220,
+                                                height: 120),
                                             Positioned(
                                               top: 4,
                                               right: 4,
@@ -336,53 +303,20 @@ class _BannerScreenState extends State<BannerScreen> {
                               itemCount: state.mobileBannerList.length,
                               itemBuilder: (context, index) {
                                 return state.mobileIsLoading
-                                    ? const CircularProgressIndicator()
+                                    ? const CupertinoActivityIndicator(
+                                        color: primaryColor,
+                                      )
                                     : Padding(
                                         padding: const EdgeInsets.all(4.0),
                                         child: Stack(
                                           children: [
-                                            SizedBox(
-                                              width: 220, // Increase the width
-                                              height:
-                                                  120, // Increase the height
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(7.5),
-                                                child: CachedNetworkImage(
-                                                  placeholder: (context, url) =>
-                                                      SizedBox(
-                                                    width: 220.0,
-                                                    height: 120.0,
-                                                    child: Shimmer.fromColors(
-                                                      baseColor:
-                                                          Colors.grey[300]!,
-                                                      highlightColor:
-                                                          Colors.grey[100]!,
-                                                      child: Container(
-                                                        height: 220,
-                                                        width: 120,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          image:
-                                                              DecorationImage(
-                                                            image: AssetImage(
-                                                              ImageConstant
-                                                                  .hinvex,
-                                                            ),
-                                                            fit: BoxFit.contain,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  fit: BoxFit.cover,
-                                                  imageUrl: state
-                                                      .mobileBannerList[index]
-                                                      .image
-                                                      .toString(),
-                                                ),
-                                              ),
-                                            ),
+                                            CustomNetworkImageWidget(
+                                                imageUrl: state
+                                                    .mobileBannerList[index]
+                                                    .image
+                                                    .toString(),
+                                                width: 220,
+                                                height: 120),
                                             Positioned(
                                               top: 4,
                                               right: 4,
@@ -452,18 +386,6 @@ class _BannerScreenState extends State<BannerScreen> {
                                                                 .only(
                                                                 bottom: 10),
                                                         onTap: () {
-                                                          // state.deleteStorageImage(
-                                                          //   url: state
-                                                          //       .mobileBannerList[
-                                                          //           index]
-                                                          //       .image,
-                                                          //   id: state
-                                                          //       .mobileBannerList[
-                                                          //           index]
-                                                          //       .postId,
-                                                          //   onSuccess: () {},
-                                                          //   onFailure: () {},
-                                                          // );
                                                           showDialog(
                                                             context: context,
                                                             barrierDismissible:

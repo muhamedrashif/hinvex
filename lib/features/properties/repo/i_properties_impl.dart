@@ -1,5 +1,11 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dartz/dartz.dart';
 import 'package:hinvex/features/properties/data/i_properties_facade.dart';
+import 'package:hinvex/features/user/data/model/user_product_details_model.dart';
+import 'package:hinvex/general/failures/failures.dart';
+import 'package:hinvex/general/typedefs/typedefs.dart';
 import 'package:injectable/injectable.dart';
 
 @LazySingleton(as: IPropertiesFacade)
@@ -7,70 +13,49 @@ class IPropertiesImpl implements IPropertiesFacade {
   IPropertiesImpl(this._firestore);
   final FirebaseFirestore _firestore;
 
+  QueryDocumentSnapshot<Map<String, dynamic>>? lastDoc;
+  bool noMoreData = false;
+
 // FETCH PROPERTIES
-
   @override
-  // Stream<QuerySnapshot<Map<String, dynamic>>> fetchProperties() {
-  //   final result = _firestore
-  //       .collection('posts')
-  //       .orderBy('createDate', descending: true)
-  //       .where('userId', isNotEqualTo: 'owner')
-  //       .limit(5)
-  //       .snapshots();
-  //   return result;
-  // }
-
-  // @override
-  // Stream<QuerySnapshot<Map<String, dynamic>>> fetchNextPoperties(
-  //     DocumentSnapshot<Object?>? lastDocument) {
-  //   if (lastDocument == null) {
-  //     return const Stream.empty();
-  //   }
-  //   final result = _firestore
-  //       .collection('posts')
-  //       .orderBy('createDate', descending: true)
-  //       .where('userId', isNotEqualTo: 'owner')
-  //       .startAfterDocument(lastDocument)
-  //       .limit(5)
-  //       .snapshots();
-  //   return result;
-  // }
-
-  @override
-  Future<QuerySnapshot<Map<String, dynamic>>> fetchProperties() async {
+  FutureResult<List<UserProductDetailsModel>> fetchProperties() async {
+    log("FETCH PROPERTY CALLED");
+    if (noMoreData == true) return right([]); //THERE IS NOMORE DATA
     try {
-      final result = await _firestore
-          .collection('posts')
-          .orderBy('createDate', descending: true)
-          .where('userId', isNotEqualTo: 'owner')
-          .limit(5)
-          .get();
-      return result;
+      final result = lastDoc == null
+          ? await _firestore
+              .collection('posts')
+              .where('isAdmin', isEqualTo: false)
+              .orderBy('createDate', descending: true)
+              .limit(10)
+              .get()
+          : await _firestore
+              .collection('posts')
+              .where('isAdmin', isEqualTo: false)
+              .orderBy('createDate', descending: true)
+              .startAfterDocument(lastDoc!)
+              .limit(10)
+              .get();
+      log("result  ${result.docs.length}");
+
+      if (result.docs.length < 10 || result.docs.isEmpty) {
+        noMoreData = true;
+      } else {
+        lastDoc = result.docs.last;
+      }
+      final userList =
+          result.docs.map((e) => UserProductDetailsModel.fromSnap(e)).toList();
+      return right(userList);
     } catch (e) {
-      print('Error fetching properties: $e');
-      throw e; // rethrow the error to be caught by the caller
+      print(e.toString());
+      return left(MainFailure.noDataFountFailure(errorMsg: e.toString()));
     }
   }
 
   @override
-  Future<QuerySnapshot<Map<String, dynamic>>?> fetchNextPoperties(
-      DocumentSnapshot<Object?>? lastDocument) async {
-    try {
-      if (lastDocument == null) {
-        return null;
-      }
-      final result = await _firestore
-          .collection('posts')
-          .orderBy('createDate', descending: true)
-          .where('userId', isNotEqualTo: 'owner')
-          .startAfterDocument(lastDocument)
-          .limit(5)
-          .get();
-      return result;
-    } catch (e) {
-      print('Error fetching next properties: $e');
-      throw e; // rethrow the error to be caught by the caller
-    }
+  void clearDoc() {
+    lastDoc = null;
+    noMoreData = false;
   }
 
   @override

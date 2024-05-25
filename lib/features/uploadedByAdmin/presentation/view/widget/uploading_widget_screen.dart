@@ -1,7 +1,7 @@
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hinvex/features/home/presantation/provider/routing_provider.dart';
@@ -12,7 +12,7 @@ import 'package:hinvex/general/utils/app_assets/image_constants.dart';
 import 'package:hinvex/general/utils/app_theme/colors.dart';
 import 'package:hinvex/general/utils/enums/enums.dart';
 import 'package:hinvex/general/utils/progress_indicator_widget/progress_indicator_widget.dart';
-import 'package:hinvex/general/utils/snackbar/snackbar.dart';
+import 'package:hinvex/general/utils/toast/toast.dart';
 import 'package:provider/provider.dart';
 
 class Bhk {
@@ -209,6 +209,7 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                   ),
                                   InkWell(
                                     onTap: () {
+                                      state.imageFile = [];
                                       Provider.of<RoutingProvider>(context,
                                               listen: false)
                                           .uploadedByAdminRouting(
@@ -361,43 +362,6 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                                                   context);
                                                             },
                                                           );
-
-                                                          // Update text field with suggestion
-                                                          // opentreetMapModel =
-                                                          //     suggestion;
-                                                          // _searchLocationController
-                                                          //         .text =
-                                                          //     '${suggestion.localArea!}, ${suggestion.district!}';
-                                                          //   setState(() {
-                                                          //     placeCell = PlaceCell(
-                                                          //         localArea:
-                                                          //             suggestion
-                                                          //                 .localArea,
-                                                          //         district: suggestion
-                                                          //             .district
-                                                          //             .toString(),
-                                                          //         state: suggestion
-                                                          //             .state
-                                                          //             .toString(),
-                                                          //         country: suggestion
-                                                          //             .country
-                                                          //             .toString(),
-                                                          //         pincode: suggestion
-                                                          //             .pincode
-                                                          //             .toString(),
-                                                          //         geoPoint: LandMark(
-                                                          //             latitude:
-                                                          //                 suggestion.latitude ??
-                                                          //                     0,
-                                                          //             longitude:
-                                                          //                 suggestion.longitude ??
-                                                          //                     0));
-                                                          //   });
-
-                                                          //   state.uploadLocation(
-                                                          //       placeCell!);
-
-                                                          // Clear suggestions
                                                         },
                                                       );
                                                     },
@@ -573,7 +537,7 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                         height: 50,
                                         decoration: BoxDecoration(
                                             color: Colors.grey[200]),
-                                        child: DropdownButton<String>(
+                                        child: DropdownButtonFormField<String>(
                                           value: _selectedBedroom,
                                           hint: const Text(
                                             "Select",
@@ -588,20 +552,25 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                             });
                                           },
                                           isExpanded: true,
-                                          underline: Container(
-                                            height: 0,
-                                            color: Colors.grey[200],
-                                          ),
                                           itemHeight: 50,
                                           menuMaxHeight: 150,
                                           style: const TextStyle(fontSize: 13),
-                                          padding: const EdgeInsets.all(8),
+                                          decoration: const InputDecoration(
+                                            border: InputBorder.none,
+                                            contentPadding: EdgeInsets.all(8),
+                                          ),
                                           items: _bedroom.map((String bedroom) {
                                             return DropdownMenuItem<String>(
                                               value: bedroom,
                                               child: Text(bedroom),
                                             );
                                           }).toList(),
+                                          validator: (text) {
+                                            if (text == null || text.isEmpty) {
+                                              return 'Please Select One';
+                                            }
+                                            return null;
+                                          },
                                         ),
                                       ),
                                     ),
@@ -635,7 +604,7 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                         height: 50,
                                         decoration: BoxDecoration(
                                             color: Colors.grey[200]),
-                                        child: DropdownButton<String>(
+                                        child: DropdownButtonFormField<String>(
                                           value: _selectedBathroom,
                                           hint: const Text(
                                             "Select",
@@ -650,14 +619,13 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                             });
                                           },
                                           isExpanded: true,
-                                          underline: Container(
-                                            height: 0,
-                                            color: Colors.grey[200],
-                                          ),
                                           itemHeight: 50,
                                           menuMaxHeight: 150,
                                           style: const TextStyle(fontSize: 13),
-                                          padding: const EdgeInsets.all(8),
+                                          decoration: const InputDecoration(
+                                            border: InputBorder.none,
+                                            contentPadding: EdgeInsets.all(8),
+                                          ),
                                           items:
                                               _bathroom.map((String bathroom) {
                                             return DropdownMenuItem<String>(
@@ -665,6 +633,12 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                               child: Text(bathroom),
                                             );
                                           }).toList(),
+                                          validator: (text) {
+                                            if (text == null || text.isEmpty) {
+                                              return 'Please Select One';
+                                            }
+                                            return null;
+                                          },
                                         ),
                                       ),
                                     ),
@@ -701,7 +675,7 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                         height: 50,
                                         decoration: BoxDecoration(
                                             color: Colors.grey[200]),
-                                        child: DropdownButton<String>(
+                                        child: DropdownButtonFormField<String>(
                                           value: _selectedFurnisher,
                                           hint: const Text(
                                             "Select",
@@ -715,14 +689,13 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                             });
                                           },
                                           isExpanded: true,
-                                          underline: Container(
-                                            height: 0,
-                                            color: Colors.grey[200],
-                                          ),
                                           itemHeight: 50,
                                           menuMaxHeight: 150,
                                           style: const TextStyle(fontSize: 13),
-                                          padding: const EdgeInsets.all(8),
+                                          decoration: const InputDecoration(
+                                            border: InputBorder.none,
+                                            contentPadding: EdgeInsets.all(8),
+                                          ),
                                           items: _furnisher
                                               .map((String furnisher) {
                                             return DropdownMenuItem<String>(
@@ -730,6 +703,12 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                               child: Text(furnisher),
                                             );
                                           }).toList(),
+                                          validator: (text) {
+                                            if (text == null || text.isEmpty) {
+                                              return 'Please Select One';
+                                            }
+                                            return null;
+                                          },
                                         ),
                                       ),
                                     ),
@@ -765,7 +744,7 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                         height: 50,
                                         decoration: BoxDecoration(
                                             color: Colors.grey[200]),
-                                        child: DropdownButton<String>(
+                                        child: DropdownButtonFormField<String>(
                                           value: _selectedConstructionStatus,
                                           hint: const Text(
                                             "Select",
@@ -780,14 +759,13 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                             });
                                           },
                                           isExpanded: true,
-                                          underline: Container(
-                                            height: 0,
-                                            color: Colors.grey[200],
-                                          ),
                                           itemHeight: 50,
                                           menuMaxHeight: 150,
                                           style: const TextStyle(fontSize: 13),
-                                          padding: const EdgeInsets.all(8),
+                                          decoration: const InputDecoration(
+                                            border: InputBorder.none,
+                                            contentPadding: EdgeInsets.all(8),
+                                          ),
                                           items: _constructionStatus
                                               .map((String constructionStatus) {
                                             return DropdownMenuItem<String>(
@@ -795,6 +773,12 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                               child: Text(constructionStatus),
                                             );
                                           }).toList(),
+                                          validator: (text) {
+                                            if (text == null || text.isEmpty) {
+                                              return 'Please Select One';
+                                            }
+                                            return null;
+                                          },
                                         ),
                                       ),
                                     ),
@@ -904,8 +888,19 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                                   color: Colors.grey),
                                             ),
                                             keyboardType: TextInputType.number,
+                                            inputFormatters: <TextInputFormatter>[
+                                              FilteringTextInputFormatter
+                                                  .digitsOnly
+                                            ],
                                             controller:
                                                 _superBuilupAreaController,
+                                            validator: (text) {
+                                              if (text == null ||
+                                                  text.isEmpty) {
+                                                return 'Please Enter Builtup Area';
+                                              }
+                                              return null;
+                                            },
                                           ),
                                         ),
                                       ),
@@ -952,7 +947,18 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                                   color: Colors.grey),
                                             ),
                                             keyboardType: TextInputType.number,
+                                            inputFormatters: <TextInputFormatter>[
+                                              FilteringTextInputFormatter
+                                                  .digitsOnly
+                                            ],
                                             controller: _pricePerSqftController,
+                                            validator: (text) {
+                                              if (text == null ||
+                                                  text.isEmpty) {
+                                                return 'Please Enter Price Per sq.ft';
+                                              }
+                                              return null;
+                                            },
                                           ),
                                         ),
                                       ),
@@ -1001,7 +1007,18 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                                   color: Colors.grey),
                                             ),
                                             keyboardType: TextInputType.number,
+                                            inputFormatters: <TextInputFormatter>[
+                                              FilteringTextInputFormatter
+                                                  .digitsOnly
+                                            ],
                                             controller: _carpetAreaController,
+                                            validator: (text) {
+                                              if (text == null ||
+                                                  text.isEmpty) {
+                                                return 'Please Enter Builtup Area';
+                                              }
+                                              return null;
+                                            },
                                           ),
                                         ),
                                       ),
@@ -1048,7 +1065,18 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                                   color: Colors.grey),
                                             ),
                                             keyboardType: TextInputType.number,
+                                            inputFormatters: <TextInputFormatter>[
+                                              FilteringTextInputFormatter
+                                                  .digitsOnly
+                                            ],
                                             controller: _washRoomController,
+                                            validator: (text) {
+                                              if (text == null ||
+                                                  text.isEmpty) {
+                                                return 'Please Enter Wash Room';
+                                              }
+                                              return null;
+                                            },
                                           ),
                                         ),
                                       ),
@@ -1094,7 +1122,18 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                                   color: Colors.grey),
                                             ),
                                             keyboardType: TextInputType.number,
+                                            inputFormatters: <TextInputFormatter>[
+                                              FilteringTextInputFormatter
+                                                  .digitsOnly
+                                            ],
                                             controller: _plotAreaController,
+                                            validator: (text) {
+                                              if (text == null ||
+                                                  text.isEmpty) {
+                                                return 'Please Enter Plot Area';
+                                              }
+                                              return null;
+                                            },
                                           ),
                                         ),
                                       ),
@@ -1140,7 +1179,18 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                                   color: Colors.grey),
                                             ),
                                             keyboardType: TextInputType.number,
+                                            inputFormatters: <TextInputFormatter>[
+                                              FilteringTextInputFormatter
+                                                  .digitsOnly
+                                            ],
                                             controller: _plotLenthController,
+                                            validator: (text) {
+                                              if (text == null ||
+                                                  text.isEmpty) {
+                                                return 'Please Enter Length';
+                                              }
+                                              return null;
+                                            },
                                           ),
                                         ),
                                       ),
@@ -1186,7 +1236,18 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                                   color: Colors.grey),
                                             ),
                                             keyboardType: TextInputType.number,
+                                            inputFormatters: <TextInputFormatter>[
+                                              FilteringTextInputFormatter
+                                                  .digitsOnly
+                                            ],
                                             controller: _plotBreadthController,
+                                            validator: (text) {
+                                              if (text == null ||
+                                                  text.isEmpty) {
+                                                return 'Please Enter Breadth';
+                                              }
+                                              return null;
+                                            },
                                           ),
                                         ),
                                       ),
@@ -1233,7 +1294,18 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                                   color: Colors.grey),
                                             ),
                                             keyboardType: TextInputType.number,
+                                            inputFormatters: <TextInputFormatter>[
+                                              FilteringTextInputFormatter
+                                                  .digitsOnly
+                                            ],
                                             controller: _totalFloorsController,
+                                            validator: (text) {
+                                              if (text == null ||
+                                                  text.isEmpty) {
+                                                return 'Please Enter Total Floors';
+                                              }
+                                              return null;
+                                            },
                                           ),
                                         ),
                                       ),
@@ -1280,7 +1352,18 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                                   color: Colors.grey),
                                             ),
                                             keyboardType: TextInputType.number,
+                                            inputFormatters: <TextInputFormatter>[
+                                              FilteringTextInputFormatter
+                                                  .digitsOnly
+                                            ],
                                             controller: _floorNoController,
+                                            validator: (text) {
+                                              if (text == null ||
+                                                  text.isEmpty) {
+                                                return 'Please Enter Floor No.';
+                                              }
+                                              return null;
+                                            },
                                           ),
                                         ),
                                       ),
@@ -1301,30 +1384,32 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const SizedBox(
-                                        width: 200,
-                                        child: Row(
-                                          children: [
-                                            Text("Car Parking"),
-                                            Text(
-                                              "*",
-                                              style:
-                                                  TextStyle(color: Colors.red),
-                                            ),
-                                          ],
-                                        )),
+                                      width: 200,
+                                      child: Row(
+                                        children: [
+                                          Text("Car Parking"),
+                                          Text(
+                                            "*",
+                                            style: TextStyle(color: Colors.red),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                     SizedBox(
                                       width: 450,
                                       child: Container(
                                         height: 50,
                                         decoration: BoxDecoration(
-                                            color: Colors.grey[200]),
-                                        child: DropdownButton<String>(
+                                          color: Colors.grey[200],
+                                        ),
+                                        child: DropdownButtonFormField<String>(
                                           value: _selectedCarParking,
                                           hint: const Text(
                                             "Select",
                                             style: TextStyle(
-                                                fontSize: 10,
-                                                color: Colors.grey),
+                                              fontSize: 10,
+                                              color: Colors.grey,
+                                            ),
                                           ),
                                           onChanged: (String? newValue) {
                                             if (newValue == null) return;
@@ -1333,14 +1418,13 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                             });
                                           },
                                           isExpanded: true,
-                                          underline: Container(
-                                            height: 0,
-                                            color: Colors.grey[200],
-                                          ),
                                           itemHeight: 50,
                                           menuMaxHeight: 150,
                                           style: const TextStyle(fontSize: 13),
-                                          padding: const EdgeInsets.all(8),
+                                          decoration: const InputDecoration(
+                                            border: InputBorder.none,
+                                            contentPadding: EdgeInsets.all(8),
+                                          ),
                                           items: _carParking
                                               .map((String carParking) {
                                             return DropdownMenuItem<String>(
@@ -1348,6 +1432,12 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                               child: Text(carParking),
                                             );
                                           }).toList(),
+                                          validator: (text) {
+                                            if (text == null || text.isEmpty) {
+                                              return 'Please Select One';
+                                            }
+                                            return null;
+                                          },
                                         ),
                                       ),
                                     ),
@@ -1381,7 +1471,7 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                         height: 50,
                                         decoration: BoxDecoration(
                                             color: Colors.grey[200]),
-                                        child: DropdownButton<Bhk>(
+                                        child: DropdownButtonFormField<Bhk>(
                                           value: _selectedBHK != null
                                               ? _bhkList.firstWhere((element) =>
                                                   element.name == _selectedBHK)
@@ -1400,88 +1490,32 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                             });
                                           },
                                           isExpanded: true,
-                                          underline: Container(
-                                            height: 0,
-                                            color: Colors.grey[200],
-                                          ),
                                           itemHeight: 50,
                                           menuMaxHeight: 150,
                                           style: const TextStyle(fontSize: 13),
-                                          padding: const EdgeInsets.all(8),
+                                          decoration: const InputDecoration(
+                                            border: InputBorder.none,
+                                            contentPadding: EdgeInsets.all(8),
+                                          ),
                                           items: _bhkList.map((bhk) {
                                             return DropdownMenuItem<Bhk>(
                                               value: bhk,
                                               child: Text(bhk.name),
                                             );
                                           }).toList(),
+                                          validator: (text) {
+                                            if (text == null ||
+                                                text.name.isEmpty) {
+                                              return 'Please Select One';
+                                            }
+                                            return null;
+                                          },
                                         ),
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
-/////////////////////////////////////////////////////////////////////////Facing,
-                            // if (_selectedCategory == 'House' ||
-                            //     _selectedCategory == 'Apartments' ||
-                            //     _selectedCategory == 'Lands/Plots')
-                            //   Padding(
-                            //     padding: const EdgeInsets.all(10.0),
-                            //     child: Row(
-                            //       mainAxisAlignment: MainAxisAlignment.start,
-                            //       crossAxisAlignment: CrossAxisAlignment.start,
-                            //       children: [
-                            //         const SizedBox(
-                            //             width: 200,
-                            //             child: Row(
-                            //               children: [
-                            //                 Text("Facing"),
-                            //                 Text(
-                            //                   "*",
-                            //                   style:
-                            //                       TextStyle(color: Colors.red),
-                            //                 ),
-                            //               ],
-                            //             )),
-                            //         SizedBox(
-                            //           width: 450,
-                            //           child: Container(
-                            //             height: 50,
-                            //             decoration: BoxDecoration(
-                            //                 color: Colors.grey[200]),
-                            //             child: DropdownButton<String>(
-                            //               value: _selectedFacing,
-                            //               hint: const Text(
-                            //                 "Select",
-                            //                 style: TextStyle(
-                            //                     fontSize: 10,
-                            //                     color: Colors.grey),
-                            //               ),
-                            //               onChanged: (String? newValue) {
-                            //                 setState(() {
-                            //                   _selectedFacing = newValue!;
-                            //                 });
-                            //               },
-                            //               isExpanded: true,
-                            //               underline: Container(
-                            //                 height: 0,
-                            //                 color: Colors.grey[200],
-                            //               ),
-                            //               itemHeight: 50,
-                            //               menuMaxHeight: 150,
-                            //               style: const TextStyle(fontSize: 13),
-                            //               padding: const EdgeInsets.all(8),
-                            //               items: _facing.map((String facing) {
-                            //                 return DropdownMenuItem<String>(
-                            //                   value: facing,
-                            //                   child: Text(facing),
-                            //                 );
-                            //               }).toList(),
-                            //             ),
-                            //           ),
-                            //         ),
-                            //       ],
-                            //     ),
-                            //   ),
 /////////////////////////////////////////////////////////////////////////Project Name
                             if (_selectedCategory == 'House' ||
                                 _selectedCategory == 'Apartments' ||
@@ -1524,6 +1558,13 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                                   color: Colors.grey),
                                             ),
                                             controller: _projectNameController,
+                                            validator: (text) {
+                                              if (text == null ||
+                                                  text.isEmpty) {
+                                                return 'Please Entre Project Name';
+                                              }
+                                              return null;
+                                            },
                                           ),
                                         ),
                                       ),
@@ -1673,6 +1714,11 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                             }
                                             return null;
                                           },
+                                          keyboardType: TextInputType.number,
+                                          inputFormatters: <TextInputFormatter>[
+                                            FilteringTextInputFormatter
+                                                .digitsOnly
+                                          ],
                                         ),
                                       ),
                                     ),
@@ -1714,13 +1760,24 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                                 fontSize: 10,
                                                 color: Colors.grey),
                                           ),
+                                          maxLength: 10,
                                           controller: _phoneNumberController,
                                           validator: (text) {
                                             if (text == null || text.isEmpty) {
-                                              return 'Please Enter WhatsApp Number';
+                                              return 'Please Enter Phone Number';
                                             }
-                                            return null;
+                                            if (text.length < 10 ||
+                                                text.length > 10) {
+                                              return 'Mobile Number must be of 10 digit';
+                                            } else {
+                                              return null;
+                                            }
                                           },
+                                          keyboardType: TextInputType.number,
+                                          inputFormatters: <TextInputFormatter>[
+                                            FilteringTextInputFormatter
+                                                .digitsOnly
+                                          ],
                                         ),
                                       ),
                                     ),
@@ -1763,12 +1820,23 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                                 color: Colors.grey),
                                           ),
                                           controller: _whatsappNumberController,
+                                          maxLength: 10,
                                           validator: (text) {
                                             if (text == null || text.isEmpty) {
                                               return 'Please Enter WhatsApp Number';
                                             }
-                                            return null;
+                                            if (text.length < 10 ||
+                                                text.length > 10) {
+                                              return 'Mobile Number must be of 10 digit';
+                                            } else {
+                                              return null;
+                                            }
                                           },
+                                          keyboardType: TextInputType.number,
+                                          inputFormatters: <TextInputFormatter>[
+                                            FilteringTextInputFormatter
+                                                .digitsOnly
+                                          ],
                                         ),
                                       ),
                                     ),
@@ -1850,9 +1918,9 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                         child: InkWell(
                                           onTap: () {
                                             if (state.imageFile.length > 7) {
-                                              showSnackBar(
-                                                  "Maximum Allowed Images 7",
-                                                  context);
+                                              showToast(
+                                                "Maximum Allowed Images 7",
+                                              );
                                               return;
                                             }
 
@@ -1861,9 +1929,9 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                             state.getImage(onSuccess: () {
                                               Navigator.pop(context);
                                             }, onFailure: () {
-                                              showSnackBar(
-                                                  "Maximum Allowed Images 7",
-                                                  context);
+                                              showToast(
+                                                "Maximum Allowed Images 7",
+                                              );
                                               Navigator.pop(context);
                                             });
                                           },
@@ -2070,140 +2138,152 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                         }
                                         if (_formKey.currentState!.validate()) {
                                           _formKey.currentState!.save();
-                                          showProgress(context);
-                                          state.uploadPropertyToFireStore(
-                                            userProductDetailsModel:
-                                                UserProductDetailsModel(
-                                              userId: userId,
-                                              createDate: Timestamp.now(),
-                                              updateDate: Timestamp.now(),
-                                              propertyCategory:
-                                                  UserProductDetailsModel
-                                                      .getSelectedCategory(
-                                                          _selectedCategory ??
-                                                              ''),
-                                              propertyType:
-                                                  UserProductDetailsModel
-                                                      .getSelectedType(
-                                                          _selectedType ?? ''),
-                                              propertyPrice: int.parse(
-                                                  _askingPriceController.text),
-                                              propertyImage: state.imageFile,
-                                              propertyTitle:
-                                                  _adTitleController.text,
-                                              propertyDetils:
-                                                  _describeController.text,
-                                              propertyLocation: placeCell,
-                                              bedRooms: selectedBedroom,
-                                              bathRooms: selectedBathroom,
-                                              furnishing:
-                                                  UserProductDetailsModel
-                                                      .getSelectedFurnisher(
-                                                          _selectedFurnisher ??
-                                                              ''),
-                                              constructionStatus:
-                                                  UserProductDetailsModel
-                                                      .getConstructionStatus(
-                                                          _selectedConstructionStatus ??
-                                                              ''),
-                                              listedBy: UserProductDetailsModel
-                                                  .getSelectedListedBy(
-                                                      _selectedListedBy ?? ''),
-                                              superBuiltupAreaft: int.tryParse(
-                                                  _superBuilupAreaController
-                                                      .text),
-                                              carpetAreaft: int.tryParse(
-                                                  _carpetAreaController.text),
-                                              totalFloors: int.tryParse(
-                                                  _totalFloorsController.text),
-                                              floorNo: int.tryParse(
-                                                  _floorNoController.text),
-                                              carParking: selectedCarParking,
-                                              // facing: UserProductDetailsModel
-                                              //     .getSelectedFacing(
-                                              //         _selectedFacing ?? ''),
-                                              projectName:
-                                                  _projectNameController.text,
-                                              phoneNumber:
-                                                  _phoneNumberController.text,
-                                              whatsAppNumber:
-                                                  _whatsappNumberController
-                                                      .text,
-                                              plotArea: int.tryParse(
-                                                  _plotAreaController.text),
-                                              plotLength: int.tryParse(
-                                                  _plotLenthController.text),
-                                              plotBreadth: int.tryParse(
-                                                  _plotBreadthController.text),
-                                              washRoom: int.tryParse(
-                                                  _washRoomController.text),
-                                              noOfReports: 0,
-                                              description:
-                                                  _descriptionController.text,
-                                              pricePerstft: int.tryParse(
-                                                  _pricePerSqftController.text),
-                                              bhk: _selctedBHKValue,
-                                            ),
-                                            onSuccess: () {
-                                              // Clear text controllers
-                                              _askingPriceController.clear();
-                                              _adTitleController.clear();
-                                              _describeController.clear();
-                                              _searchLocationController.clear();
-                                              _superBuilupAreaController
-                                                  .clear();
-                                              _carpetAreaController.clear();
-                                              _totalFloorsController.clear();
-                                              _floorNoController.clear();
-                                              _projectNameController.clear();
-                                              _phoneNumberController.clear();
-                                              _whatsappNumberController.clear();
-                                              _washRoomController.clear();
-                                              _plotAreaController.clear();
-                                              _plotLenthController.clear();
-                                              _plotBreadthController.clear();
-                                              _descriptionController.clear();
-                                              _pricePerSqftController.clear();
-                                              // Reset selected values to default or clear them
-                                              _selectedCategory = null;
-                                              _selectedType = null;
-                                              _selectedBedroom = null;
-                                              _selectedBathroom = null;
-                                              _selectedFurnisher = null;
-                                              _selectedConstructionStatus =
-                                                  null;
-                                              _selectedListedBy = null;
-                                              _selectedCarParking = null;
-                                              // _selectedFacing = null;
-                                              _selctedBHKValue = null;
-                                              _selectedBHK = null;
-                                              showSnackBar(
+                                          if (state.imageFile.isNotEmpty) {
+                                            showProgress(context);
+                                            state.uploadPropertyToFireStore(
+                                              userProductDetailsModel:
+                                                  UserProductDetailsModel(
+                                                userId: userId,
+                                                createDate: Timestamp.now(),
+                                                updateDate: Timestamp.now(),
+                                                propertyCategory:
+                                                    UserProductDetailsModel
+                                                        .getSelectedCategory(
+                                                            _selectedCategory ??
+                                                                ''),
+                                                propertyType:
+                                                    UserProductDetailsModel
+                                                        .getSelectedType(
+                                                            _selectedType ??
+                                                                ''),
+                                                propertyPrice: int.parse(
+                                                    _askingPriceController
+                                                        .text),
+                                                propertyImage: state.imageFile,
+                                                propertyTitle:
+                                                    _adTitleController.text,
+                                                propertyDetils:
+                                                    _describeController.text,
+                                                propertyLocation: placeCell,
+                                                bedRooms: selectedBedroom,
+                                                bathRooms: selectedBathroom,
+                                                furnishing:
+                                                    UserProductDetailsModel
+                                                        .getSelectedFurnisher(
+                                                            _selectedFurnisher ??
+                                                                ''),
+                                                constructionStatus:
+                                                    UserProductDetailsModel
+                                                        .getConstructionStatus(
+                                                            _selectedConstructionStatus ??
+                                                                ''),
+                                                listedBy:
+                                                    UserProductDetailsModel
+                                                        .getSelectedListedBy(
+                                                            _selectedListedBy ??
+                                                                ''),
+                                                superBuiltupAreaft: int.tryParse(
+                                                    _superBuilupAreaController
+                                                        .text),
+                                                carpetAreaft: int.tryParse(
+                                                    _carpetAreaController.text),
+                                                totalFloors: int.tryParse(
+                                                    _totalFloorsController
+                                                        .text),
+                                                floorNo: int.tryParse(
+                                                    _floorNoController.text),
+                                                carParking: selectedCarParking,
+                                                // facing: UserProductDetailsModel
+                                                //     .getSelectedFacing(
+                                                //         _selectedFacing ?? ''),
+                                                projectName:
+                                                    _projectNameController.text,
+                                                phoneNumber:
+                                                    '+91${_phoneNumberController.text}',
+                                                whatsAppNumber:
+                                                    '+91${_whatsappNumberController.text}',
+                                                plotArea: int.tryParse(
+                                                    _plotAreaController.text),
+                                                plotLength: int.tryParse(
+                                                    _plotLenthController.text),
+                                                plotBreadth: int.tryParse(
+                                                    _plotBreadthController
+                                                        .text),
+                                                washRoom: int.tryParse(
+                                                    _washRoomController.text),
+                                                noOfReports: 0,
+                                                description:
+                                                    _descriptionController.text,
+                                                pricePerstft: int.tryParse(
+                                                    _pricePerSqftController
+                                                        .text),
+                                                bhk: _selctedBHKValue,
+                                                isAdmin: true,
+                                              ),
+                                              onSuccess: () {
+                                                // Clear text controllers
+                                                _askingPriceController.clear();
+                                                _adTitleController.clear();
+                                                _describeController.clear();
+                                                _searchLocationController
+                                                    .clear();
+                                                _superBuilupAreaController
+                                                    .clear();
+                                                _carpetAreaController.clear();
+                                                _totalFloorsController.clear();
+                                                _floorNoController.clear();
+                                                _projectNameController.clear();
+                                                _phoneNumberController.clear();
+                                                _whatsappNumberController
+                                                    .clear();
+                                                _washRoomController.clear();
+                                                _plotAreaController.clear();
+                                                _plotLenthController.clear();
+                                                _plotBreadthController.clear();
+                                                _descriptionController.clear();
+                                                _pricePerSqftController.clear();
+                                                // Reset selected values to default or clear them
+                                                _selectedCategory = null;
+                                                _selectedType = null;
+                                                _selectedBedroom = null;
+                                                _selectedBathroom = null;
+                                                _selectedFurnisher = null;
+                                                _selectedConstructionStatus =
+                                                    null;
+                                                _selectedListedBy = null;
+                                                _selectedCarParking = null;
+                                                _selctedBHKValue = null;
+                                                _selectedBHK = null;
+                                                state.imageFile = [];
+                                                showToast(
                                                   "Upload Property Successfully",
-                                                  context);
-                                              Navigator.pop(context);
-                                              state
-                                                ..imageFile.clear()
-                                                ..clearData()
-                                                ..clearDoc()
-                                                ..fetchProducts();
-                                              Provider.of<RoutingProvider>(
-                                                      context,
-                                                      listen: false)
-                                                  .uploadedByAdminRouting(
-                                                      UploadedByAdminRoutingEnum
-                                                          .uploadedViewScreen);
-                                            },
-                                            onFailure: () {
-                                              showSnackBar(
+                                                );
+                                                Navigator.pop(context);
+                                              },
+                                              onFailure: () {
+                                                showToast(
                                                   "Upload Property Failed",
-                                                  context);
-                                              Navigator.pop(context);
-                                            },
-                                          );
+                                                );
+                                                Navigator.pop(context);
+                                              },
+                                            );
+                                          } else {
+                                            showToast("Please Select Image");
+                                          }
+                                          {
+                                            showToast(
+                                              "Please Enter Details",
+                                            );
+                                          }
                                         }
+                                        showToast(
+                                          "Please Enter Details",
+                                        );
                                       },
                                       child: state.sendLoading
-                                          ? const CircularProgressIndicator()
+                                          ? const CupertinoActivityIndicator(
+                                              color: primaryColor,
+                                            )
                                           : Container(
                                               decoration: BoxDecoration(
                                                 borderRadius:
