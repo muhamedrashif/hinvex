@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:hinvex/general/utils/app_theme/colors.dart';
@@ -27,7 +28,7 @@ void showProgress<T>(BuildContext context) {
                       SizedBox(
                         height: 30,
                         width: 30,
-                        child: CircularProgressIndicator(
+                        child: CupertinoActivityIndicator(
                           color: primaryColor,
                         ),
                       ),
