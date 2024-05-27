@@ -4,7 +4,8 @@ import 'package:hinvex/general/utils/app_assets/image_constants.dart';
 
 import '../../../../general/utils/app_theme/colors.dart';
 import 'widget/dashboard_container_card.dart';
-import 'widget/graph_widget.dart';
+import 'widget/posts_graph_widget.dart';
+import 'widget/user_praph_widget.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -45,7 +46,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             color: titleTextColor, fontWeight: FontWeight.bold),
                       ),
                     ),
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.symmetric(vertical: 8.0),
                       child: Row(
                         children: [
@@ -53,19 +54,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             text: "Total User's",
                             icon: Icons.diversity_3,
                             num: '1000',
-                            color: Color(0xFF8896AB),
+                            color: Color(0xFF8896AB).withOpacity(.37),
                           ),
                           DashboardCard(
                             text: "Post",
                             icon: Icons.diversity_2,
                             num: '500',
-                            color: Color(0xFF6F829D),
+                            color: Color(0xFF6F829D).withOpacity(.49),
                           ),
                           DashboardCard(
                             text: "Reports",
                             icon: Icons.theaters,
                             num: '54',
-                            color: Color(0xFF6F829D),
+                            color: Color(0xFF6F829D).withOpacity(.49),
                           ),
                         ],
                       ),
@@ -74,38 +75,71 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       padding: const EdgeInsets.all(16.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           Container(
-                            height: 388.75,
                             width: 430,
                             decoration: BoxDecoration(
                               color: const Color(0xFFF2FFFE),
                               borderRadius: BorderRadius.circular(12.69),
                             ),
-                            child: const Column(
+                            child: Column(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Text(
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text(
                                         "Weekly Users",
                                         style: TextStyle(
                                             fontWeight: FontWeight.w600,
                                             fontSize: 12.9),
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                        height: 29.04,
+                                        width: 99.58,
+                                        decoration: BoxDecoration(
+                                          color: Colors.black,
+                                          borderRadius:
+                                              BorderRadius.circular(8.3),
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            SizedBox(
+                                              height: 16.6,
+                                              width: 16.6,
+                                              child: Image.asset(
+                                                  ImageConstant.calendar),
+                                            ),
+                                            const Gap(12),
+                                            const Text(
+                                              "Calender",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 9.52),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                GraphWidget()
+                                const SizedBox(height: 15),
+                                const UserGraphWidget()
                               ],
                             ),
                           ),
                           const Gap(8),
                           Container(
-                            height: 388.75,
+                            // height: 388.75,
                             width: 430,
                             decoration: BoxDecoration(
                               color: const Color(0xFFF2E9F1),
@@ -160,7 +194,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     ),
                                   ],
                                 ),
-                                const GraphWidgetnew(),
+                                const SizedBox(height: 15),
+                                const PostGraphWidget(),
                               ],
                             ),
                           )

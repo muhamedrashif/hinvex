@@ -20,13 +20,18 @@ class DashboardCard extends StatelessWidget {
       child: Container(
         height: 121,
         width: 230,
-        decoration: BoxDecoration(boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 3,
-            blurRadius: 3,
-          )
-        ], borderRadius: BorderRadius.circular(16), color: color),
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 3,
+              spreadRadius: 2,
+              offset: const Offset(0, 0),
+            ),
+          ],
+        ),
         child: Column(
           children: [
             Padding(
@@ -51,4 +56,3 @@ class DashboardCard extends StatelessWidget {
     );
   }
 }
-  // card container

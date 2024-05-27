@@ -16,7 +16,7 @@ showListTileShimmer() {
               height: 40,
               width: 200,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(8),
                 color: Colors.white,
               ),
             ),
