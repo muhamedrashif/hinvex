@@ -44,6 +44,8 @@ class UserProductDetailsModel {
   List? reportReasons;
   final String? mobileBannerId;
   bool? isAdmin;
+  final String? videoUrl;
+  final String? videoThumbnail;
   UserProductDetailsModel({
     this.id,
     this.userId,
@@ -84,6 +86,8 @@ class UserProductDetailsModel {
     this.reportReasons,
     this.mobileBannerId,
     this.isAdmin,
+    this.videoUrl,
+    this.videoThumbnail,
   });
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -125,6 +129,8 @@ class UserProductDetailsModel {
         "reportReasons": reportReasons,
         "mobileBannerId": mobileBannerId,
         "isAdmin": isAdmin,
+        "videoUrl": videoUrl,
+        "videoThumbnail": videoThumbnail,
       };
 
   static UserProductDetailsModel fromSnap(
@@ -172,6 +178,8 @@ class UserProductDetailsModel {
       reportReasons: snapshot['reportReasons'],
       mobileBannerId: snapshot['mobileBannerId'],
       isAdmin: snapshot['isAdmin'],
+      videoUrl: snapshot['videoUrl'] ?? '',
+      videoThumbnail: snapshot['videoThumbnail'] ?? '',
     );
   }
 
@@ -499,6 +507,8 @@ class UserProductDetailsModel {
     List? reportReasons,
     String? mobileBannerId,
     bool? isAdmin,
+    String? videoUrl,
+    String? videoThumbnail,
   }) {
     return UserProductDetailsModel(
       id: id ?? this.id,
@@ -540,6 +550,8 @@ class UserProductDetailsModel {
       reportReasons: reportReasons ?? this.reportReasons,
       mobileBannerId: mobileBannerId,
       isAdmin: isAdmin ?? this.isAdmin,
+      videoUrl: videoUrl ?? this.videoUrl,
+      videoThumbnail: videoThumbnail ?? this.videoThumbnail,
     );
   }
 }

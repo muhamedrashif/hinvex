@@ -7,28 +7,12 @@ import 'package:hinvex/general/typedefs/typedefs.dart';
 import 'model/location_model_main.dart/location_model_main.dart';
 
 abstract class IUploadedByAdminFacade {
-  // FutureResult<List<String?>> getImage({
-  //   required List<Uint8List> imageByte,
-  // }) {
-  //   throw UnimplementedError('getImage() not impl');
-  // }
-
   FutureResult<UserProductDetailsModel> uploadPropertyToFireStore({
     required UserProductDetailsModel userProductDetailsModel,
     required List<String> imageByte,
   }) {
     throw UnimplementedError('uploadPropertyToFireStore() not impl');
   }
-
-  // Stream<QuerySnapshot<UserProductDetailsModel>> fetchUploadedProperties() {
-  //   throw UnimplementedError('fetchProperties() not impl');
-  // }
-
-  // Stream<QuerySnapshot<UserProductDetailsModel>> fetchNextUploadedProperties(
-  //   DocumentSnapshot? lastDocument,
-  // ) {
-  //   throw UnimplementedError('fetchNextUploadedProperties() not impl');
-  // }
 
   Future<QuerySnapshot<Map<String, dynamic>>> fetchUser(String userId) {
     throw UnimplementedError('fetchUser() not impl');

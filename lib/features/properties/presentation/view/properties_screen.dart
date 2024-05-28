@@ -76,14 +76,25 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
                                   style: const TextStyle(fontSize: 10),
                                   controller: _searchController,
                                   onChanged: (query) {
+                                    // if (query.isEmpty) {
+                                    //   state.clearDoc();
+                                    //   state.fetchPropertiesList.clear();
+                                    //   state.fetchProducts();
+                                    // }
+                                    // if (query.isNotEmpty) {
+                                    //   state.onSearchChanged(query);
+                                    // }
                                     if (query.isEmpty) {
-                                      state.clearDoc();
-                                      state.fetchPropertiesList.clear();
-                                      state.fetchProducts();
+                                      state
+                                        ..fetchPropertiesList.clear()
+                                        ..clearDoc()
+                                        ..fetchProducts();
+                                      return;
                                     }
-                                    if (query.isNotEmpty) {
-                                      state.onSearchChanged(query);
-                                    }
+                                    state
+                                      ..fetchPropertiesList.clear()
+                                      ..clearDoc()
+                                      ..searchProperty(query);
                                   },
                                   decoration: const InputDecoration(
                                     hintText: "Search Here",

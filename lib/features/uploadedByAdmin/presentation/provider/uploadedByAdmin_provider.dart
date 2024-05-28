@@ -6,6 +6,7 @@ import 'package:hinvex/features/uploadedByAdmin/data/model/search_location_model
 import 'package:hinvex/features/user/data/model/user_model.dart';
 import 'package:hinvex/features/user/data/model/user_product_details_model.dart';
 import 'package:hinvex/general/services/image_picker_service.dart';
+import 'package:hinvex/general/services/video_picker_service.dart';
 import 'package:hinvex/general/utils/toast/toast.dart';
 
 import '../../data/model/location_model_main.dart/location_model_main.dart';
@@ -36,6 +37,7 @@ class UploadedByAdminProvider with ChangeNotifier {
   bool isLoading = false;
   bool fetchPropertyLoading = false;
   final scrollController = ScrollController();
+  String? videoPath;
 
   // GET IMAGE
 
@@ -62,7 +64,7 @@ class UploadedByAdminProvider with ChangeNotifier {
 
   // Method to remove image based on index
   void removeImageAtIndex(int index) async {
-    await deleteUrl(url: imageFile[index]);
+    // await deleteUrl(url: imageFile[index]);
 
     if (index >= 0 && index < imageFile.length) {
       imageFile.removeAt(index);
@@ -99,6 +101,7 @@ class UploadedByAdminProvider with ChangeNotifier {
   propertyDetails({required UserProductDetailsModel userProductDetailsModel}) {
     selectedPropertiesDetails = userProductDetailsModel;
     imageFile = List<String>.from(userProductDetailsModel.propertyImage ?? []);
+    videoPath = userProductDetailsModel.videoUrl;
     notifyListeners();
   }
 
@@ -239,6 +242,44 @@ class UploadedByAdminProvider with ChangeNotifier {
         .toList();
     notifyListeners();
   }
+
+// GET VIDEO
+
+  Future<void> getVideo({
+    required VoidCallback onSuccess,
+    required VoidCallback onFailure,
+  }) async {
+    final videoBytes = await pickVideo();
+    if (videoBytes != null) {
+      try {
+        final downloadUrl = await saveVideo(videoBytes: videoBytes);
+        videoPath = downloadUrl;
+
+        onSuccess();
+      } catch (e) {
+        showToast('Failed to save video: $e');
+        onFailure();
+      }
+    } else {
+      onFailure();
+    }
+    notifyListeners();
+    log("videoPath::::::::::::$videoPath");
+  }
+
+// REMOVE VIDEO
+
+  void removeVideo(String path) async {
+    // await deleteVideo(videoPath: path);
+
+    if (videoPath != null) {
+      videoPath = null;
+
+      notifyListeners();
+    }
+  }
+
+// INITSTATE
 
   Future<void> init() async {
     if (_filteredUploadedPropertiesList.isEmpty) {

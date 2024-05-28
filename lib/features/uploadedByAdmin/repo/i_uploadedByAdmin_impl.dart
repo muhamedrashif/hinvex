@@ -46,7 +46,12 @@ class IUploadedByAdminImpl implements IUploadedByAdminFacade {
       userProductDetailsModel.propertyImage = imageByte;
       final response = await _firestore
           .collection('posts')
-          .add(userProductDetailsModel.copyWith(keywords: keywords).toJson());
+          .add(userProductDetailsModel.copyWith(keywords: [
+            ...keywords,
+            ...keywordsBuilder(userProductDetailsModel.propertyTitle ?? ''),
+            ...keywordsBuilder(
+                userProductDetailsModel.getSelectedCategoryString),
+          ]).toJson());
       return right(userProductDetailsModel.copyWith(id: response.id));
     } on CustomExeception catch (e) {
       return left(MainFailure.imageUploadFailure(errorMsg: e.errorMsg));
@@ -254,17 +259,23 @@ class IUploadedByAdminImpl implements IUploadedByAdminFacade {
 // UPDATE UPLOADED PROPERTY
 
   @override
-  FutureResult<void> updateUploadedPosts(
+  FutureResult<Unit> updateUploadedPosts(
       UserProductDetailsModel userProductDetailsModel) async {
     try {
-      log("inside for update");
-      debugPrint(
-          "Updating post in Firestore with ID: ${userProductDetailsModel.id}");
+      final builder = AlfabetKeywordsBuilder();
+      builder.descriptionToKeywords(
+          '${userProductDetailsModel.propertyTitle} ${userProductDetailsModel.description} ${userProductDetailsModel.propertyDetils}');
+      final keywords = builder.build();
       await _firestore
           .collection('posts')
           .doc(userProductDetailsModel.id)
-          .update(userProductDetailsModel.toJson());
-      return right(null);
+          .update(userProductDetailsModel.copyWith(keywords: [
+            ...keywords,
+            ...keywordsBuilder(
+                userProductDetailsModel.getSelectedCategoryString),
+            ...keywordsBuilder(userProductDetailsModel.propertyTitle ?? ''),
+          ]).toJson());
+      return right(unit);
     } on CustomExeception catch (e) {
       return left(MainFailure.serverFailure(errorMsg: e.errorMsg));
     }

@@ -51,7 +51,7 @@ class IReportsAndIssuesImpl implements IReportsAndIssuesFacade {
               ),
             ),
           )
-          .limit(5)
+          .limit(10)
           .get();
       return result;
     } catch (e, stackTrace) {
@@ -99,7 +99,7 @@ class IReportsAndIssuesImpl implements IReportsAndIssuesFacade {
             ),
           )
           .startAfterDocument(lastDocument)
-          .limit(5)
+          .limit(10)
           .get();
 
       return result;

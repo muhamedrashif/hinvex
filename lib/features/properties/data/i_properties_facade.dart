@@ -12,4 +12,9 @@ abstract class IPropertiesFacade {
   Future<QuerySnapshot<Map<String, dynamic>>> fetchUser(String userId) {
     throw UnimplementedError('fetchUser() not impl');
   }
+
+  FutureResult<List<UserProductDetailsModel>> searchProperty(
+      String categoryName) {
+    throw UnimplementedError('fetchProduct is not implemented');
+  }
 }

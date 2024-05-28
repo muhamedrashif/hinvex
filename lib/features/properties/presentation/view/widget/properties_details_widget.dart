@@ -6,8 +6,10 @@ import 'package:hinvex/features/properties/presentation/provider/properties_prov
 import 'package:hinvex/general/utils/app_assets/image_constants.dart';
 import 'package:hinvex/general/utils/app_theme/colors.dart';
 import 'package:hinvex/general/utils/enums/enums.dart';
+import 'package:hinvex/general/widgets/image_popup_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class PropertiesDetailWidget extends StatefulWidget {
   const PropertiesDetailWidget({super.key});
@@ -101,14 +103,21 @@ class _PropertiesDetailWidgetState extends State<PropertiesDetailWidget> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: CircleAvatar(
-                                      backgroundImage: NetworkImage(state
-                                          .userModel!.userImage
-                                          .toString()),
-                                      radius: 30,
-                                    ),
-                                  ),
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: state.userModel!.userImage
+                                              .toString()
+                                              .isNotEmpty
+                                          ? CircleAvatar(
+                                              backgroundImage: NetworkImage(
+                                                  state.userModel!.userImage
+                                                      .toString()),
+                                              radius: 30,
+                                            )
+                                          : CircleAvatar(
+                                              backgroundImage: AssetImage(
+                                                  ImageConstant.defaultProfile),
+                                              radius: 30,
+                                            )),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 8.0),
@@ -196,52 +205,57 @@ class _PropertiesDetailWidgetState extends State<PropertiesDetailWidget> {
                                           .propertyImage!
                                           .length,
                                       itemBuilder: (context, index) {
-                                        return Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 4.0, vertical: 4.0),
-                                          child: SizedBox(
-                                            height: 110,
-                                            width: 150,
-                                            child: CachedNetworkImage(
-                                              placeholder: (context, url) =>
-                                                  Shimmer.fromColors(
-                                                baseColor: Colors.grey[300]!,
-                                                highlightColor:
-                                                    Colors.grey[100]!,
-                                                child: SizedBox(
-                                                  height: 220,
-                                                  width: 120,
-                                                  child: Transform.scale(
-                                                    scale: .6,
-                                                    child: Image.asset(
-                                                        ImageConstant.hinvex),
+                                        return InkWell(
+                                          onTap: () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) =>
+                                                  ImagePopUpWidget(
+                                                      imageUrl: state
+                                                          .selectedPropertiesDetails!
+                                                          .propertyImage!),
+                                            );
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 4.0, vertical: 4.0),
+                                            child: SizedBox(
+                                              height: 110,
+                                              width: 150,
+                                              child: CachedNetworkImage(
+                                                placeholder: (context, url) =>
+                                                    Shimmer.fromColors(
+                                                  baseColor: Colors.grey[300]!,
+                                                  highlightColor:
+                                                      Colors.grey[100]!,
+                                                  child: SizedBox(
+                                                    height: 220,
+                                                    width: 120,
+                                                    child: Transform.scale(
+                                                      scale: .6,
+                                                      child: Image.asset(
+                                                          ImageConstant.hinvex),
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                              errorWidget:
-                                                  (context, url, error) =>
-                                                      Container(
-                                                color: Colors.grey[300],
-                                                child: const Center(
-                                                  child: Icon(
-                                                    Icons.error_outline,
-                                                    color: Colors.red,
-                                                    size: 36,
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        Container(
+                                                  color: Colors.grey[300],
+                                                  child: const Center(
+                                                    child: Icon(
+                                                      Icons.error_outline,
+                                                      color: Colors.red,
+                                                      size: 36,
+                                                    ),
                                                   ),
                                                 ),
+                                                fit: BoxFit.cover,
+                                                imageUrl: state
+                                                    .selectedPropertiesDetails!
+                                                    .propertyImage![index],
                                               ),
-                                              fit: BoxFit.cover,
-                                              imageUrl: state
-                                                  .selectedPropertiesDetails!
-                                                  .propertyImage![index],
                                             ),
-
-                                            // child: Image.network(
-                                            //   state
-                                            //       .selectedPropertiesDetails!
-                                            //       .propertyImage![index],
-                                            //   fit: BoxFit.cover,
-                                            // ),
                                           ),
                                         );
                                       }),
@@ -250,6 +264,49 @@ class _PropertiesDetailWidgetState extends State<PropertiesDetailWidget> {
                             ],
                           ),
                         ),
+                        state.selectedPropertiesDetails!.videoUrl
+                                .toString()
+                                .isNotEmpty
+                            ? Padding(
+                                padding: const EdgeInsets.all(18.0),
+                                child: InkWell(
+                                  onTap: () async {
+                                    await launchUrlString(state
+                                        .selectedPropertiesDetails!.videoUrl
+                                        .toString());
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(4),
+                                      color: titleTextColor,
+                                    ),
+                                    child: const Padding(
+                                      padding: EdgeInsets.all(10.0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(
+                                            Icons.play_circle_filled_rounded,
+                                            color: Colors.white,
+                                            size: 20,
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Text(
+                                            "View Video",
+                                            style: TextStyle(
+                                              color: buttonTextColor,
+                                              fontSize: 10,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : const SizedBox(),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,

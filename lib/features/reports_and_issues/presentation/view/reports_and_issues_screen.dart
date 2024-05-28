@@ -19,7 +19,7 @@ class ReportsAndIssuesScreen extends StatefulWidget {
 }
 
 class _ReportsAndIssuesScreenState extends State<ReportsAndIssuesScreen> {
-  final TextEditingController _searchController = TextEditingController();
+  // final TextEditingController _searchController = TextEditingController();
 
   final ScrollController _scrollController = ScrollController();
 
@@ -52,28 +52,6 @@ class _ReportsAndIssuesScreenState extends State<ReportsAndIssuesScreen> {
     }
   }
 
-  // String _selectedDate = '';
-  // String _dateCount = '';
-  // String _range = '';
-  // String _rangeCount = '';
-
-  // void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
-  //   /// multi range.
-  //   setState(() {
-  //     if (args.value is PickerDateRange) {
-  //       _range = '${DateFormat('dd/MM/yyyy').format(args.value.startDate)} -'
-  //           // ignore: lines_longer_than_80_chars
-  //           ' ${DateFormat('dd/MM/yyyy').format(args.value.endDate ?? args.value.startDate)}';
-  //     } else if (args.value is DateTime) {
-  //       _selectedDate = args.value.toString();
-  //     } else if (args.value is List<DateTime>) {
-  //       _dateCount = args.value.length.toString();
-  //     } else {
-  //       _rangeCount = args.value.length.toString();
-  //     }
-  //   });
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,8 +72,8 @@ class _ReportsAndIssuesScreenState extends State<ReportsAndIssuesScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
+                          const Padding(
+                            padding: EdgeInsets.all(8.0),
                             child: SizedBox(
                               height: 80,
                               child: Column(
@@ -103,31 +81,31 @@ class _ReportsAndIssuesScreenState extends State<ReportsAndIssuesScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text("Hello Admin"),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8.0, vertical: 0),
-                                    child: SizedBox(
-                                      height: 40,
-                                      width: 300,
-                                      child: TextFormField(
-                                        scrollPadding: const EdgeInsets.all(8),
-                                        style: const TextStyle(fontSize: 10),
-                                        controller: _searchController,
-                                        onChanged: (query) {
-                                          state.onSearchChanged(query);
-                                        },
-                                        decoration: const InputDecoration(
-                                          hintText: "Search Here",
-                                          hintStyle: TextStyle(fontSize: 10),
-                                          suffixIcon: Icon(Icons.search),
-                                          border: OutlineInputBorder(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(15))),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+                                  Text("Hello Admin"),
+                                  // Padding(
+                                  //   padding: const EdgeInsets.symmetric(
+                                  //       horizontal: 8.0, vertical: 0),
+                                  //   child: SizedBox(
+                                  //     height: 40,
+                                  //     width: 300,
+                                  //     child: TextFormField(
+                                  //       scrollPadding: const EdgeInsets.all(8),
+                                  //       style: const TextStyle(fontSize: 10),
+                                  //       controller: _searchController,
+                                  //       onChanged: (query) {
+                                  //         state.onSearchChanged(query);
+                                  //       },
+                                  //       decoration: const InputDecoration(
+                                  //         hintText: "Search Here",
+                                  //         hintStyle: TextStyle(fontSize: 10),
+                                  //         suffixIcon: Icon(Icons.search),
+                                  //         border: OutlineInputBorder(
+                                  //             borderRadius: BorderRadius.all(
+                                  //                 Radius.circular(15))),
+                                  //       ),
+                                  //     ),
+                                  //   ),
+                                  // ),
                                 ],
                               ),
                             ),

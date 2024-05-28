@@ -144,8 +144,8 @@ class _UserScreenState extends State<UserScreen> {
                                                         const EdgeInsets.all(
                                                             8.0),
                                                     child: Text(
-                                                      user.userId.isNotEmpty
-                                                          ? "ID:${user.userId}"
+                                                      user.id!.isNotEmpty
+                                                          ? "ID:${user.id}"
                                                           : "ID:",
                                                       style: const TextStyle(
                                                           color: Colors.grey),

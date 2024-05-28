@@ -13,9 +13,11 @@ import 'package:hinvex/general/utils/app_theme/colors.dart';
 import 'package:hinvex/general/utils/enums/enums.dart';
 import 'package:hinvex/general/utils/progress_indicator_widget/progress_indicator_widget.dart';
 import 'package:hinvex/general/utils/toast/toast.dart';
+import 'package:hinvex/general/widgets/image_popup_widget.dart';
 import 'package:provider/provider.dart';
 
 import 'uploading_widget_screen.dart';
+import 'video_pick_widget.dart';
 
 class EditUploadedWidgetScreen extends StatefulWidget {
   const EditUploadedWidgetScreen({super.key});
@@ -186,6 +188,7 @@ class _EditUploadedWidgetScreenState extends State<EditUploadedWidgetScreen> {
                                     onTap: () {
                                       if (state.imageFile.isNotEmpty) {
                                         state.imageFile = [];
+                                        state.videoPath = null;
 
                                         Provider.of<RoutingProvider>(context,
                                                 listen: false)
@@ -1825,6 +1828,8 @@ class _EditUploadedWidgetScreenState extends State<EditUploadedWidgetScreen> {
                                 ],
                               ),
                             ),
+                            const VideoPickWidget(),
+
                             Padding(
                               padding: const EdgeInsets.all(10.0),
                               child: Row(
@@ -1999,30 +2004,40 @@ class _EditUploadedWidgetScreenState extends State<EditUploadedWidgetScreen> {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  // Padding(
-                                  //   padding: const EdgeInsets.symmetric(
-                                  //       vertical: 18.0, horizontal: 10),
-                                  //   child: InkWell(
-                                  //     onTap: () {},
-                                  //     child: Container(
-                                  //       decoration: BoxDecoration(
-                                  //           borderRadius:
-                                  //               BorderRadius.circular(4),
-                                  //           border:
-                                  //               Border.all(color: Colors.grey)),
-                                  //       child: const Padding(
-                                  //         padding: EdgeInsets.symmetric(
-                                  //             horizontal: 15.0, vertical: 10),
-                                  //         child: Text(
-                                  //           "Preview",
-                                  //           style: TextStyle(
-                                  //             fontSize: 10,
-                                  //           ),
-                                  //         ),
-                                  //       ),
-                                  //     ),
-                                  //   ),
-                                  // ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 18.0, horizontal: 10),
+                                    child: InkWell(
+                                      onTap: () {
+                                        state.imageFile.isNotEmpty
+                                            ? showDialog(
+                                                context: context,
+                                                builder: (context) =>
+                                                    ImagePopUpWidget(
+                                                        imageUrl:
+                                                            state.imageFile),
+                                              )
+                                            : showToast("Please Select Image");
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                            border:
+                                                Border.all(color: Colors.grey)),
+                                        child: const Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 15.0, vertical: 10),
+                                          child: Text(
+                                            "Preview",
+                                            style: TextStyle(
+                                              fontSize: 10,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 18.0, horizontal: 10),
@@ -2190,6 +2205,7 @@ class _EditUploadedWidgetScreenState extends State<EditUploadedWidgetScreen> {
                                                 isAdmin: state
                                                     .selectedPropertiesDetails!
                                                     .isAdmin,
+                                                videoUrl: state.videoPath,
                                               ),
                                               onSuccess: () {
                                                 showToast(

@@ -67,6 +67,8 @@ dependencies:
   url_launcher: ^6.2.6
   fluttertoast: ^8.2.5
   fl_chart: ^0.68.0
+  video_player: ^2.8.6
+  video_thumbnail: ^0.5.3
   
 dev_dependencies:
   flutter_test:

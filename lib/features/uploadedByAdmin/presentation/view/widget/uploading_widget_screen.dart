@@ -7,12 +7,14 @@ import 'package:flutter/services.dart';
 import 'package:hinvex/features/home/presantation/provider/routing_provider.dart';
 import 'package:hinvex/features/uploadedByAdmin/data/model/search_location_model/search_location_model.dart';
 import 'package:hinvex/features/uploadedByAdmin/presentation/provider/uploadedByAdmin_provider.dart';
+import 'package:hinvex/features/uploadedByAdmin/presentation/view/widget/video_pick_widget.dart';
 import 'package:hinvex/features/user/data/model/user_product_details_model.dart';
 import 'package:hinvex/general/utils/app_assets/image_constants.dart';
 import 'package:hinvex/general/utils/app_theme/colors.dart';
 import 'package:hinvex/general/utils/enums/enums.dart';
 import 'package:hinvex/general/utils/progress_indicator_widget/progress_indicator_widget.dart';
 import 'package:hinvex/general/utils/toast/toast.dart';
+import 'package:hinvex/general/widgets/image_popup_widget.dart';
 import 'package:provider/provider.dart';
 
 class Bhk {
@@ -210,6 +212,7 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                   InkWell(
                                     onTap: () {
                                       state.imageFile = [];
+                                      state.videoPath = null;
                                       Provider.of<RoutingProvider>(context,
                                               listen: false)
                                           .uploadedByAdminRouting(
@@ -1892,6 +1895,8 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                 ],
                               ),
                             ),
+                            const VideoPickWidget(),
+
                             Padding(
                               padding: const EdgeInsets.all(10.0),
                               child: Row(
@@ -2067,30 +2072,40 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  // Padding(
-                                  //   padding: const EdgeInsets.symmetric(
-                                  //       vertical: 18.0, horizontal: 10),
-                                  //   child: InkWell(
-                                  //     onTap: () {},
-                                  //     child: Container(
-                                  //       decoration: BoxDecoration(
-                                  //           borderRadius:
-                                  //               BorderRadius.circular(4),
-                                  //           border:
-                                  //               Border.all(color: Colors.grey)),
-                                  //       child: const Padding(
-                                  //         padding: EdgeInsets.symmetric(
-                                  //             horizontal: 15.0, vertical: 10),
-                                  //         child: Text(
-                                  //           "Preview",
-                                  //           style: TextStyle(
-                                  //             fontSize: 10,
-                                  //           ),
-                                  //         ),
-                                  //       ),
-                                  //     ),
-                                  //   ),
-                                  // ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 18.0, horizontal: 10),
+                                    child: InkWell(
+                                      onTap: () {
+                                        state.imageFile.isNotEmpty
+                                            ? showDialog(
+                                                context: context,
+                                                builder: (context) =>
+                                                    ImagePopUpWidget(
+                                                        imageUrl:
+                                                            state.imageFile),
+                                              )
+                                            : showToast("Please Select Image");
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                            border:
+                                                Border.all(color: Colors.grey)),
+                                        child: const Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 15.0, vertical: 10),
+                                          child: Text(
+                                            "Preview",
+                                            style: TextStyle(
+                                              fontSize: 10,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 18.0, horizontal: 10),
@@ -2219,6 +2234,7 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                                         .text),
                                                 bhk: _selctedBHKValue,
                                                 isAdmin: true,
+                                                videoUrl: state.videoPath,
                                               ),
                                               onSuccess: () {
                                                 // Clear text controllers
@@ -2255,6 +2271,8 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
                                                 _selctedBHKValue = null;
                                                 _selectedBHK = null;
                                                 state.imageFile = [];
+                                                state.videoPath = null;
+
                                                 showToast(
                                                   "Upload Property Successfully",
                                                 );

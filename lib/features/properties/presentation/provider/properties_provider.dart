@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:hinvex/features/properties/data/i_properties_facade.dart';
 import 'package:hinvex/features/user/data/model/user_model.dart';
@@ -12,6 +14,7 @@ class PropertiesProvider with ChangeNotifier {
   UserProductDetailsModel? selectedPropertiesDetails;
   bool fetchUserLoading = false;
   UserModel? userModel;
+  bool searchLoading = false;
 
   List<UserProductDetailsModel> fetchPropertiesList = [];
   final scrollController = ScrollController();
@@ -62,22 +65,26 @@ class PropertiesProvider with ChangeNotifier {
     }
   }
 
-  // FILTER USER FOR SEARCH
+  // SEARCH PROPERTY
 
-  void onSearchChanged(String query) {
-    if (query.isEmpty) {
-      fetchPropertiesList = List.from(fetchPropertiesList);
-    } else {
-      fetchPropertiesList = fetchPropertiesList.where((property) {
-        return property.getSelectedCategoryString
-                .toLowerCase()
-                .contains(query.toLowerCase()) ||
-            property.getSelectedTypeString
-                .toLowerCase()
-                .contains(query.toLowerCase());
-      }).toList();
-    }
-    notifyListeners();
+  Future<void> searchProperty(String categoryName) async {
+    final result = await iPropertiesFacade.searchProperty(categoryName);
+
+    result.fold(
+      (l) {
+        log(l.errorMsg);
+        // showToast(l.errorMsg);
+        searchLoading = false;
+        notifyListeners();
+      },
+      (r) {
+        log(r.length.toString());
+        searchLoading = false;
+        log(r.first.toString());
+        fetchPropertiesList.addAll(r);
+        notifyListeners();
+      },
+    );
   }
 
   void clearDoc() {

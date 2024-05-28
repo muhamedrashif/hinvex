@@ -81,47 +81,6 @@ class ReportsAndIssuesProvider with ChangeNotifier {
     fetchReportList.clear();
     _filteredReportsList.clear();
   }
-  // Future<void> fetchReports({DateTime? startDate, DateTime? endDate}) async {
-  //   isLoading = true;
-  //   notifyListeners();
-  //   fetchReportsLoading = true;
-  //   final result = iReportsAndIssuesFacade.fetchReports(
-  //     startDate: startDate,
-  //     endDate: endDate,
-  //   );
-  //   result.listen((event) {
-  //     final result =
-  //         event.docs.map((e) => UserProductDetailsModel.fromSnap(e)).toList();
-  //     fetchReportList.addAll(result);
-  //     lastDocument = event.docs.isNotEmpty ? event.docs.last : null;
-  //     fetchNextReportsLoading = false;
-  //     _filteredReportsList.addAll(fetchReportList);
-  //     isLoading = false;
-  //     notifyListeners();
-  //   });
-  // }
-
-  // Future<void> fetchNextReports(
-  //     {DateTime? startDate, DateTime? endDate}) async {
-  //   if (fetchNextReportsLoading || fetchNextReportsCompleted) return;
-  //   notifyListeners();
-  //   fetchNextReportsLoading = true;
-  //   final result = iReportsAndIssuesFacade.fetchNextReports(
-  //     startDate: startDate,
-  //     endDate: endDate,
-  //     lastDocument: lastDocument,
-  //   );
-  //   result.listen((event) {
-  //     final reports =
-  //         event.docs.map((e) => UserProductDetailsModel.fromSnap(e)).toList();
-  //     fetchReportList.addAll(reports);
-  //     lastDocument = event.docs.isNotEmpty ? event.docs.last : null;
-  //     fetchNextReportsLoading = false;
-  //     if (reports.isEmpty) fetchNextReportsCompleted = true;
-  //     _filteredReportsList.addAll(reports);
-  //     notifyListeners();
-  //   });
-  // }
 
   // FILTER REPORTS FOR SEARCH
 

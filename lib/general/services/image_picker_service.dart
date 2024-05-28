@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'dart:typed_data';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:hinvex/general/failures/exeception/execeptions.dart';
 import 'package:hinvex/general/failures/failures.dart';
 import 'package:hinvex/general/typedefs/typedefs.dart';
@@ -126,6 +125,7 @@ Future<void> deleteUrl({
 // }
 FutureResult<List<String>> pickMultipleImages(int maxImages) async {
   final ImagePicker imagePicker = ImagePicker();
+  // ignore: unnecessary_nullable_for_final_variable_declarations
   final List<XFile>? pickedImageFiles = await imagePicker.pickMultiImage();
   final List<Uint8List> imageBytesList = [];
   List<String> url = [];
