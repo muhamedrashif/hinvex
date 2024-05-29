@@ -34,4 +34,7 @@ abstract class IUserFacade {
   }
 
   void clearDoc() {}
+  FutureResult<List<UserModel>> searchUser(String phoneNumber) async {
+    throw UnimplementedError('searchUser is not implemented');
+  }
 }

@@ -21,11 +21,16 @@ class IUserImpl implements IUserFacade {
     if (noMoreData == true) return right([]); //THERE IS NOMORE DATA
     try {
       final result = lastDoc == null
-          ? await _firestore.collection('users').limit(5).get()
+          ? await _firestore
+              .collection('users')
+              .orderBy('startedDate', descending: true)
+              .limit(10)
+              .get()
           : await _firestore
               .collection('users')
+              .orderBy('startedDate', descending: true)
               .startAfterDocument(lastDoc!)
-              .limit(5)
+              .limit(10)
               .get();
       log("result  ${result.docs.length}");
 
@@ -108,6 +113,44 @@ class IUserImpl implements IUserFacade {
       return right(null);
     } on CustomExeception catch (e) {
       return left(MainFailure.serverFailure(errorMsg: e.errorMsg));
+    }
+  }
+
+// SEARCH USER
+  @override
+  FutureResult<List<UserModel>> searchUser(String phoneNumber) async {
+    try {
+      final result = lastDoc == null
+          ? await _firestore
+              .collection('users')
+              .orderBy('startedDate', descending: true)
+              .where('userPhoneNumber', isEqualTo: phoneNumber)
+              .limit(10)
+              .get()
+          : await _firestore
+              .collection('users')
+              .orderBy('startedDate', descending: true)
+              .where('userPhoneNumber', isEqualTo: phoneNumber)
+              .startAfterDocument(lastDoc!)
+              .limit(10)
+              .get();
+
+      if (result.docs.isNotEmpty) {
+        lastDoc = result.docs.last;
+        return right(
+          [
+            ...result.docs.map(
+              (e) => UserModel.fromSnap(e),
+            ),
+          ],
+        );
+      }
+
+      return left(
+          const MainFailure.noDataFountFailure(errorMsg: 'No Data Fount'));
+    } on FirebaseException catch (e) {
+      print(e.message);
+      return left(MainFailure.noDataFountFailure(errorMsg: e.code));
     }
   }
 }

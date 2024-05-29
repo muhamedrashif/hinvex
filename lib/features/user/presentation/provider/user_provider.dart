@@ -106,7 +106,7 @@ class UserProvider with ChangeNotifier {
     } else {
       fetchUserList = fetchUserList
           .where((user) =>
-              user.userName.toLowerCase().contains(query.toLowerCase()))
+              user.userPhoneNumber.toLowerCase().contains(query.toLowerCase()))
           .toList();
     }
 
@@ -120,6 +120,27 @@ class UserProvider with ChangeNotifier {
       notifyListeners();
       iUserFacade.updateUser(selectedUserDetails!);
     }
+  }
+
+  // SEARCH USER
+
+  Future<void> searchUser(String phoneNumber) async {
+    final result = await iUserFacade.searchUser(phoneNumber);
+
+    result.fold(
+      (l) {
+        log(l.errorMsg);
+
+        notifyListeners();
+      },
+      (r) {
+        log(r.length.toString());
+
+        log(r.first.toString());
+        fetchUserList.addAll(r);
+        notifyListeners();
+      },
+    );
   }
 
   Future<void> init() async {

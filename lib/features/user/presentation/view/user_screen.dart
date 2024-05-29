@@ -62,13 +62,16 @@ class _UserScreenState extends State<UserScreen> {
                                   controller: _searchController,
                                   onChanged: (query) {
                                     if (query.isEmpty) {
-                                      state.clearDoc();
-                                      state.fetchUserList.clear();
-                                      state.fetchUser();
+                                      state
+                                        ..fetchUserList.clear()
+                                        ..clearDoc()
+                                        ..fetchUser();
+                                      return;
                                     }
-                                    if (query.isNotEmpty) {
-                                      state.onSearchChanged(query);
-                                    }
+                                    state
+                                      ..fetchUserList.clear()
+                                      ..clearDoc()
+                                      ..searchUser(query);
                                   },
                                   decoration: const InputDecoration(
                                     hintText: "Search Here",

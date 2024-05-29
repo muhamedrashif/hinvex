@@ -18,7 +18,6 @@ class UploadedViewScreen extends StatefulWidget {
 
 class _UploadedViewScreenState extends State<UploadedViewScreen> {
   final TextEditingController _searchController = TextEditingController();
-  // final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -27,37 +26,6 @@ class _UploadedViewScreenState extends State<UploadedViewScreen> {
     });
     super.initState();
   }
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   WidgetsBinding.instance.addPostFrameCallback((_) {
-
-  //     // if (context
-  //     //     .read<UploadedByAdminProvider>()
-  //     //     .filteredUploadedPropertiesList
-  //     //     .isEmpty) {
-  //     //   context.read<UploadedByAdminProvider>().fetchProducts();
-  //     //   log("fetchProducts called uploaded view widget");
-  //     // }
-
-  //     // _scrollController.addListener(_scrollListener);
-  //   });
-  // }
-
-  // @override
-  // void dispose() {
-  //   _scrollController.dispose();
-  //   super.dispose();
-  // }
-
-  // void _scrollListener() {
-  //   if (_scrollController.position.pixels ==
-  //           _scrollController.position.maxScrollExtent &&
-  //       _scrollController.position.atEdge) {
-  //     Provider.of<UploadedByAdminProvider>(context, listen: false)
-  //         .fetchProducts();
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +72,6 @@ class _UploadedViewScreenState extends State<UploadedViewScreen> {
                                       ..clearData()
                                       ..clearDoc()
                                       ..searchProperty(query);
-                                    // state.search(query);
                                   },
                                   decoration: const InputDecoration(
                                     hintText: "Search Here",
