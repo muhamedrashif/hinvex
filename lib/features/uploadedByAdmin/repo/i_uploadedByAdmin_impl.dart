@@ -121,59 +121,56 @@ class IUploadedByAdminImpl implements IUploadedByAdminFacade {
   @override
   FutureResult<List<UserProductDetailsModel>> searchProperty(
       String categoryName) async {
+    if (noMoreData == true) return right([]);
     try {
-      if (lastDoc == null) {
-        log('lastdoc null');
-      } else {
-        log('lastdoc');
-      }
       final result = lastDoc == null
           ? await _firestore
               .collection('posts')
+              .where("isAdmin", isEqualTo: true)
+              .where('keywords', arrayContains: categoryName)
               .orderBy('createDate', descending: true)
-              .where(
-                Filter.and(
-                    Filter('userId', isEqualTo: "owner"),
-                    Filter.or(
-                      Filter('propertyCategory', isEqualTo: categoryName),
-                      Filter(
-                        'keywords',
-                        arrayContains: categoryName,
-                      ),
-                    )),
-              )
+              // .where(
+              //   Filter.and(
+              //     Filter('isAdmin', isEqualTo: "owner"),
+              //     // Filter.or(
+              //     //   Filter('propertyCategory', isEqualTo: categoryName),
+              //     Filter(
+              //       'keywords',
+              //       arrayContains: categoryName,
+              //     ),
+              //     // ),
+              //   ),
+              // )
               .limit(10)
               .get()
           : await _firestore
               .collection('posts')
+              .where("isAdmin", isEqualTo: true)
+              .where('keywords', arrayContains: categoryName)
               .orderBy('createDate', descending: true)
-              .where(
-                Filter.and(
-                  Filter('userId', isEqualTo: "owner"),
-                  Filter('propertyCategory', isEqualTo: categoryName),
-                  Filter(
-                    'keywords',
-                    arrayContains: categoryName,
-                  ),
-                ),
-              )
+              // .where(
+              //   Filter.and(
+              //     Filter('userId', isEqualTo: "owner"),
+              //     // Filter('propertyCategory', isEqualTo: categoryName),
+              //     Filter(
+              //       'keywords',
+              //       arrayContains: categoryName,
+              //     ),
+              //   ),
+              // )
               .startAfterDocument(lastDoc!)
               .limit(10)
               .get();
 
-      if (result.docs.isNotEmpty) {
+      if (result.docs.length < 10 || result.docs.isEmpty) {
+        noMoreData = true;
+      } else {
         lastDoc = result.docs.last;
-        return right(
-          [
-            ...result.docs.map(
-              (e) => UserProductDetailsModel.fromSnap(e),
-            ),
-          ],
-        );
       }
+      final propertyList =
+          result.docs.map((e) => UserProductDetailsModel.fromSnap(e)).toList();
 
-      return left(
-          const MainFailure.noDataFountFailure(errorMsg: 'No Data Fount'));
+      return right(propertyList);
     } on FirebaseException catch (e) {
       debugPrint(e.message);
       return left(MainFailure.noDataFountFailure(errorMsg: e.code));
@@ -276,6 +273,22 @@ class IUploadedByAdminImpl implements IUploadedByAdminFacade {
             ...keywordsBuilder(userProductDetailsModel.propertyTitle ?? ''),
           ]).toJson());
       return right(unit);
+    } on CustomExeception catch (e) {
+      return left(MainFailure.serverFailure(errorMsg: e.errorMsg));
+    }
+  }
+
+  @override
+  FutureResult<void> deleteVideoFromFireStore(
+      UserProductDetailsModel? userProductDetailsModel) async {
+    try {
+      await _firestore
+          .collection('posts')
+          .doc(userProductDetailsModel?.id)
+          .update({
+        'videoUrl': null,
+      });
+      return right(null);
     } on CustomExeception catch (e) {
       return left(MainFailure.serverFailure(errorMsg: e.errorMsg));
     }

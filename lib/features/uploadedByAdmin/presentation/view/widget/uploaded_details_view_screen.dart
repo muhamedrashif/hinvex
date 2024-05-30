@@ -69,7 +69,7 @@ class _UploadedDetailWidgetState extends State<UploadedDetailWidget> {
                                     child: InkWell(
                                       onTap: () {
                                         state.imageFile.clear();
-                                        // log("fetchProducts called uploaded details view widget");
+                                        state.videoPath = null;
                                         Provider.of<RoutingProvider>(context,
                                                 listen: false)
                                             .uploadedByAdminRouting(

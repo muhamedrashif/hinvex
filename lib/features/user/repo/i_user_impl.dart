@@ -23,12 +23,12 @@ class IUserImpl implements IUserFacade {
       final result = lastDoc == null
           ? await _firestore
               .collection('users')
-              .orderBy('startedDate', descending: true)
+              // .orderBy('startedDate', descending: true)
               .limit(10)
               .get()
           : await _firestore
               .collection('users')
-              .orderBy('startedDate', descending: true)
+              // .orderBy('startedDate', descending: true)
               .startAfterDocument(lastDoc!)
               .limit(10)
               .get();
@@ -123,13 +123,13 @@ class IUserImpl implements IUserFacade {
       final result = lastDoc == null
           ? await _firestore
               .collection('users')
-              .orderBy('startedDate', descending: true)
+              // .orderBy('startedDate', descending: true)
               .where('userPhoneNumber', isEqualTo: phoneNumber)
               .limit(10)
               .get()
           : await _firestore
               .collection('users')
-              .orderBy('startedDate', descending: true)
+              // .orderBy('startedDate', descending: true)
               .where('userPhoneNumber', isEqualTo: phoneNumber)
               .startAfterDocument(lastDoc!)
               .limit(10)

@@ -17,7 +17,7 @@ class UploadedViewScreen extends StatefulWidget {
 }
 
 class _UploadedViewScreenState extends State<UploadedViewScreen> {
-  final TextEditingController _searchController = TextEditingController();
+  // final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -56,21 +56,46 @@ class _UploadedViewScreenState extends State<UploadedViewScreen> {
                               child: SizedBox(
                                 height: 40,
                                 width: 300,
+                                // child: TextFormField(
+                                //   scrollPadding: const EdgeInsets.all(8),
+                                //   style: const TextStyle(fontSize: 10),
+                                //   // controller: _searchController,
+                                //   onChanged: (query) {
+                                //     if (query.isEmpty) {
+                                //       state
+
+                                //         ..clearDoc()
+                                //         ..fetchProducts();
+                                //       return;
+                                //     }
+                                //     state
+
+                                //       ..clearDoc()
+                                //       ..searchProperty(query);
+                                //   },
+                                //   decoration: const InputDecoration(
+                                //     hintText: "Search Here",
+                                //     hintStyle: TextStyle(fontSize: 10),
+                                //     suffixIcon: Icon(Icons.search),
+                                //     border: OutlineInputBorder(
+                                //         borderRadius: BorderRadius.all(
+                                //             Radius.circular(15))),
+                                //   ),
+                                // ),
                                 child: TextFormField(
                                   scrollPadding: const EdgeInsets.all(8),
                                   style: const TextStyle(fontSize: 10),
-                                  controller: _searchController,
                                   onChanged: (query) {
                                     if (query.isEmpty) {
                                       state
-                                        ..clearData()
                                         ..clearDoc()
+                                        ..clearPreviousResults()
                                         ..fetchProducts();
                                       return;
                                     }
                                     state
-                                      ..clearData()
                                       ..clearDoc()
+                                      ..clearPreviousResults() // Clear previous search results
                                       ..searchProperty(query);
                                   },
                                   decoration: const InputDecoration(
@@ -148,7 +173,9 @@ class _UploadedViewScreenState extends State<UploadedViewScreen> {
                     ),
                     Expanded(
                       child: state.fetchPropertyLoading &&
-                              state.filteredUploadedPropertiesList.isEmpty
+                                  state
+                                      .filteredUploadedPropertiesList.isEmpty ||
+                              state.isLoading
                           ? const Center(
                               child: CupertinoActivityIndicator(
                                 color: primaryColor,

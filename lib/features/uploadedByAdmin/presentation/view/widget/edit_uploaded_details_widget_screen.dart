@@ -85,7 +85,7 @@ class _EditUploadedWidgetScreenState extends State<EditUploadedWidgetScreen> {
     'Apartments',
     'Lands/Plots',
     'Commercial',
-    'Co-Working Soace',
+    'Co-Working Space',
     'PG & Guest House'
   ];
   // TYPE
@@ -113,7 +113,7 @@ class _EditUploadedWidgetScreenState extends State<EditUploadedWidgetScreen> {
   final List<String> _constructionStatus = [
     'New Launch',
     'Ready To Move',
-    'Uder-Construction'
+    'Under-Construction'
   ];
   // LISTED BY
   String? _selectedListedBy;
@@ -185,11 +185,14 @@ class _EditUploadedWidgetScreenState extends State<EditUploadedWidgetScreen> {
                                     ),
                                   ),
                                   InkWell(
-                                    onTap: () {
+                                    onTap: () async {
                                       if (state.imageFile.isNotEmpty) {
                                         state.imageFile = [];
                                         state.videoPath = null;
-
+                                        state
+                                          ..clearDoc()
+                                          ..clearPreviousResults()
+                                          ..fetchProducts();
                                         Provider.of<RoutingProvider>(context,
                                                 listen: false)
                                             .uploadedByAdminRouting(
@@ -1828,7 +1831,11 @@ class _EditUploadedWidgetScreenState extends State<EditUploadedWidgetScreen> {
                                 ],
                               ),
                             ),
-                            const VideoPickWidget(),
+                            VideoPickWidget(
+                              userProductDetailsModel:
+                                  state.selectedPropertiesDetails,
+                              isEditing: true,
+                            ),
 
                             Padding(
                               padding: const EdgeInsets.all(10.0),
@@ -2045,12 +2052,6 @@ class _EditUploadedWidgetScreenState extends State<EditUploadedWidgetScreen> {
                                       onTap: () {
                                         log(" propertyLocation: ${state.selectedPropertiesDetails?.propertyLocation.toString()}");
 
-                                        // String text = _superBuilupAreaController
-                                        //     .text
-                                        //     .trim();
-                                        // int _superBuilupArea = text.isEmpty
-                                        //     ? 0
-                                        //     : int.tryParse(text) ?? 0;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                                         int? selectedBedroom;
 

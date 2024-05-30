@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hinvex/features/uploadedByAdmin/data/i_uploadedByAdmin_facade.dart';
@@ -7,6 +8,7 @@ import 'package:hinvex/features/user/data/model/user_model.dart';
 import 'package:hinvex/features/user/data/model/user_product_details_model.dart';
 import 'package:hinvex/general/services/image_picker_service.dart';
 import 'package:hinvex/general/services/video_picker_service.dart';
+import 'package:hinvex/general/utils/progress_indicator_widget/progress_indicator_widget.dart';
 import 'package:hinvex/general/utils/toast/toast.dart';
 
 import '../../data/model/location_model_main.dart/location_model_main.dart';
@@ -25,10 +27,8 @@ class UploadedByAdminProvider with ChangeNotifier {
   bool fetchUserLoading = false;
   UserModel? userModel;
   UserProductDetailsModel? selectedPropertiesDetails;
-  List<UserProductDetailsModel> _filteredUploadedPropertiesList = [];
+  List<UserProductDetailsModel> filteredUploadedPropertiesList = [];
 
-  List<UserProductDetailsModel> get filteredUploadedPropertiesList =>
-      _filteredUploadedPropertiesList;
   bool updateLoading = false;
   List<PlaceResult> _suggestions = [];
 
@@ -38,6 +38,7 @@ class UploadedByAdminProvider with ChangeNotifier {
   bool fetchPropertyLoading = false;
   final scrollController = ScrollController();
   String? videoPath;
+  Set<String> propertyIds = {}; // Set to track unique property IDs
 
   // GET IMAGE
 
@@ -89,7 +90,7 @@ class UploadedByAdminProvider with ChangeNotifier {
       onFailure();
       showToast(error.errorMsg);
     }, (success) {
-      _filteredUploadedPropertiesList.insert(0, success);
+      filteredUploadedPropertiesList.insert(0, success);
       sendLoading = false;
       notifyListeners();
       onSuccess.call();
@@ -101,7 +102,9 @@ class UploadedByAdminProvider with ChangeNotifier {
   propertyDetails({required UserProductDetailsModel userProductDetailsModel}) {
     selectedPropertiesDetails = userProductDetailsModel;
     imageFile = List<String>.from(userProductDetailsModel.propertyImage ?? []);
-    videoPath = userProductDetailsModel.videoUrl;
+    videoPath = userProductDetailsModel.videoUrl!.isEmpty
+        ? null
+        : userProductDetailsModel.videoUrl;
     notifyListeners();
   }
 
@@ -152,8 +155,49 @@ class UploadedByAdminProvider with ChangeNotifier {
     result.fold((l) => null, (r) => null);
   }
 
-// FETCH PROPERTY
+// // FETCH PROPERTY
 
+//   Future<void> fetchProducts() async {
+//     log('called fetchProducts');
+
+//     fetchPropertyLoading = true;
+//     notifyListeners();
+//     final result = await iUploadedByAdminFacade.fetchProduct();
+//     result.fold(
+//       (l) {
+//         showToast(l.errorMsg);
+//         fetchPropertyLoading = false;
+//         notifyListeners();
+//       },
+//       (r) {
+//         filteredUploadedPropertiesList.addAll(r);
+//         fetchPropertyLoading = false;
+//         notifyListeners();
+//       },
+//     );
+//   }
+
+//   // SEARCH PROPERTY
+
+//   Future<void> searchProperty(String categoryName) async {
+//     if (isLoading) return;
+//     final result = await iUploadedByAdminFacade.searchProperty(categoryName);
+
+//     result.fold(
+//       (l) {
+//         log(l.errorMsg);
+//         isLoading = false;
+//         notifyListeners();
+//       },
+//       (r) {
+//         filteredUploadedPropertiesList.addAll(r);
+//         isLoading = false;
+//         notifyListeners();
+//       },
+//     );
+//   }
+
+  // FETCH PROPERTY
   Future<void> fetchProducts() async {
     log('called fetchProducts');
 
@@ -167,7 +211,17 @@ class UploadedByAdminProvider with ChangeNotifier {
         notifyListeners();
       },
       (r) {
-        _filteredUploadedPropertiesList.addAll(r);
+        // Filter out duplicates using propertyIds set
+        final uniqueProperties = r.where((property) {
+          if (propertyIds.contains(property.id)) {
+            return false;
+          } else {
+            propertyIds.add(property.id!);
+            return true;
+          }
+        }).toList();
+
+        filteredUploadedPropertiesList.addAll(uniqueProperties);
         fetchPropertyLoading = false;
         notifyListeners();
       },
@@ -175,8 +229,9 @@ class UploadedByAdminProvider with ChangeNotifier {
   }
 
   // SEARCH PROPERTY
-
   Future<void> searchProperty(String categoryName) async {
+    if (isLoading) return;
+    clearPreviousResults(); // Clear previous results before new search
     final result = await iUploadedByAdminFacade.searchProperty(categoryName);
 
     result.fold(
@@ -186,10 +241,18 @@ class UploadedByAdminProvider with ChangeNotifier {
         notifyListeners();
       },
       (r) {
-        log(r.length.toString());
+        // Filter out duplicates using propertyIds set
+        final uniqueProperties = r.where((property) {
+          if (propertyIds.contains(property.id)) {
+            return false;
+          } else {
+            propertyIds.add(property.id!);
+            return true;
+          }
+        }).toList();
+
+        filteredUploadedPropertiesList.addAll(uniqueProperties);
         isLoading = false;
-        log(r.first.toString());
-        _filteredUploadedPropertiesList.addAll(r);
         notifyListeners();
       },
     );
@@ -226,9 +289,8 @@ class UploadedByAdminProvider with ChangeNotifier {
       showToast(error.errorMsg);
     }, (success) {
       updateLoading = false;
-      _filteredUploadedPropertiesList[
-              _filteredUploadedPropertiesList.indexWhere(
-                  (element) => element.id == userProductDetailsModel.id)] =
+      filteredUploadedPropertiesList[filteredUploadedPropertiesList.indexWhere(
+              (element) => element.id == userProductDetailsModel.id)] =
           userProductDetailsModel;
       notifyListeners();
       onSuccess.call();
@@ -237,7 +299,7 @@ class UploadedByAdminProvider with ChangeNotifier {
 
 // REMOVE LOCALY FROM THE LIST
   void removeFromfilteredUploadedPropertiesList(String id) {
-    _filteredUploadedPropertiesList = _filteredUploadedPropertiesList
+    filteredUploadedPropertiesList = filteredUploadedPropertiesList
         .where((element) => element.id != id)
         .toList();
     notifyListeners();
@@ -245,36 +307,57 @@ class UploadedByAdminProvider with ChangeNotifier {
 
 // GET VIDEO
 
-  Future<void> getVideo({
-    required VoidCallback onSuccess,
-    required VoidCallback onFailure,
-  }) async {
-    final videoBytes = await pickVideo();
-    if (videoBytes != null) {
-      try {
-        final downloadUrl = await saveVideo(videoBytes: videoBytes);
-        videoPath = downloadUrl;
+  Future<void> getVideo({required BuildContext context}) async {
+    await pickVideo().then((value) {
+      value.fold((failure) {
+        log(failure.errorMsg);
+      }, (videoPickedBytes) async {
+        showProgress(context);
+        notifyListeners();
+        if (videoPickedBytes == null) {
+          log('Calledddd');
+          return;
+        }
+        if (videoPath != null) {
+          log("videoPathhhhhhhhh:::::::$videoPath");
+          await deleteVideo(videoPath: videoPath!).then((value) {
+            videoPath = null;
+          });
+        }
+        log("videoPickedBytes$videoPickedBytes");
 
-        onSuccess();
-      } catch (e) {
-        showToast('Failed to save video: $e');
-        onFailure();
-      }
-    } else {
-      onFailure();
-    }
-    notifyListeners();
-    log("videoPath::::::::::::$videoPath");
+        await saveVideo(videoBytes: videoPickedBytes).then((value) {
+          value.fold((failure) {
+            log(failure.errorMsg);
+            Navigator.pop(context);
+          }, (r) {
+            log("videoPath2::::::::::::$r");
+            videoPath = r;
+            notifyListeners();
+            Navigator.pop(context);
+          });
+        });
+      });
+    });
   }
 
 // REMOVE VIDEO
 
-  void removeVideo(String path) async {
-    // await deleteVideo(videoPath: path);
-
+  Future<void> removeVideo(
+      {required String path,
+      required bool isEditing,
+      UserProductDetailsModel? userProductDetailsModel}) async {
+    await deleteVideo(videoPath: path).then((value) async {
+      if (isEditing) {
+        log("message");
+        await iUploadedByAdminFacade
+            .deleteVideoFromFireStore(userProductDetailsModel);
+        videoPath = null;
+        notifyListeners();
+      }
+    });
     if (videoPath != null) {
       videoPath = null;
-
       notifyListeners();
     }
   }
@@ -282,9 +365,9 @@ class UploadedByAdminProvider with ChangeNotifier {
 // INITSTATE
 
   Future<void> init() async {
-    if (_filteredUploadedPropertiesList.isEmpty) {
-      iUploadedByAdminFacade.clearDoc();
-      _filteredUploadedPropertiesList = [];
+    if (filteredUploadedPropertiesList.isEmpty) {
+      clearDoc();
+      clearPreviousResults();
       await fetchProducts();
     }
 
@@ -302,12 +385,15 @@ class UploadedByAdminProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void clearDoc() {
-    iUploadedByAdminFacade.clearDoc();
+  // Clear previous search results before new search
+  void clearPreviousResults() {
+    filteredUploadedPropertiesList.clear();
+    propertyIds.clear();
   }
 
-  void clearData() {
-    _filteredUploadedPropertiesList.clear();
+  void clearDoc() {
+    iUploadedByAdminFacade.clearDoc();
+    filteredUploadedPropertiesList.clear();
     notifyListeners();
   }
 }

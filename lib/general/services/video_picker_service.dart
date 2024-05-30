@@ -1,6 +1,9 @@
+import 'dart:developer';
 import 'dart:typed_data';
+import 'package:dartz/dartz.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:hinvex/general/failures/exeception/execeptions.dart';
+import 'package:hinvex/general/failures/failures.dart';
+import 'package:hinvex/general/typedefs/typedefs.dart';
 import 'package:hinvex/general/utils/toast/toast.dart';
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html';
@@ -9,34 +12,7 @@ final FirebaseStorage _storage = FirebaseStorage.instance;
 
 // VIDEO PICKER
 
-// Future<Uint8List?> pickVideo() async {
-//   final ImagePicker imagePicker = ImagePicker();
-//   final XFile? pickedVideoFile;
-//   final Uint8List? videoBytes;
-//   try {
-//     pickedVideoFile = await imagePicker.pickVideo(source: ImageSource.gallery);
-//     if (pickedVideoFile != null) {
-//       final bytes = await pickedVideoFile.readAsBytes();
-//       final int sizeInBytes = bytes.length;
-//       final int sizeInMB = sizeInBytes ~/ (1024 * 1024);
-//       if (sizeInMB < 15) {
-//         videoBytes = Uint8List.fromList(bytes);
-//         return videoBytes;
-//       } else {
-//         showToast(
-//             'Video file is too large: ${sizeInMB}MB. Maximum allowed size is 15MB.');
-//       }
-//     } else {
-//       showToast('Failed to pick video from gallery');
-//     }
-//   } catch (e) {
-//     showToast('Failed to pick video from gallery: $e');
-//   }
-
-//   return null;
-// }
-
-Future<Uint8List?> pickVideo() async {
+FutureResult<Uint8List?> pickVideo() async {
   final FileUploadInputElement input = FileUploadInputElement()
     ..accept = 'video/*';
   input.click();
@@ -58,7 +34,8 @@ Future<Uint8List?> pickVideo() async {
     if (sizeInMB > 15) {
       // Video size exceeds 15 MB
       window.alert('Video size exceeds 15 MB.');
-      return null;
+      return left(const MainFailure.imagePickFailed(
+          errorMsg: 'Video size exceeds 15 MB.'));
     }
 
     // Check video duration
@@ -70,17 +47,18 @@ Future<Uint8List?> pickVideo() async {
     if (durationInSeconds > 60) {
       // Video duration exceeds 1 minute
       window.alert('Video duration exceeds 1 minute.');
-      return null;
+      return left(const MainFailure.imagePickFailed(
+          errorMsg: 'Video duration exceeds 1 minute.'));
     }
 
-    return videoBytes;
+    return Right(videoBytes);
   } else {
     // No file selected
-    return null;
+    return left(const MainFailure.imagePickFailed(errorMsg: 'Video issue'));
   }
 }
 
-Future<String> saveVideo({
+FutureResult<String> saveVideo({
   required Uint8List videoBytes,
 }) async {
   final String videoName =
@@ -89,10 +67,12 @@ Future<String> saveVideo({
     await _storage
         .ref(videoName)
         .putData(videoBytes, SettableMetadata(contentType: 'video/mp4'));
+    log("videoBytes2::::::::::::$videoBytes");
     final downloadUrl = await _storage.ref(videoName).getDownloadURL();
-    return downloadUrl;
+    log("downloadUrl::::::::::::$downloadUrl");
+    return right(downloadUrl);
   } on FirebaseException catch (e) {
-    throw CustomExeception(e.code);
+    return left(MainFailure.imageUploadFailure(errorMsg: e.toString()));
   }
 }
 

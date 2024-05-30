@@ -87,10 +87,14 @@ class IPopularCitiesImpl implements IPopularCitiesFacade {
   FutureResult<String> uploadPopularCities(
       PopularCitiesModel popularCitiesModel) async {
     try {
-      final response = await _firestore
+      final id = _firestore.collection('popularcities').doc().id;
+      final updatedModel = popularCitiesModel.copyWith(id: id);
+      await _firestore
           .collection('popularcities')
-          .add(popularCitiesModel.toJson());
-      return right(response.id);
+          .doc(id)
+          .set(updatedModel.toJson());
+
+      return right(updatedModel.toString());
     } on CustomExeception catch (e) {
       print(e.toString());
       return left(MainFailure.imageUploadFailure(errorMsg: e.errorMsg));
@@ -99,17 +103,6 @@ class IPopularCitiesImpl implements IPopularCitiesFacade {
 
   @override
   FutureResult<List<PopularCitiesModel>> fetchPopularCities() async {
-    // try {
-    //   final result = await _firestore.collection('popularcities').get();
-    //   final cities = result.docs.map((e) => e.data()).toList();
-    //   final popularCitiesModel =
-    //       cities.map((data) => PopularCitiesModel.fromSnap(data)).toList();
-
-    //   return Right(popularCitiesModel);
-    // } catch (e, stackTrace) {
-    //   print(e.toString());
-    //   log("Error fetching next reports: $e", stackTrace: stackTrace);
-    //   throw CustomExeception('Error fetching next reports: $e');
     // }
     try {
       final result = await _firestore.collection('popularcities').get();

@@ -24,7 +24,9 @@ class Bhk {
 }
 
 class UploadingWidgetScreen extends StatefulWidget {
-  const UploadingWidgetScreen({super.key});
+  const UploadingWidgetScreen({
+    super.key,
+  });
 
   @override
   State<UploadingWidgetScreen> createState() => _UploadingWidgetScreenState();
@@ -110,7 +112,7 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
     'Apartments',
     'Lands/Plots',
     'Commercial',
-    'Co-Working Soace',
+    'Co-Working Space',
     'PG & Guest House'
   ];
   // TYPE
@@ -138,7 +140,7 @@ class _UploadingWidgetScreenState extends State<UploadingWidgetScreen> {
   final List<String> _constructionStatus = [
     'New Launch',
     'Ready To Move',
-    'Uder-Construction'
+    'Under-Construction'
   ];
   // LISTED BY
   String? _selectedListedBy;

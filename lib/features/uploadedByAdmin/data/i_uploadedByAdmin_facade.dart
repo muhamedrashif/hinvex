@@ -57,4 +57,9 @@ abstract class IUploadedByAdminFacade {
       UserProductDetailsModel userProductDetailsModel) {
     throw UnimplementedError('updateUploadedPosts() not impl');
   }
+
+  FutureResult<void> deleteVideoFromFireStore(
+      UserProductDetailsModel? userProductDetailsModel) {
+    throw UnimplementedError('deleteVideo() not impl');
+  }
 }
